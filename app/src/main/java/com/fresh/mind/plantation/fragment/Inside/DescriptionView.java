@@ -55,7 +55,6 @@ public class DescriptionView extends Fragment {
     private CustomTextView mAboutTitle, mFavorableTitle, mThreeChar, mPlantationGuideTitle, mHarvestTile, mAgroforest, mUsesTitle, mAdditional;
     private VerifyDetails verifyDetails;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
