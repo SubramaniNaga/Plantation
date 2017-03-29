@@ -98,6 +98,8 @@ public class LocationSelected extends Fragment {
             });
             mLocationBasedSeletedTree.setAdapter(new Adapter_LocationBasedSeletedTree(getActivity(), mTreeNames, mImageList));
         } else {
+
+
             mSpinnerArray = new String[]{getActivity().getString(R.string.noTreeType)};
             LocationBasedTreeTypeSpr.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.adapter_spinner, R.id.mSPinnerText, mSpinnerArray));
             mNodata.setVisibility(View.VISIBLE);
