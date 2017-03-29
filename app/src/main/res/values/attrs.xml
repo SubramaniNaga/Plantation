@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomFontTextView">
+        <attr name="typeface" />
+    </declare-styleable>
+
+    <attr name="typeface" format="enum">
+        <enum name="lato_light" value="0" />
+        <enum name="lato_bold" value="1" />
+        <enum name="lato_semibold" value="2" />
+        <enum name="lato_regular" value="3" />
+    </attr>
+
+</resources>

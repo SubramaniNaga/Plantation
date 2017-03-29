@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bc_gray"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="4dp"
+        android:orientation="vertical">
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mTreeNameTxt"
+            style="@style/CustomFontStyle"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Tree Name"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/mFirstImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="155dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/logo_3"
+                    android:transitionName="anim"
+                    tools:ignore="ContentDescription,UnusedAttribute" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/mSecondImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo_3" />
+
+                    <ImageView
+                        android:id="@+id/mThirdImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="4dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo_3" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mAboutTitle"
+            style="@style/CustomFontStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ABOUTTHESPECIES"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/GeneralInformation"
+                style="@style/CustomFontStyleStarting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/GeneralInformation"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/Habitat"
+                style="@style/CustomFontStyleStarting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="@string/Habitat"
+                app:typeface="lato_regular" />
+        </LinearLayout>
+
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/customTextView3"
+            style="@style/CustomFontStyle"
+            android:text="@string/FAVORABLEENVIRONMENTALCONDITIONS"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mAltitudeTxt"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginTop="4dp"
+                android:text="Altitude - "
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mRainfallTxt"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginTop="4dp"
+                android:text="Rainfall - "
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mSoilTxt"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginTop="8dp"
+                android:text="Soil - "
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mSoilPh"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginTop="4dp"
+                android:text="@string/SoilpH"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/Temperature"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginTop="4dp"
+
+                android:text="@string/temp"
+                android:textColor="#0e7302"
+                app:typeface="lato_bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.fresh.mind.plantation.customized.CustomTextView
+                    android:id="@+id/TemperatureMin"
+                    style="@style/CustomFontStyleStarting"
+                    android:layout_weight="1"
+                    android:text="TemperatureMin - "
+                    app:typeface="lato_regular" />
+
+                <com.fresh.mind.plantation.customized.CustomTextView
+                    android:id="@+id/TemperatureMax"
+                    style="@style/CustomFontStyleStarting"
+                    android:layout_weight="1"
+                    android:text="TemperatureMax - "
+                    app:typeface="lato_regular" />
+            </LinearLayout>
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mTerrainTxt"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="4dp"
+                android:text="Terrain - "
+                app:typeface="lato_regular" />
+
+        </LinearLayout>
+
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mThreeChar"
+            style="@style/CustomFontStyle"
+            android:text="@string/TREECHARACTERISTICSPROPERTIES"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mTreeChar"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/TreeCharacteristics"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ConservationStatus"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/ConservationStatus"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mEdibilityStatus"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/EdibilityRating"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mMedicalRating"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/MedicinalRating"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mOtherUsesRating"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/OtherUsesRating"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mHabit"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/Habit"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/GrowthRate"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/GrowthRate"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/Height"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/Height"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mCultivetionsStatus"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/CultivationStatus"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/OtherDetails"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/OtherDetails"
+                app:typeface="lato_regular" />
+        </LinearLayout>
+
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mPlantationGuideTitle"
+            style="@style/CustomFontStyle"
+            android:text="@string/PLANTATIONGUIDELINES"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mPropagation"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/Propagation"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/PlantationTechnique"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/plantationTec"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mCareDsease"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/Diseasecontrol"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/Irrigation"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/Irrigation"
+                app:typeface="lato_regular" />
+        </LinearLayout>
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mHarvestTile"
+            style="@style/CustomFontStyle"
+            android:text="@string/HARVESTDETAILS"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mYeild"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/Yield"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mReommandedHarvest"
+                style="@style/CustomFontStyleStarting"
+                android:text="@string/RecommendedHarvest"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mMarketDetails"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/MarketDetails"
+                app:typeface="lato_regular" />
+        </LinearLayout>
+
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mAgroforest"
+            style="@style/CustomFontStyle"
+            android:text="@string/AGROFORESTRYRECOMMENDATIONS"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/Intercrops"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/Intercrops"
+                app:typeface="lato_regular" />
+        </LinearLayout>
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mUsesTitle"
+            style="@style/CustomFontStyle"
+            android:text="@string/USES"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/MajorUses"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/MajorUses"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/OtherUses"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/OtherUses"
+                app:typeface="lato_regular" />
+
+        </LinearLayout>
+
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/customTextView4"
+            style="@style/CustomFontStyle"
+            android:text="@string/ADDITIONALINFORMATION"
+            android:textAllCaps="true"
+            android:textSize="13dp"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/CarbonStockDetails"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="2dp"
+                android:text="@string/CarbonStockDetails"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/References"
+                style="@style/CustomFontStyleStarting"
+                android:layout_marginBottom="8dp"
+                android:text="@string/References"
+                app:typeface="lato_regular" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

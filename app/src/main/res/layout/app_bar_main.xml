@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:visibility="visible">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/toolBar"
+                android:elevation="10dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="8dp"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_back" />
+
+                    <LinearLayout
+                        android:id="@+id/mSearchViewLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintLeft_toRightOf="@+id/back"
+                        app:layout_constraintRight_toLeftOf="@+id/searchView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.81">
+
+                        <com.fresh.mind.plantation.customized.CustomEditeText
+                            android:id="@+id/mSearchViewEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@drawable/empty_edit"
+                            android:cursorVisible="true"
+                            android:hint="Search..."
+                            android:maxLines="1"
+
+                            android:padding="8dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/white"
+                            app:typeface="lato_semibold" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="5"
+                            android:visibility="gone"
+                            app:srcCompat="@android:drawable/ic_delete" />
+
+                    </LinearLayout>
+
+                    <com.fresh.mind.plantation.customized.CustomTextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:foregroundGravity="center"
+                        android:maxLines="1"
+                        android:paddingBottom="6dp"
+                        android:text="Plantation Made Easy"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        android:visibility="visible"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/back"
+                        app:layout_constraintRight_toLeftOf="@+id/searchView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:typeface="lato_semibold" />
+
+                    <com.fresh.mind.plantation.customized.CustomTextView
+                        android:id="@+id/title1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:foregroundGravity="center"
+                        android:maxLines="1"
+                        android:paddingBottom="9dp"
+                        android:paddingLeft="20dp"
+                        android:text="Sample Text"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        android:visibility="gone"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/back"
+                        app:layout_constraintRight_toLeftOf="@+id/searchView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:typeface="lato_semibold" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/searchView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@android:drawable/ic_menu_search">
+
+                        <ImageView
+                            android:id="@+id/weatherImage"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@+id/tempDetails"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/vector_drawable_questions" />
+
+                        <com.fresh.mind.plantation.customized.CustomTextView
+                            android:id="@+id/tempDetails"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:typeface="lato_bold" />
+                    </android.support.constraint.ConstraintLayout>
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

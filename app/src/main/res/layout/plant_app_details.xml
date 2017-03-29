@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bc_gray"
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/plant_weather"
+                android:visibility="gone" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/about_plantantion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/aboutPlantationV2"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Plantation Made Easy, a mobile application developed by Ms. S. Sudha, IFS (P) 2013-15 Course, focuses
+on making easier choice of tree species for plantation. It provides a variety of options to farmers,
+home gardeners, industries and individuals to choose the right tree species for their requirement. The
+main objective of this application is to guide the user about the plantation technique and post
+plantation care. This application also widens the choice of tree species."
+                android:textColor="@color/black"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mistral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/AboutMistralEnterprises"
+                android:textAllCaps="true"
+                android:textColor="@color/toolBar"
+                android:textSize="16dp"
+                android:visibility="gone"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mistralDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"
+                android:text="\t\t\t Need Mistral Enterprises  a mobile application developed by Ms. S. Sudha, IFS (P) 2013-15 Course, focuses
+on making easier choice of tree species for plantation. It provides a variety of options to farmers,
+home gardeners, industries and individuals to choose the right tree species for their requirement. The
+main objective of this application"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/projectTeam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/AbouttheProjectTeam"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/projectTeamDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Need Project Team Details a mobile application developed by Ms. S. Sudha, IFS (P) 2013-15 Course, focuses
+on making easier choice of tree species for plantation. It provides a variety of options to farmers,
+home gardeners, industries and individuals to choose the right tree species for their requirement. The
+main objective of this application"
+                android:textColor="@color/black"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/acknowledgement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/Acknowledgement"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/acknowledgementDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Need Acknowledgement Details  a mobile application developed by Ms. S. Sudha, IFS (P) 2013-15 Course, focuses
+on making easier choice of tree species for plantation. It provides a variety of options to farmers,
+home gardeners, industries and individuals to choose the right tree species for their requirement. The
+main objective of this application"
+                android:textColor="@color/black"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/reference"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/Reference"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.forests.tn.nic.in/"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.worldagroforestry.org/"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.agritech.tnau.ac.in/forestry"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.agritech.tnau.ac.in/horticulture"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.indiabiodiversity.org/"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.envfor.nic.in/"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/ref7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:padding="8dp"
+                android:text="http://www.ifgtb.icfre.gov.in/"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/website"
+                app:typeface="lato_semibold" />
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

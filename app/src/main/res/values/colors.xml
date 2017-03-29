@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="toolBar">#1aa70a</color>
+    <color name="colorPrimaryDark">#017d4c</color>
+    <color name="colorAccent">#0e7302</color>
+    <color name="black">#000000</color>
+    <color name="light_black">#353434</color>
+    <color name="pressed">#0e7102</color>
+    <color name="white">#ffffff</color>
+    <color name="red">#fd0606</color>
+    <color name="nav_bg">#e2d708</color>
+    <color name="blue">#0c3bca</color>
+    <color name="gray">#dfdfdf</color>
+    <color name="bc_gray">#dcdcdc</color>
+    <color name="orange">#954569</color>
+    <color name="orange1">#ff9007</color>
+    <color name="light_green">#77e46b</color>
+
+    <color name="appYellow">#dfff2a</color>
+
+</resources>

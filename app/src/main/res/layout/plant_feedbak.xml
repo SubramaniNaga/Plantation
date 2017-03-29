@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bc_gray">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/customTextView5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="10dp"
+            android:text="@string/Feedback"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:typeface="lato_bold" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/layout_shadow"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/customTextView5">
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:padding="10dp"
+                android:text="@string/name"
+                android:textColor="@color/colorPrimaryDark"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomEditeText
+                android:id="@+id/mNameTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:hint="@string/hint_Name"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textSize="15sp"
+                app:et_supportSingleLine="true"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:text="@string/mobileNumber"
+                android:textColor="@color/colorPrimaryDark"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomEditeText
+                android:id="@+id/mMobileNumbertxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:hint="@string/hint_MobileNumber"
+                android:inputType="number"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textSize="15sp"
+                app:et_supportSingleLine="true"
+                app:typeface="lato_semibold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:text="@string/Feedback_Suggestion"
+                android:textColor="@color/colorPrimaryDark"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomEditeText
+                android:id="@+id/mSuggestionBoxTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:hint="@string/hint_Feedback"
+                android:nextFocusDown="@+id/mSubmit"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textSize="15sp"
+                app:typeface="lato_semibold" />
+        </LinearLayout>
+
+        <com.fresh.mind.plantation.customized.CustomTextView
+            android:id="@+id/mSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorPrimaryDark"
+            android:paddingBottom="10dp"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:paddingTop="10dp"
+            android:text="@string/submit"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+            app:typeface="lato_bold" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
