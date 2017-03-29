@@ -49,7 +49,7 @@ public class LocationSelected extends Fragment {
 
     private TreeTypeInfo treeTypeInfo;
     private TreeList treeList;
-    private ArrayList<HashMap<String, byte[]>> mImageList = null;
+
     private String[] mSpinnerArray;
 
     @Nullable
