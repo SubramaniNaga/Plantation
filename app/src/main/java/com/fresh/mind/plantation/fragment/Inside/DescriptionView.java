@@ -40,6 +40,7 @@ import static com.fresh.mind.plantation.R.string.Soil;
  * Created by AND I5 on 03-02-2017.
  */
 
+
 public class DescriptionView extends Fragment {
     View rootView;
 
