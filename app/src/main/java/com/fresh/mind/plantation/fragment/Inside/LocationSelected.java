@@ -64,6 +64,7 @@ public class LocationSelected extends Fragment {
             Utils.setLocalLanguage("en", getActivity());
         }
 
+
         ((MainActivity) getActivity()).viewTreeDetails(getActivity().getResources().getString(R.string.chooseByLocation), "Location Selection");
         rootView = inflater.inflate(R.layout.plant_selecte_location, null);
         LocationBasedTreeTypeSpr = (Spinner) rootView.findViewById(R.id.LocationBasedTreeTypeSpr);
