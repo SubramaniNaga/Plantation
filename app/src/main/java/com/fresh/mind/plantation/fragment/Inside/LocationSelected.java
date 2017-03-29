@@ -46,7 +46,7 @@ public class LocationSelected extends Fragment {
     private Spinner LocationBasedTreeTypeSpr;
     ArrayList<HashMap<String, String>> mTreeTypeNames = null;
     ArrayList<HashMap<String, String>> mTreeNames = null;
-    private TreeTypeNameList treeTypeNameList;
+
     private TreeTypeInfo treeTypeInfo;
     private TreeList treeList;
     private ArrayList<HashMap<String, byte[]>> mImageList = null;
@@ -72,7 +72,7 @@ public class LocationSelected extends Fragment {
         mNodata = (CustomTextView) rootView.findViewById(R.id.mNodata);
         mSelectedDisticName.setText("" + Config.SELECTED_DISTRICT_NAME + " " + getActivity().getString(R.string.district));
 
-        treeTypeNameList = new TreeTypeNameList(getActivity());
+
         treeTypeInfo = new TreeTypeInfo(getActivity());
         treeList = new TreeList(getActivity());
         mTreeTypeNames = treeTypeInfo.getTreTypeeNamesFromDistrict(Config.SELECTED_DISTRICT_NAME, AppData.checkLanguage(getActivity()));
