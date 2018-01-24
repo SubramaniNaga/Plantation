@@ -50,7 +50,8 @@ public class DescriptionView extends Fragment {
     private CustomTextView TreeCharacteristics, ConservationStatus, EdibilityRating, MedicinalRating, OtherUsesRating,
             Habit, GrowthRate, Height, CultivationStatus, OtherDetails, marketdetailstitle, Propagation, PlantationTechnique, CareDiseaseControl, Irrigation,
             Yield, RecommendedHarvest, MarketDetails, Intercrops, MajorUses,
-            OtherUses, CarbonStockDetails, References;
+            OtherUses, CarbonStockDetails, References, mArtificialRegeneration, mSeedCollection, mSeedTreatment, mNurseryTechnique;
+
     private ScrollView svAll;
     private CustomTextView tvNodata;
     private CustomTextView mAboutTitle, mFavorableTitle, mThreeChar, mPlantationGuideTitle,/* mHarvestTile, mAgroforest, */
@@ -165,6 +166,13 @@ public class DescriptionView extends Fragment {
 
                 String Reference = description.get(i).get("Reference");
 
+
+                String artificial_regeneration = description.get(i).get("artificial_regeneration");
+                String seed_collection = description.get(i).get("seed_collection");
+                String seed_treatment = description.get(i).get("seed_treatment");
+                String nursery_technique = description.get(i).get("nursery_technique");
+
+
                 if ((Soil.equals("null") || Soil.isEmpty()) && (Altitude.equals("null") || Altitude.isEmpty()) && (temp.equals("null") || temp.isEmpty()) && (Rainfall.equals("null") || Rainfall.isEmpty())
                         && (Terrain.equals("null") || Terrain.isEmpty()) && (Soil_PH.equals("null") || Soil_PH.isEmpty())) {
                     mFavorableTitle.setVisibility(View.GONE);
@@ -259,6 +267,22 @@ public class DescriptionView extends Fragment {
 
                 PropagationStr = PropagationStr.replace("<li>", "<p>\u2022 ");
                 setText(Propagation, PropagationStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Propagation) + " </font> : </b><br/>	" + PropagationStr));
+
+                Log.d("artificial_regenerationadsd", "" + artificial_regeneration);
+
+                artificial_regeneration = artificial_regeneration.replace("<li>", "<p>\u2022 ");
+                setText(mArtificialRegeneration, artificial_regeneration, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.artificial_regeneration) + " </font> : </b><br/>	" + artificial_regeneration));
+
+                Log.d("seed_collectionsdsdsd", "" + seed_collection);
+                seed_collection = seed_collection.replace("<li>", "<p>\u2022 ");
+                setText(mSeedCollection, seed_collection, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.seed_collection) + " </font> : </b><br/>	" + seed_collection));
+
+                Log.d("seed_treatmentsdsds", "" + seed_treatment);
+                seed_treatment = seed_treatment.replace("<li>", "<p>\u2022 ");
+                setText(mSeedTreatment, seed_treatment, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.seed_treatment) + " </font> : </b><br/>	" + seed_treatment));
+                Log.d("nursery_techniquesdsd", "" + nursery_technique);
+                nursery_technique = nursery_technique.replace("<li>", "<p>\u2022 ");
+                setText(mNurseryTechnique, nursery_technique, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.nursery_technique) + " </font> : </b><br/>	" + nursery_technique));
 
                 Plantation_TechniqueStr = Plantation_TechniqueStr.replace("<li>", "<p>\u2022 ");
                 //PlantationTechnique.setText("" + Plantation_TechniqueStr);
@@ -529,6 +553,12 @@ public class DescriptionView extends Fragment {
         mAgroforest = (CustomTextView) rootView.findViewById(R.id.mAgroforest);*/
         mUsesTitle = (CustomTextView) rootView.findViewById(R.id.mUsesTitle);
         mAdditional = (CustomTextView) rootView.findViewById(R.id.customTextView4);
+
+
+        mArtificialRegeneration = (CustomTextView) rootView.findViewById(R.id.artificial_regeneration);
+        mSeedCollection = (CustomTextView) rootView.findViewById(R.id.seed_collection);
+        mSeedTreatment = (CustomTextView) rootView.findViewById(R.id.seed_treatment);
+        mNurseryTechnique = (CustomTextView) rootView.findViewById(R.id.nursery_technique);
 
     }
 

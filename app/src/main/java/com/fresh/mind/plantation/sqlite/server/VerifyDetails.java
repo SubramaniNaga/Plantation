@@ -93,6 +93,7 @@ public class VerifyDetails extends SQLiteOpenHelper {
                 cursor = sqLiteDatabase.rawQuery("select * from VerifyDetails where common_key='" + common_key + "'", null);
                 if (cursor.moveToFirst()) {
                     do {
+
                         HashMap<String, String> status = new HashMap<>();
                         status.put("General_Info", cursor.getString(cursor.getColumnIndex("General_Info")));
                         status.put("Habitat", cursor.getString(cursor.getColumnIndex("Habitat")));
@@ -129,13 +130,9 @@ public class VerifyDetails extends SQLiteOpenHelper {
 
 
                         status.put("artificial_regeneration", cursor.getString(cursor.getColumnIndex("artificial_regeneration")));
-
                         status.put("seed_collection", cursor.getString(cursor.getColumnIndex("seed_collection")));
-
                         status.put("seed_treatment", cursor.getString(cursor.getColumnIndex("seed_treatment")));
-
                         status.put("nursery_technique", cursor.getString(cursor.getColumnIndex("nursery_technique")));
-
 
 
                         //status.put("lastUpdate", cursor.getString(cursor.getColumnIndex("lastUpdate")));
@@ -191,10 +188,18 @@ public class VerifyDetails extends SQLiteOpenHelper {
                     status.put("Reference", cursor.getString(cursor.getColumnIndex("References_Tamil")));
                     status.put("Intercrops", cursor.getString(cursor.getColumnIndex("Intercrops_Tamil")));
 
-                    status.put("artificial_regeneration_tamil", cursor.getString(cursor.getColumnIndex("artificial_regeneration_tamil")));
-                    status.put("seed_collection_tamil", cursor.getString(cursor.getColumnIndex("seed_collection_tamil")));
-                    status.put("seed_treatment_tamil", cursor.getString(cursor.getColumnIndex("seed_treatment_tamil")));
-                    status.put("nursery_technique_tamil", cursor.getString(cursor.getColumnIndex("nursery_technique_tamil")));
+
+
+                    Log.d("seedCollectionssdlskd",""+cursor.getString(cursor.getColumnIndex("seed_collection_tamil")));
+                    status.put("seed_collection", cursor.getString(cursor.getColumnIndex("seed_collection_tamil")));
+
+                    Log.d("seed_treatment_tamilsdsdsd",""+cursor.getString(cursor.getColumnIndex("seed_treatment_tamil")));
+                    status.put("seed_treatment", cursor.getString(cursor.getColumnIndex("seed_treatment_tamil")));
+
+                    Log.d("nursery_technique_tamilsssss",""+cursor.getString(cursor.getColumnIndex("nursery_technique_tamil")));
+                    status.put("nursery_technique", cursor.getString(cursor.getColumnIndex("nursery_technique_tamil")));
+
+                    status.put("artificial_regeneration", cursor.getString(cursor.getColumnIndex("artificial_regeneration_tamil")));
                     //status.put("lastUpdate", cursor.getString(cursor.getColumnIndex("lastUpdate")));
                    /* status.values().remove("");
                     Log.d("statusIsEMpty", "222  " + status.isEmpty() + "  " + status.size());*/
@@ -238,11 +243,8 @@ public class VerifyDetails extends SQLiteOpenHelper {
 
 
                     status.put("artificial_regeneration", cursor.getString(cursor.getColumnIndex("artificial_regeneration")));
-
                     status.put("seed_collection", cursor.getString(cursor.getColumnIndex("seed_collection")));
-
                     status.put("seed_treatment", cursor.getString(cursor.getColumnIndex("seed_treatment")));
-
                     status.put("nursery_technique", cursor.getString(cursor.getColumnIndex("nursery_technique")));
                     //status.put("lastUpdate", cursor.getString(cursor.getColumnIndex("lastUpdate")));
                  /*   status.values().remove("");
@@ -304,7 +306,7 @@ public class VerifyDetails extends SQLiteOpenHelper {
                                                             Log.d("InsideLopppsTreeType", splitDist + "  Sisct " + treeTypeFromDb + " treeTypeFromDb " + treeTypeFromLoop);
                                                             if (treeTypeFromDb.trim().toLowerCase().contains(treeTypeFromLoop.trim().toLowerCase())) {
 
-                                                                Log.d("InsideLopppsTreeTypeIf", splitDist + " DistName " + treeTypeFromLoop + " treeTypeFromDb " + treeTypeFromDb);
+                                                               // Log.d("InsideLopppsTreeTypeIf", splitDist + " DistName " + treeTypeFromLoop + " treeTypeFromDb " + treeTypeFromDb);
 
                                                                 HashMap<String, String> status = new HashMap<>();
                                                                 status.put("treeType", cursor.getString(cursor.getColumnIndex("TreeType")));

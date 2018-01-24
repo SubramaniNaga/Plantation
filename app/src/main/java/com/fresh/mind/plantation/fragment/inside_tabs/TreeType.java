@@ -229,6 +229,7 @@ public class TreeType extends Fragment implements LocationListener {
             response = convertStreamToString(in);
         } catch (ProtocolException e) {
             e.printStackTrace();
+
         }
         // read the response
         // Log.d("asdsad", "" + response);

@@ -277,7 +277,7 @@ public class ImagesDownloadService extends IntentService {
 
                 try {
                     result = JSONParser.getJsonResponse(url, nameValuePairs);
-
+                    Log.d("sdsdsdsd", "re  " + result);
                 } catch (OutOfMemoryError outOfMemoryError) {
                     outOfMemoryError.printStackTrace();
                 }
@@ -422,6 +422,16 @@ public class ImagesDownloadService extends IntentService {
                                                 String Other_Details_Tamil = jsonObject.getString("Other_Details_Tamil").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "\r".replace("\\t", "\t")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
                                                 String Propagation = jsonObject.getString("Propagation").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "\r".replace("\\t", "\t")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
                                                 String Propagation_Tamil = jsonObject.getString("Propagation_Tamil").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+
+                                                String artificial_regeneration = jsonObject.getString("artificial_regeneration").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String artificial_regeneration_tamil = jsonObject.getString("artificial_regeneration_tamil").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String seed_collection = jsonObject.getString("seed_collection").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String seed_collection_tamil = jsonObject.getString("artificial_regeneration").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String seed_treatment = jsonObject.getString("artificial_regeneration_tamil").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String seed_treatment_tamil = jsonObject.getString("seed_collection").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String nursery_technique = jsonObject.getString("artificial_regeneration_tamil").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+                                                String nursery_technique_tamil = jsonObject.getString("seed_collection").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
+
                                                 String Plantation_Technique = jsonObject.getString("Plantation_Technique").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
                                                 String Plantation_Technique_Tamil = jsonObject.getString("Plantation_Technique_Tamil").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "<br/>".replace("\\t", "<br/>")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
                                                 String Care_Disease = jsonObject.getString("Care_Disease").replace("\\r\\n", "<br/>\t").replace("\\n", "<br/>").replace("\\r", "\r".replace("\\t", "\t")).replace("\\", "").replace("\"", "").replace("\uF0B7", "\u25CF ").replace("\uF0A7", "\u25CF ");
@@ -534,6 +544,16 @@ public class ImagesDownloadService extends IntentService {
                                                 contentValues.put("TreeTypeTamil", TreeTypeTamil.trim());
                                                 contentValues.put("ScientificTamil", ScientificTamil.trim());
                                                 contentValues.put("Propagation_Tamil", "" + Propagation_Tamil.trim());
+
+                                                contentValues.put("artificial_regeneration", artificial_regeneration);
+                                                contentValues.put("artificial_regeneration_tamil", artificial_regeneration_tamil);
+                                                contentValues.put("seed_collection", seed_collection);
+                                                contentValues.put("seed_collection_tamil", seed_collection_tamil);
+                                                contentValues.put("seed_treatment", seed_treatment);
+                                                contentValues.put("seed_treatment_tamil", seed_treatment_tamil);
+                                                contentValues.put("nursery_technique", nursery_technique);
+                                                contentValues.put("nursery_technique_tamil", nursery_technique_tamil);
+
                                                 //   Log.d("contentValues how", "" + contentValues.size());
                                                 JSONObject ImagesObj = jsonObject.getJSONObject("Images");
                                                 boolean statusImg = ImagesObj.getBoolean("status");
