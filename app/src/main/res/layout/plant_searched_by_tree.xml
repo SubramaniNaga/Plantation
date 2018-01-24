@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Searched By Tree"
+
         android:textColor="@color/black"
         app:typeface="lato_bold" />
 

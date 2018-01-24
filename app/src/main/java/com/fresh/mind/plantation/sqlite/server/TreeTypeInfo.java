@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,8 +29,8 @@ public class TreeTypeInfo extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String TreeTypeInfo = "create table TreeTypeTable(id INTEGER PRIMARY KEY AUTOINCREMENT, districtName text, lastUpdate text, treeType text,soilType text," +
-                "districtNameTamil text, treeTypeTamil text,soilTypeTamil text)";
+        String TreeTypeInfo = "create table TreeTypeTable(id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,treeType text,soilType text," +
+                "districtNameTamil text,treeTypeTamil text,soilTypeTamil text)";
         db.execSQL(TreeTypeInfo);
     }
 
@@ -52,7 +55,7 @@ public class TreeTypeInfo extends SQLiteOpenHelper {
 
 
     public ArrayList<HashMap<String, String>> getTreeType(String districtName, String soillType, String language) {
-
+        Log.d("dfgdfg", "" + districtName + "  " + soillType);
         ArrayList<HashMap<String, String>> mSoilList = new ArrayList<>();
         sqLiteDatabase = this.getReadableDatabase();
         String qury = null;
@@ -94,6 +97,7 @@ public class TreeTypeInfo extends SQLiteOpenHelper {
         mSoilList.addAll(hashSet);
         cursor.close();
         sqLiteDatabase.close();
+        Log.d("mSoilList", "" + mSoilList.size());
         return mSoilList;
     }
 
@@ -171,5 +175,53 @@ public class TreeTypeInfo extends SQLiteOpenHelper {
         cursor.close();
         sqLiteDatabase.close();
         return cou;
+    }
+
+    public ArrayList<KeyPairBoolData> getSetter(String language) {
+        ArrayList<KeyPairBoolData> mSoilList = new ArrayList<>();
+        sqLiteDatabase = this.getReadableDatabase();
+        String qury = "select * from TreeTypeTable";
+        Cursor cursor = sqLiteDatabase.rawQuery(qury, null);
+        //Log.d("cursor location", "" + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            do {
+                KeyPairBoolData keyPairBoolData = new KeyPairBoolData();
+              //  Log.d("sddss", "" + cursor.getString(cursor.getColumnIndex("treeTypeTamil")));
+                if (language.equals("1")) {
+                    String treeType = cursor.getString(cursor.getColumnIndex("treeTypeTamil"));
+                    if (treeType.equals("null") || treeType.isEmpty()) {
+                    } else {
+                        String soilType = cursor.getString(cursor.getColumnIndex("treeTypeTamil"));
+                        /*HashMap<String, String> mHash = new HashMap<>();
+                        mHash.put("Treetype", soilType);
+                        mSoilList.add(mHash);*/
+                        keyPairBoolData.setName(soilType);
+                        mSoilList.add(keyPairBoolData);
+
+                    }
+                } else {
+                  //  Log.d("sddssEng", "" + cursor.getString(cursor.getColumnIndex("treeType")));
+
+                    String soilType = cursor.getString(cursor.getColumnIndex("treeType"));
+                    if (soilType.equals("null") || soilType.isEmpty()) {
+                    } else {
+                        /*HashMap<String, String> mHash = new HashMap<>();
+                        mHash.put("Treetype", soilType);
+                        mSoilList.add(mHash);*/
+                        keyPairBoolData.setName(soilType);
+                        mSoilList.add(keyPairBoolData);
+                    }
+                }
+
+            } while (cursor.moveToNext());
+        }
+
+        HashSet<KeyPairBoolData> hashSet = new HashSet<>();
+        hashSet.addAll(mSoilList);
+        mSoilList.clear();
+        mSoilList.addAll(hashSet);
+        cursor.close();
+        sqLiteDatabase.close();
+        return mSoilList;
     }
 }

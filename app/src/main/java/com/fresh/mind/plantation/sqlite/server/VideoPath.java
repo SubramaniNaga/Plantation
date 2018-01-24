@@ -26,7 +26,7 @@ public class VideoPath extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String VideoPath = "create table VideoPathTable(id INTEGER PRIMARY KEY AUTOINCREMENT,video text,Description text,DescriptionTamil text,lastUpdate text)";
+        String VideoPath = "create table VideoPathTable(id INTEGER PRIMARY KEY AUTOINCREMENT,video text,Description text,DescriptionTamil text,lastUpdate text,tutorial_title_tamil text,tutorial_title text)";
         db.execSQL(VideoPath);
     }
 
@@ -52,12 +52,14 @@ public class VideoPath extends SQLiteOpenHelper {
                 if (s.equals("1")) {
                     HashMap<String, String> stringStringHashMap = new HashMap<>();
                     stringStringHashMap.put("path", "" + cursor.getString(cursor.getColumnIndex("video")));
+                    stringStringHashMap.put("tutorial_title",""+cursor.getString(cursor.getColumnIndex("tutorial_title_tamil")));
                     stringStringHashMap.put("Description", "" + cursor.getString(cursor.getColumnIndex("DescriptionTamil")));
                     hashMaps.add(stringStringHashMap);
                 } else {
                     HashMap<String, String> stringStringHashMap = new HashMap<>();
                     stringStringHashMap.put("path", "" + cursor.getString(cursor.getColumnIndex("video")));
-                    Log.d("descriptionVideo", "" + cursor.getString(cursor.getColumnIndex("Description")));
+                    stringStringHashMap.put("tutorial_title",""+cursor.getString(cursor.getColumnIndex("tutorial_title")));
+                   // Log.d("descriptionVideo", "" + cursor.getString(cursor.getColumnIndex("Description")));
                     stringStringHashMap.put("Description", "" + cursor.getString(cursor.getColumnIndex("Description")));
 
                     hashMaps.add(stringStringHashMap);
@@ -78,5 +80,14 @@ public class VideoPath extends SQLiteOpenHelper {
         sql.execSQL("delete from VideoPathTable");
         sql.close();
 
+    }
+
+    public int getCount() {
+        SQLiteDatabase sql = this.getReadableDatabase();
+        Cursor cursor = sql.rawQuery("select * from VideoPathTable", null);
+        int count = cursor.getCount();
+        cursor.close();
+        sql.close();
+        return count;
     }
 }

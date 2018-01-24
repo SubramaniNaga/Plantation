@@ -17,12 +17,23 @@
         android:textColor="@color/black"
         app:typeface="lato_bold" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvTreeType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:numColumns="3"/>
+
     <ListView
         android:id="@+id/mTreeType"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="4dp"
         android:divider="@null"
+        android:visibility="gone"
         android:dividerHeight="0dp"
         android:drawSelectorOnTop="true" />
 

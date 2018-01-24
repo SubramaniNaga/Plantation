@@ -1,15 +1,25 @@
 package com.fresh.mind.plantation.Constant;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.RingtoneManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.fresh.mind.plantation.R;
+import com.fresh.mind.plantation.activity.MainActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -113,12 +123,35 @@ public class Utils {
     }
 
 
-    public static void setLocalLanguage(String language, FragmentActivity fragmentActivity) {
+    public static void setLocalLanguage(String language, Context fragmentActivity) {
         Locale myLocale = new Locale(language);
         Resources res = fragmentActivity.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
+    }
+
+
+    public static void showNotification(String text, String bigText, Context context) {
+
+        Intent intent = new Intent(context, MainActivity.class);
+        int mNotificationId = 001;
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+        Notification notification = mBuilder.setSmallIcon(R.drawable.logo_3)
+                .setTicker(text)
+                .setWhen(0)
+                .setAutoCancel(true)
+                .setContentTitle(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText))
+                .setContentIntent(resultPendingIntent)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_3))
+                .setGroupSummary(true)
+                .setContentText(bigText).build();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(mNotificationId, notification);
     }
 }

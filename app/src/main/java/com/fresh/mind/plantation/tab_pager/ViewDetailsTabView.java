@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.adapter.pager_adapter.TabPagerAdapter;
 import com.fresh.mind.plantation.customized.CustomTabLayout;
 import com.fresh.mind.plantation.customized.CustomTextView;
-import com.fresh.mind.plantation.fragment.inside_tabs.TreeSpecies;
 import com.fresh.mind.plantation.holder.ViewHolder;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 
@@ -33,13 +31,11 @@ import com.fresh.mind.plantation.sqlite.LanguageChange;
 public class ViewDetailsTabView extends Fragment {
 
     private static final String ARG_KITTEN_NUMBER = "view";
-    View rootView;
-    TabHost tabHost;
-    ViewPager Tab;
-    TabPagerAdapter TabAdapter;
-    ActionBar actionBar;
-
-
+    private View rootView;
+    private TabPagerAdapter TabAdapter;
+    public static String titleName;
+    public static String glossary;
+/*
     public static ViewDetailsTabView newInstance(@IntRange int kittenNumber, ViewHolder holder, int viewType) {
         Bundle args = new Bundle();
 
@@ -55,17 +51,14 @@ public class ViewDetailsTabView extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
-    }
+    }*/
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Bundle bundle = getArguments();
-        String titleName = bundle.getString("titleName");
-        String treeName = bundle.getString("treeName");
-        String treeIcon = (String) bundle.getString("treeIcon");
-      //  Log.d("titleName", "" + titleName + " " + treeName);
+        titleName = bundle.getString("titleName");
 
 
         LanguageChange languageChange = new LanguageChange(getActivity());
@@ -75,13 +68,14 @@ public class ViewDetailsTabView extends Fragment {
         } else {
             Utils.setLocalLanguage("en", getActivity());
         }
-        ((MainActivity) getActivity()).viewTreeDetails(getActivity().getResources().getString(R.string.viewDetails), titleName + 1);
+        ((MainActivity) getActivity()).viewTreeDetails(Config.TREE_NAME, titleName + 1);
+        MainActivity.menuItem.setVisible(false);
+        MainActivity.menuItem1.setVisible(false);
         rootView = inflater.inflate(R.layout.tab, null);
 
         CustomTabLayout tabLayout = (CustomTabLayout) rootView.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(getActivity().getResources().getString(R.string.images)));
         tabLayout.addTab(tabLayout.newTab().setText(getActivity().getResources().getString(R.string.descriptions)));
-
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setVisibility(View.VISIBLE);
         final ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.pager);
@@ -92,6 +86,7 @@ public class ViewDetailsTabView extends Fragment {
         viewPager.setAdapter(TabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+        //viewPager.getAdapter().notifyDataSetChanged();
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
 
@@ -111,14 +106,12 @@ public class ViewDetailsTabView extends Fragment {
                 Typeface typface2 = Typeface.createFromAsset(getActivity().getAssets(), "proximanovabold.otf");
                 tabTextView.setTypeface(typface2, Typeface.NORMAL);
 
-
             }
 
         }
-
+/*
         tabLayout.setTabTextColors(ContextCompat.getColor(getActivity(), R.color.black),
-                ContextCompat.getColor(getActivity(), R.color.white)
-        );
+                ContextCompat.getColor(getActivity(), R.color.white));*/
 
        /* ColorStateList colors;
         if (Build.VERSION.SDK_INT >= 23) {

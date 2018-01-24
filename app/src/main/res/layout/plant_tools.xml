@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/bc_gray">
 
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/bc_gray"
         android:orientation="vertical">
 
         <com.fresh.mind.plantation.customized.CustomTextView
@@ -26,6 +26,7 @@
             android:padding="8dp"
             android:text="@string/estimatePlantation"
             android:textColor="@color/black"
+            android:textSize="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,6 +41,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:background="@drawable/layout_shadow"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -90,6 +92,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:background="@drawable/layout_shadow"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -154,7 +157,7 @@
                 android:padding="8dp"
                 android:text="@string/inMeter"
                 android:textColor="@color/black"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 app:typeface="lato_semibold" />
         </LinearLayout>
 
@@ -183,10 +186,11 @@
                 android:background="@color/colorPrimaryDark"
                 android:clickable="true"
                 android:gravity="center"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
                 android:text="@string/estimate"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 app:typeface="lato_semibold"
                 tools:layout_editor_absoluteX="35dp"
                 tools:layout_editor_absoluteY="184dp" />
@@ -201,10 +205,11 @@
                 android:layout_weight="1"
                 android:background="@color/red"
                 android:gravity="center"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
                 android:text="@string/reset"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 app:typeface="lato_semibold"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="168dp" />
@@ -221,7 +226,7 @@
             android:layout_marginTop="32dp"
             android:gravity="center"
             android:padding="8dp"
-            android:text="The number of planting material requires for your land is"
+            android:text="@string/required"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -244,7 +249,6 @@
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
             android:paddingTop="10dp"
-            android:text="TextView"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

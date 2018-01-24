@@ -17,15 +17,15 @@
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/AboutMistralEnterprises"
             android:padding="8dp" />
 
         <com.fresh.mind.plantation.customized.CustomTextView
             android:id="@+id/mUrlTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:padding="8dp"
-            android:text="WebView"
             android:textColor="@color/white" />
     </android.support.v7.widget.Toolbar>
 

@@ -1,21 +1,17 @@
 package com.fresh.mind.plantation.tab_pager;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
@@ -28,8 +24,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.Constant.SessionManager;
@@ -39,33 +35,42 @@ import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.adapter.pager_adapter.AdapterMainLay;
 import com.fresh.mind.plantation.customized.CustomTabLayout;
 
-import com.fresh.mind.plantation.fragment.Weathers;
-import com.fresh.mind.plantation.service.GPSTracker;
-import com.fresh.mind.plantation.service.UpdateData;
+import com.fresh.mind.plantation.fragment.menu_page.Weathers;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
+import static android.content.ContentValues.TAG;
+import static android.content.Context.ACTIVITY_SERVICE;
+import static android.content.Context.LOCATION_SERVICE;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static com.fresh.mind.plantation.Constant.Config.SELECTED_TAB_VIEW_POSITION;
 import static com.fresh.mind.plantation.Constant.Config.celsiu;
-import static com.fresh.mind.plantation.R.id.address;
-import static com.fresh.mind.plantation.fragment.Weathers.getAddress;
 
 /**
  * Created by AND I5 on 13-02-2017.
  */
 @SuppressWarnings("ResourceType")
-public class HomeTabView extends Fragment {
-    private View rootView;
+public class HomeTabView extends Fragment implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
     private ListView listView;
     private SessionManager sessionManager;
     private AdapterMainLay TabAdapter;
@@ -73,6 +78,29 @@ public class HomeTabView extends Fragment {
     private LocationManager lm;
     private double lat, lng;
     private Location location;
+    private static final long INTERVAL = 1000 * 60 * 1; //1 minute
+    private static final long FASTEST_INTERVAL = 1000 * 60 * 1; // 1 minute
+    private LocationRequest mLocationRequest;
+    private GoogleApiClient mGoogleApiClient;
+    private double currentLatitude;
+    public double currentLongitude;
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+
+    public void initGoogleAPIClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(connectionAddListener)
+                .addOnConnectionFailedListener(connectionFailedListener)
+                .build();
+        mGoogleApiClient.connect();
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -80,7 +108,22 @@ public class HomeTabView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        createLocationRequest();
 
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        int resp = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+        if (resp == ConnectionResult.SUCCESS) {
+
+            initGoogleAPIClient();
+
+        } else {
+            Log.e(TAG, "Your Device doesn't support Google Play Services.");
+        }
         LanguageChange languageChange = new LanguageChange(getActivity());
         String languages = languageChange.getStatus();
         if (languages.equals("1")) {
@@ -89,15 +132,19 @@ public class HomeTabView extends Fragment {
             Utils.setLocalLanguage("en", getActivity());
         }
         ((MainActivity) getActivity()).setHomePage();
-        rootView = inflater.inflate(R.layout.plant_home_tab_view, null);
+        View rootView = inflater.inflate(R.layout.plant_home_tab_view, null);
+
         sessionManager = new SessionManager(getActivity());
 
-        //listView = (ListView) rootView.findViewById(R.id.listView);
 
-        HashMap<String, String> mHas = sessionManager.getUserDetails();
-        // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body1, new TabLays()).commit();
+        return rootView;
+    }
 
-        CustomTabLayout tabLayout = (CustomTabLayout) rootView.findViewById(R.id.tab_layout);
+    @Override
+    public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(rootView, savedInstanceState);
+
+        final CustomTabLayout tabLayout = (CustomTabLayout) rootView.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("TREE SPECIES"));
         tabLayout.addTab(tabLayout.newTab().setText("TREE TYPE"));
         tabLayout.addTab(tabLayout.newTab().setText("LOCATION"));
@@ -109,20 +156,17 @@ public class HomeTabView extends Fragment {
         TabAdapter = new AdapterMainLay(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(TabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
         tabLayout.setupWithViewPager(viewPager);
-
+        TabAdapter.notifyDataSetChanged();
         tabLayout.getTabAt(0).setIcon(R.drawable.vector_drawable_tree_spec);
         tabLayout.getTabAt(1).setIcon(R.drawable.vector_drawable_tree_type);
         tabLayout.getTabAt(2).setIcon(R.drawable.vector_drawablelocation);
-        tabLayout.getTabAt(3).setIcon(R.drawable.vector_drawable_setting_tools);
+        tabLayout.getTabAt(3).setIcon(R.drawable.vector_drawable_magnifier);
         Config.pass = "splash";
-        viewPager.setCurrentItem(Config.SELECTED_TAB_VIEW_POSITION);
-        setTitle(Config.SELECTED_TAB_VIEW_POSITION, getActivity());
+        viewPager.setCurrentItem(SELECTED_TAB_VIEW_POSITION);
+        setTitle(SELECTED_TAB_VIEW_POSITION, getActivity());
 
-        if (Config.SERVICE == 0) {
-            getActivity().startService(new Intent(getActivity(), UpdateData.class));
-        }
+//        viewPager.getAdapter().notifyDataSetChanged();
 
         ColorStateList colors;
         if (Build.VERSION.SDK_INT >= 23) {
@@ -142,15 +186,13 @@ public class HomeTabView extends Fragment {
             }
         }
 
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                                                @Override
                                                public void onTabSelected(TabLayout.Tab tab) {
-                                                   //  Log.d("243-05890", "" + tab.getPosition());
-                                                   Config.SELECTED_TAB_VIEW_POSITION = tab.getPosition();
-                                                   viewPager.setCurrentItem(Config.SELECTED_TAB_VIEW_POSITION);
-                                                   setTitle(Config.SELECTED_TAB_VIEW_POSITION, getActivity());
-                                                   //tab.getIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-
+                                                   SELECTED_TAB_VIEW_POSITION = tab.getPosition();
+                                                   viewPager.setCurrentItem(tab.getPosition());
+                                                   setTitle(tab.getPosition(), getActivity());
                                                }
 
                                                @Override
@@ -165,65 +207,116 @@ public class HomeTabView extends Fragment {
                                            }
 
         );
-        return rootView;
+
+
+        //Log.d("s2342354", "" + Config.main);
+        if (celsiu >= 0) {
+            MainActivity.tempTxt.setText("" + celsiu + "℃");
+            MainActivity.tempTxt.setVisibility(View.VISIBLE);
+            if (Config.main.toLowerCase().contains("Sunny".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.sunny);
+            } else if (Config.main.toLowerCase().contains("Clouds".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.partly_cloudy_29);
+            } else if (Config.main.toLowerCase().equals("Thunderstorm".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.partly_sunny_weather);
+            } else if (Config.main.toLowerCase().equals("Clear".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.clear);
+            } else if (Config.main.toLowerCase().equals("Rain".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.rain);
+            } else if (Config.main.toLowerCase().equals("Smoke".toLowerCase()) || Config.main.toLowerCase().equals("miste".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.cloudy_10);
+            } else if (Config.main.toLowerCase().equals("Haze".toLowerCase()) || Config.main.toLowerCase().equals("Fog".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.haze);
+            } else {
+                MainActivity.weatherImage.setImageResource(R.drawable.partly_cloudy_29);
+            }
+        } else {
+            MainActivity.weatherImage.setImageResource(R.drawable.vector_drawable_questions);
+            MainActivity.tempTxt.setVisibility(View.GONE);
+        }
+
+    }
+
+    private boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ("com.fresh.mind.plantation.service".equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void setTitle(int selectedTabViewPosition, FragmentActivity act) {
+        Log.d("tabeSelctionPosi", "" + selectedTabViewPosition);
         if (selectedTabViewPosition == 0) {
             MainActivity.title.setText(act.getResources().getString(R.string.treeSpecies));
             MainActivity.title.setVisibility(View.VISIBLE);
-        }
-        if (selectedTabViewPosition == 1) {
+            MainActivity.menuItem.setVisible(true);
+            MainActivity.menuItem1.setVisible(true);
+            MainActivity.menuItem.setTitle(act.getString(R.string.menuNormalName));
+            MainActivity.menuItem1.setTitle(act.getString(R.string.menuCientificName));
+            MainActivity.previouseTxt = act.getResources().getString(R.string.treeSpecies);
+            ((MainActivity) act).sortOrderFragment(act.getResources().getString(R.string.treeSpecies));
+        } else if (selectedTabViewPosition == 1) {
+            ((MainActivity) act).sortOrderFragment(act.getResources().getString(R.string.treeType));
             MainActivity.title.setText(act.getResources().getString(R.string.treeType));
-        }
-        if (selectedTabViewPosition == 2) {
+            MainActivity.menuItem.setVisible(true);
+            MainActivity.menuItem1.setVisible(true);
+            MainActivity.menuItem.setTitle(act.getString(R.string.a_z));
+            MainActivity.menuItem1.setTitle(act.getString(R.string.z_a));
+            MainActivity.previouseTxt = act.getResources().getString(R.string.treeType);
+        } else if (selectedTabViewPosition == 2) {
+            ((MainActivity) act).sortOrderFragment(act.getResources().getString(R.string.location));
             MainActivity.title.setText(act.getResources().getString(R.string.chooseByLocation));
-        }
-        if (selectedTabViewPosition == 3) {
-            MainActivity.title.setText(act.getResources().getString(R.string.tools));
-            //  MainActivity.mSearchViewImg.setVisibility(View.GONE);
+            MainActivity.menuItem.setVisible(false);
+            MainActivity.menuItem1.setVisible(false);
+            MainActivity.previouseTxt = act.getResources().getString(R.string.chooseByLocation);
+
+        } else if (selectedTabViewPosition == 3) {
+            ((MainActivity) act).sortOrderFragment(act.getResources().getString(R.string.search));
+            MainActivity.title.setText(act.getResources().getString(R.string.search));
+            MainActivity.menuItem.setVisible(false);
+            MainActivity.menuItem1.setVisible(false);
+            MainActivity.previouseTxt = act.getResources().getString(R.string.search);
+
         }
     }
-/*
+
+    private static void setMargins(View view, int left, int top, int right, int bottom) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            p.setMarginEnd(16);
+            view.requestLayout();
+        }
+    }
+
 
     @Override
     public void onLocationChanged(Location location) {
 
         Log.d("dsjfhl", "" + location.getLatitude() + "  " + location.getLongitude());
-        if (Config.celsiu == -1) {
-            Log.d("StopLocation", "Running");
-            lat = location.getLatitude();
-            lng = location.getLongitude();
-            String address = getAddress(HomeTabView.this, location.getLatitude(), location.getLongitude());
+        //if (Config.celsiu == -1) {
+        Log.d("StopLocation", "Running");
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+        String address = getAddress(HomeTabView.this, location.getLatitude(), location.getLongitude());
+        Log.d("addre123324ss ", "" + address);
+        if (address != null) {
+            setAddress(address);
             Log.d("addre123324ss ", "" + address);
-            if (address != null) {
-                setAddress(address);
-            } else {
-                Log.d("addre123324ss ", "" + address);
-            }
         } else {
+            Log.d("addre123324ss ", "nO ADDDRESS" + address);
+        }
+        /*} else {
             Log.d("StopLocation", "Stop");
 
-            lm.removeUpdates(this);
+            lm.removeUpdates((android.location.LocationListener) this);
             lm = null;
-        }
+        }*/
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-*/
 
     private void setAddress(String address) {
 
@@ -245,7 +338,9 @@ public class HomeTabView extends Fragment {
 
             JSONObject weatherMain = jsonObject.getJSONObject("main");
             double temp = weatherMain.getDouble("temp");
-            Config.celsiu = (int) (temp - 273.15);
+            Log.d("temp", "" + temp);
+            Config.celsiu = (int) temp;
+            //Config.celsiu = Math.abs((int) (temp - 273.15));
 /*
 
             double pressure = weatherMain.getDouble("pressure");
@@ -265,7 +360,7 @@ public class HomeTabView extends Fragment {
             Date date = new Date(millis);
 */
 
-
+            Log.d("jsonObjectcelsiu", "" + celsiu);
             if (Config.celsiu >= 0) {
                 MainActivity.tempTxt.setText("" + Config.celsiu + "℃");
                 MainActivity.tempTxt.setVisibility(View.VISIBLE);
@@ -324,17 +419,17 @@ public class HomeTabView extends Fragment {
                     } else {
                         sb.append("Unknown Name").append(" ");
                     }
-                    String postal = address.getPostalCode();
+                   /* String postal = address.getPostalCode();
                     Log.d("", "" + postal);
                     if (postal != null) {
                         sb.append(postal).append(" ");
                     }
                     String countryName = address.getCountryName();
-                    Log.d("postalcountryName", "" + countryName);
+                    Log.d("postalcountryName", "" + countryName + "  " + address.getAdminArea() + "  " + address.getFeatureName());
                     if (countryName != null) {
                         sb.append(countryName);
                     } else {
-                    }
+                    }*/
                     result = sb.toString();
                 }
 
@@ -352,4 +447,71 @@ public class HomeTabView extends Fragment {
         super.onDestroy();
 
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    private GoogleApiClient.ConnectionCallbacks connectionAddListener = new GoogleApiClient.ConnectionCallbacks() {
+
+
+        @Override
+        public void onConnected(Bundle bundle) {
+            try {
+                Log.i(TAG, "onConnected");
+                Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (location == null) {
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (LocationListener) getActivity());
+                } else {
+                    //If everything went fine lets get latitude and longitude
+                    currentLatitude = location.getLatitude();
+                    currentLongitude = location.getLongitude();
+                    String address = getAddress(HomeTabView.this, location.getLatitude(), location.getLongitude());
+                    Log.d("addre123324ss ", "" + address);
+                    if (address != null) {
+                        setAddress(address);
+                    } else {
+                        Log.d("addre123324ss ", "" + address);
+                    }
+                }
+
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onConnectionSuspended(int i) {
+            Log.e(TAG, "onConnectionSuspended");
+        }
+    };
+
+    private GoogleApiClient.OnConnectionFailedListener connectionFailedListener = new GoogleApiClient.OnConnectionFailedListener() {
+        @Override
+        public void onConnectionFailed(ConnectionResult connectionResult) {
+            Log.e(TAG, "onConnectionFailed" + connectionResult);
+        }
+    };
+
 }

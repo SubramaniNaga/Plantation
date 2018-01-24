@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<maps xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <map name="gridmap">
+        <area name="one" shape="rect" coords="118,124,219,226" id="@+id/area1001"/>
+        <area name="two" shape="rect" coords="474,374,574,476" id="@+id/area1002"/>
+        <area name="four" shape="rect" coords="710,878,808,980" id="@+id/area1004"/>
+        <area name="red" shape="circle" coords="574,214,74" id="@+id/area1005"/>
+        <area name="blue" shape="poly" coords="250,780,250,951,405,951" id="@+id/area1006"/>
+        <area name="green" shape="poly" coords="592,502,592,730,808,730,808,502,709,502,709,603,690,603,690,502" id="@+id/area1007"/>
+    </map>
+
+    <map name="usamap">
+			<area  name="Thiruvallur"  shape="poly" id="@+id/area1" coords="422,6,336,50,400,68,450,31"/>
+			<area name="Kanchipuram" shape="poly" id="@+id/area2" coords="442,66,412,144,374,136,370,74"/>
+			<area name="Vilupuram"  shape="poly" id="@+id/area3" coords="403,150,333,133,273,173,289,220,382,198"/>
+			<area name="Thiruvannamalai" shape="poly" id="@+id/area4" coords="359,75,373,134,270,169,265,145,306,92"/>
+			<area name="Cudalore"  shape="poly"  id="@+id/area5" coords="294,228,383,202,393,237,359,260"/>
+			<area name="Nagapattinam"  shape="poly" id="@+id/area6"  coords="393,243,356,273,350,295,395,282"/>
+			<area name="Thiruvarur"  shape="poly"  id="@+id/area7" coords="384,292,331,308,366,351,396,358,380,422"/>
+			<area name="Thanjavur"  shape="poly" id="@+id/area8"  coords="352,269,342,300,328,313,357,353,318,372,305,352"/>
+			<area name="Ariyalur"  shape="poly" id="@+id/area9"  coords="316,241,309,286,356,261"/>
+			<area name="Perambalur"  shape="poly"  id="@+id/area10" coords="301,268,252,244,287,225,313,239"/>
+			<area name="Tiruchirapalli"  shape="poly" id="@+id/area11"  coords="296,271,245,239,209,277,256,295,218,324,231,352,283,308"/>
+			<area name="Pudukottai"  shape="poly" id="@+id/area12"  coords="285,315,245,358,296,384,310,408,326,384"/>
+			<area name="Ramanathapuram"  shape="poly" id="@+id/area13"  coords="298,396,219,452,227,487,323,466"/>
+			<area name="Sivagangai" shape="poly" id="@+id/area14"  coords="237,354,216,410,238,434,293,390"/>
+			<area name="Thoothukudi" shape="poly" id="@+id/area15"  coords="221,472,216,465,155,483,174,563,186,575"/>
+			<area name="Virudhunagar" shape="poly" id="@+id/area16"  coords="212,414,130,437,116,455,174,473,222,439"/>
+			<area name="Tirunelveli"  shape="poly" id="@+id/area17"  coords="163,476,115,460,108,542,143,587,176,574"/>
+			<area name="Kanyakumari"  shape="poly" id="@+id/area18"  coords="108,551,143,596,50,572"/>
+			<area name="Madurai"  shape="poly"  id="@+id/area19" coords="160,382,231,356,208,412,146,418"/>
+			<area name="Theni"  shape="poly" id="@+id/area20"  coords="106,377,160,371,126,433,98,427"/>
+			<area name="Dindigul" shape="poly" id="@+id/area21"  coords="108,372,130,318,208,302,222,353,170,378"/>
+			<area name="Karur" shape="poly" id="@+id/area22"  coords="172,275,175,305,218,301,218,319,246,297,193,267"/>
+			<area name="Namakkal"  shape="poly"  id="@+id/area24" coords="162,231,242,222,210,273,181,258"/>
+			<area name="Salem"  shape="poly"  id="@+id/area25" coords="259,238,235,218,165,223,161,177,243,188,278,204"/>
+			<area name="Dharmapuri" shape="poly" id="@+id/area26"  coords="200,120,160,175,271,178,259,143"/>
+			<area name="Vellore"  shape="poly" id="@+id/area27"  coords="241,103,276,53,332,49,373,67,276,126,258,134"/>
+			<area name="Krishnagiri"  shape="poly" id="@+id/area28" coords="237,106,256,135,197,116,167,154,134,144,167,95,184,75"/>
+			<area name="Erode" shape="poly" id="@+id/area29"  coords="157,176,158,210,158,234,180,264,175,272,120,249,82,236,73,198,88,190"/>
+			<area name="Trippur"  shape="poly" id="@+id/area30"  coords="99,245,89,292,100,321,94,347,110,358,168,301,170,276"/>
+			<area name="Coimbatore" shape="poly" id="@+id/area31"  coords="76,359,92,312,86,248,82,240,53,257,47,283,31,312"/>
+			<area name="Nilgiris" shape="poly"  id="@+id/area32" coords="67,207,75,234,31,254,1,222,12,195"/>
+			<area name="Chennai" shape="poly" id="@+id/area33"  coords="420,62,451,37,473,60,453,69"/>
+	</map>
+
+    <map name="usamap_tamil">
+        <area  name="திருவள்ளூர்"  shape="poly" id="@+id/area101" coords="422,6,336,50,400,68,450,31"/>
+        <area name="காஞ்சிபுரம்" shape="poly" id="@+id/area102" coords="442,66,412,144,374,136,370,74"/>
+        <area name="விழுப்புரம்"  shape="poly" id="@+id/area103" coords="403,150,333,133,273,173,289,220,382,198"/>
+        <area name="திருவண்ணாமலை" shape="poly" id="@+id/area104" coords="359,75,373,134,270,169,265,145,306,92"/>
+        <area name="கடலூர்"  shape="poly"  id="@+id/area105" coords="294,228,383,202,393,237,359,260"/>
+        <area name="நாகப்பட்டினம்"  shape="poly" id="@+id/area106"  coords="393,243,356,273,350,295,395,282"/>
+        <area name="திருவாரூர்"  shape="poly"  id="@+id/area107" coords="384,292,331,308,366,351,396,358,380,422"/>
+        <area name="தஞ்சாவூர்"  shape="poly" id="@+id/area108"  coords="352,269,342,300,328,313,357,353,318,372,305,352"/>
+        <area name="அரியலூர்"  shape="poly" id="@+id/area109"  coords="316,241,309,286,356,261"/>
+        <area name="பெரம்பலூர்"  shape="poly"  id="@+id/area110" coords="301,268,252,244,287,225,313,239"/>
+        <area name="திருச்சி"  shape="poly" id="@+id/area111"  coords="296,271,245,239,209,277,256,295,218,324,231,352,283,308"/>
+        <area name="புதுக்கோட்டை"  shape="poly" id="@+id/area112"  coords="285,315,245,358,296,384,310,408,326,384"/>
+        <area name="ராமநாதபுரம்"  shape="poly" id="@+id/area113"  coords="298,396,219,452,227,487,323,466"/>
+        <area name="சிவகங்கை" shape="poly" id="@+id/area114"  coords="237,354,216,410,238,434,293,390"/>
+        <area name="தூத்துக்குடி" shape="poly" id="@+id/area115"  coords="221,472,216,465,155,483,174,563,186,575"/>
+        <area name="விருதுநகர்" shape="poly" id="@+id/area116"  coords="212,414,130,437,116,455,174,473,222,439"/>
+        <area name="திருநெல்வேலி"  shape="poly" id="@+id/area117"  coords="163,476,115,460,108,542,143,587,176,574"/>
+        <area name="கன்னியாகுமாரி"  shape="poly" id="@+id/area118"  coords="108,551,143,596,50,572"/>
+        <area name="மதுரை"  shape="poly"  id="@+id/area119" coords="160,382,231,356,208,412,146,418"/>
+        <area name="தேனி"  shape="poly" id="@+id/area120"  coords="106,377,160,371,126,433,98,427"/>
+        <area name="திண்டுக்கல்" shape="poly" id="@+id/area121"  coords="108,372,130,318,208,302,222,353,170,378"/>
+        <area name="கரூர்" shape="poly" id="@+id/area122"  coords="172,275,175,305,218,301,218,319,246,297,193,267"/>
+        <area name="நாமக்கல்"  shape="poly"  id="@+id/area124" coords="162,231,242,222,210,273,181,258"/>
+        <area name="சேலம்"  shape="poly"  id="@+id/area125" coords="259,238,235,218,165,223,161,177,243,188,278,204"/>
+        <area name="தர்மபுரி" shape="poly" id="@+id/area126"  coords="200,120,160,175,271,178,259,143"/>
+        <area name="வேலூர்"  shape="poly" id="@+id/area127"  coords="241,103,276,53,332,49,373,67,276,126,258,134"/>
+        <area name="கிருஷ்ணகிரி"  shape="poly" id="@+id/area218" coords="237,106,256,135,197,116,167,154,134,144,167,95,184,75"/>
+        <area name="ஈரோடு" shape="poly" id="@+id/area129"  coords="157,176,158,210,158,234,180,264,175,272,120,249,82,236,73,198,88,190"/>
+        <area name="திருப்பூர்"  shape="poly" id="@+id/area130"  coords="99,245,89,292,100,321,94,347,110,358,168,301,170,276"/>
+        <area name="கோயம்புத்தூர்" shape="poly" id="@+id/area131"  coords="76,359,92,312,86,248,82,240,53,257,47,283,31,312"/>
+        <area name="நீலகிரி" shape="poly"  id="@+id/area132" coords="67,207,75,234,31,254,1,222,12,195"/>
+        <area name="சென்னை" shape="poly" id="@+id/area133"  coords="420,62,451,37,473,60,453,69"/>
+
+    </map>
+
+
+</maps>

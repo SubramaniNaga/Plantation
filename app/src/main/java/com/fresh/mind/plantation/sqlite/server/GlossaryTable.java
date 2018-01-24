@@ -25,7 +25,7 @@ public class GlossaryTable extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String contact = "create table glossaryDetails(id INTEGER PRIMARY KEY AUTOINCREMENT, word text, lastUpdate text,wordTamil text ,meaning text, meaningTamil text)";
+        String contact = "create table glossaryDetails(id INTEGER PRIMARY KEY AUTOINCREMENT,word text,lastUpdate text,wordTamil text ,meaning text,meaningTamil text,common_key text)";
         db.execSQL(contact);
 
     }
@@ -40,12 +40,13 @@ public class GlossaryTable extends SQLiteOpenHelper {
     public void onInsert(ContentValues contentValues) {
         sql = this.getWritableDatabase();
         sql.insert("glossaryDetails", null, contentValues);
+        Log.d("contentValues", "" + contentValues);
         sql.close();
 
     }
 
 
-    public ArrayList<HashMap<String, String>> getContactDetails(String languages) {
+    public ArrayList<HashMap<String, String>> getGlossaryDetails(String languages) {
         sql = this.getReadableDatabase();
         Cursor cursors = sql.rawQuery("select * from glossaryDetails", null);
         ArrayList<HashMap<String, String>> hashMaps = new ArrayList<>();

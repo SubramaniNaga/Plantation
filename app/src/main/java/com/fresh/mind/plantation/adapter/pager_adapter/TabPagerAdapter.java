@@ -12,6 +12,7 @@ import com.fresh.mind.plantation.fragment.Inside.ImagesView;
  */
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
+
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);
         // TODO Auto-generated constructor stub
@@ -19,16 +20,21 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+        Fragment fragment;
         switch (i) {
             case 0:
                 //Fragement for Android Tab
-                return new ImagesView();
-
+                fragment = new ImagesView();
+                break;
             case 1:
                 //Fragment for Windows Tab
-                return new DescriptionView();
+                fragment = new DescriptionView();
+                break;
+            default:
+                fragment=new ImagesView();
+                break;
         }
-        return null;
+        return fragment;
 
     }
 

@@ -39,14 +39,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="8dp"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="4dp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         app:srcCompat="@drawable/ic_arrow_back" />
 
                     <LinearLayout
@@ -57,7 +58,7 @@
                         android:orientation="horizontal"
                         android:paddingLeft="8dp"
                         android:textColor="@color/white"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -76,8 +77,8 @@
                             android:cursorVisible="true"
                             android:hint="Search..."
                             android:maxLines="1"
-
                             android:padding="8dp"
+                            android:singleLine="true"
                             android:textColor="@color/white"
                             android:textColorHint="@color/white"
                             app:typeface="lato_semibold" />
@@ -96,17 +97,20 @@
                         android:id="@+id/title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:fadingEdge="horizontal"
                         android:foregroundGravity="center"
+                        android:lines="1"
+                        android:marqueeRepeatLimit="marquee_forever"
                         android:maxLines="1"
-                        android:paddingBottom="6dp"
-                        android:text="Plantation Made Easy"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
                         android:textColor="@color/white"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:visibility="visible"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/back"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@+id/back"
-                        app:layout_constraintRight_toLeftOf="@+id/searchView"
+                        app:layout_constraintLeft_toLeftOf="@+id/mSearchViewLayout"
+                        app:layout_constraintRight_toRightOf="@+id/mSearchViewLayout"
                         app:layout_constraintTop_toTopOf="parent"
                         app:typeface="lato_semibold" />
 
@@ -114,35 +118,40 @@
                         android:id="@+id/title1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:ellipsize="marquee"
+                        android:fadingEdge="horizontal"
                         android:foregroundGravity="center"
+                        android:lines="1"
+                        android:marqueeRepeatLimit="marquee_forever"
                         android:maxLines="1"
-                        android:paddingBottom="9dp"
-                        android:paddingLeft="20dp"
-                        android:text="Sample Text"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
                         android:textColor="@color/white"
-                        android:textSize="18dp"
-                        android:visibility="gone"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/back"
+                        android:textSize="18sp"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/back"
                         app:layout_constraintRight_toLeftOf="@+id/searchView"
                         app:layout_constraintTop_toTopOf="parent"
                         app:typeface="lato_semibold" />
 
-                    <android.support.constraint.ConstraintLayout
+                    <LinearLayout
                         android:id="@+id/searchView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@android:drawable/ic_menu_search">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
                             android:id="@+id/weatherImage"
                             android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginBottom="4dp"
+                            android:layout_height="25dp"
+                            android:layout_weight="1.5"
+                            android:padding="3dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toLeftOf="@+id/tempDetails"
@@ -151,16 +160,56 @@
 
                         <com.fresh.mind.plantation.customized.CustomTextView
                             android:id="@+id/tempDetails"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginRight="16dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.5"
                             android:textColor="@color/white"
+                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:typeface="lato_bold" />
+                    </LinearLayout>
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@android:drawable/ic_menu_search">
+
+                        <com.fresh.mind.plantation.customized.CustomTextView
+                            android:id="@+id/mAddressTxt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ContactAddress"
+                            android:visibility="gone"
+                            tools:layout_editor_absoluteX="16dp"
+                            tools:layout_editor_absoluteY="12dp" />
+
+                        <ImageView
+                            android:layout_width="1dp"
+                            android:layout_height="1dp"
+                            android:padding="4dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/vector_drawable_questions" />
+
+                        <com.fresh.mind.plantation.customized.CustomTextView
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="30*C"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:typeface="lato_regular" />
                     </android.support.constraint.ConstraintLayout>
 
                 </android.support.constraint.ConstraintLayout>

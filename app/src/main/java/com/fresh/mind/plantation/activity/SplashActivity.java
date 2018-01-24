@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -81,7 +82,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static com.fresh.mind.plantation.Constant.Config.SPLASH_LAGUAGE;
+
+import static com.fresh.mind.plantation.Constant.Config.SPLASH_LANGUAGE;
+import static com.fresh.mind.plantation.Constant.Config.fileLocationOnServer;
+import static com.fresh.mind.plantation.Constant.Config.sdCardLocation;
+import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeImages;
+import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeType;
 
 /**
  * Created by AND I5 on 17-03-2017.
@@ -108,11 +114,9 @@ public class SplashActivity extends AppCompatActivity {
     private LanguageChange languageChange;
     int totalSize = 0;
     public static CustomTextView mTamil, mEnglish;
-    private String sdCardLocation = "sdcard/Treepedia/TreeNameByImage";
-    private String sdCardLocationTreeType = "sdcard/Treepedia/TreeType";
-    private String sdCardLocationTreeImages = "sdcard/Treepedia/TreeImages";
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (BuildConfig.DEBUG) {
@@ -233,7 +237,7 @@ public class SplashActivity extends AppCompatActivity {
         //   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        SPLASH_LAGUAGE = 0;
+        SPLASH_LANGUAGE = 0;
         startActivity(intent);
         finish();
         overridePendingTransition(0, 0);
@@ -446,7 +450,7 @@ public class SplashActivity extends AppCompatActivity {
                                             } else {
                                                 Log.d("deded", i + " Not exist");
                                                 //String ImageSpilt = Image.replaceAll(" ", "%20");
-                                                String ImageDpwnLoad = "http://plantation.kambaa.com/admin2017/images/" + Image;
+                                                String ImageDpwnLoad = Config.fileLocationOnServer + Image;
                                                 Log.d("ImageImage TreeType", " " + ImageDpwnLoad);
                                                 storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
                                             }
@@ -505,7 +509,7 @@ public class SplashActivity extends AppCompatActivity {
                                         } else {
                                             Log.d("deded 2", i + " Not exist");
                                             String ImageSpilt = Image.replaceAll(" ", "%20");
-                                            String ImageDownload = "http://plantation.kambaa.com/admin2017/images/" + ImageSpilt;
+                                            String ImageDownload = fileLocationOnServer+ ImageSpilt;
                                             Log.d("ImageImage TreeType", " " + Image + "  " + ImageDownload);
                                             storagePath = downloadFile(ImageDownload, sdCardLocationTreeType);
                                             Log.d("storagePathSeond", "" + storagePath);
@@ -533,20 +537,20 @@ public class SplashActivity extends AppCompatActivity {
                         if (statusMsg3) {
                             JSONArray result1Array = json3Object.getJSONArray("result");
                             Log.d("result1Array  3", "" + result1Array);
-                            if (result1Array.length() == districtNameList.getCount()) {
-                            } else {
-                                districtNameList.delete();
-                                for (int i = 0; i < result1Array.length(); i++) {
-                                    JSONObject jsonObject = result1Array.getJSONObject(i);
-                                    String District = jsonObject.getString("District");
-                                    String Last_Update = jsonObject.getString("LastUpdate");
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("districtName", District);
-                                    contentValues.put("lastUpdate", Last_Update);
-                                    contentValues.put("districtNameTamil", jsonObject.getString("DistrictTamil"));
-                                    districtNameList.onCreate(contentValues);
-                                }
+                          /*  if (result1Array.length() == districtNameList.getCount()) {
+                            } else {*/
+                            districtNameList.delete();
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String District = jsonObject.getString("District");
+                                String Last_Update = jsonObject.getString("LastUpdate");
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("districtName", District);
+                                contentValues.put("lastUpdate", Last_Update);
+                                contentValues.put("districtNameTamil", jsonObject.getString("DistrictTamil"));
+                                districtNameList.onCreate(contentValues);
                             }
+                            // }
                         }
 
                         JSONObject json4Object = parentObject.getJSONObject("Json4");
@@ -802,13 +806,13 @@ public class SplashActivity extends AppCompatActivity {
                                                 } else {
                                                     Log.d("deded 2", i + " Not 6 exist");
                                                     String ImageSplit = Image.replaceAll(" ", "%20");
-                                                    String ImageDownload = "http://plantation.kambaa.com/admin2017/images/" + ImageSplit;
+                                                    String ImageDownload =fileLocationOnServer + ImageSplit;
                                                     Log.d("ImageImage", arr + "  " + ImageDownload);
                                                     storagePath = downloadFile(ImageDownload, sdCardLocationTreeImages);
                                                     Log.d("storagePathSeond", "" + storagePath);
 
                                                 }
-                                                imageDb.onInsert( TreeName, common_key, TreeNameTamil, storagePath);
+                                                //imageDb.onInsert( TreeName, common_key, TreeNameTamil, storagePath);
 
                                             }
 
@@ -981,8 +985,8 @@ public class SplashActivity extends AppCompatActivity {
 
         mTamil.setVisibility(View.GONE);
         mEnglish.setVisibility(View.GONE);
-        Log.d("weqwew", "" + Config.SPLASH_LAGUAGE);
-        if (Config.SPLASH_LAGUAGE == 0) {
+      //  Log.d("weqwew", "" + Config.SPLASH_LANGUAGE);
+        if (SPLASH_LANGUAGE == 0) {
             //getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);

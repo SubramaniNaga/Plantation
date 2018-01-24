@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ctc="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <com.fresh.mind.plantation.imagemap.ImageMap
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/tn_map"
+
+        android:visibility="gone"
+        ctc:fitImageToScreen="true"
+        ctc:map="usamap"
+        ctc:maxSizeFactor="1.5"
+        ctc:scaleFromOriginal="true" />
+
+    <com.fresh.mind.plantation.imagemap.ImageMap
+        android:id="@+id/map_tamil"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/tn_map"
+        android:visibility="gone"
+        ctc:fitImageToScreen="true"
+        ctc:map="usamap_tamil"
+        ctc:maxSizeFactor="1.5"
+        ctc:scaleFromOriginal="true" />
+
+</FrameLayout>

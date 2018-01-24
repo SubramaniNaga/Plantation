@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
+        <!--0-->
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/vector_drawable_home_house_real_estate"
@@ -13,69 +14,84 @@
              android:icon="@drawable/tree_species"
              android:title="Choose By Tree Species"
              android:visible="false" />-->
+        <!--1-->
         <item
             android:id="@+id/nav_choose_by_tree"
             android:icon="@drawable/tree_type"
-            android:title="Choose By Tree Type"
-            android:visible="false" />
+            android:title="@string/agroForestry"
+            android:visible="true" />
+        <!--2-->
         <item
-            android:id="@+id/nav_choose_by_location"
-            android:icon="@drawable/placeholder"
-            android:title="Choose By Location"
-            android:visible="false" />
-        <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/vector_drawable_magnifier"
-            android:title="@string/search" />
-
-        <item
-            android:id="@+id/nav_glossery"
-            android:icon="@drawable/vector_drawable_book"
-            android:title="@string/glossary" />
-        <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/efficiency"
-            android:title="@string/tools"
-            android:visible="false" />
-        <item
-            android:id="@+id/nav_contact"
-            android:icon="@drawable/vector_drawable_contact_at"
-            android:title="@string/contactInformation"
-            android:visible="false" />
-        <item
-            android:id="@+id/nav_app_details"
-            android:icon="@drawable/vector_drawable_about"
-            android:title="@string/appDetails"
-            android:visible="false" />
-        <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/vector_drawable_help_1"
-            android:title="@string/help" />
+            android:id="@+id/nav_plantation_calculation"
+            android:icon="@drawable/vector_drawable_plan"
+            android:title="@string/plantationCalculation"
+            android:visible="true" />
+        <!--3-->
         <item
             android:id="@+id/nav_tutorial"
             android:icon="@drawable/update"
             android:title="@string/tutorials"
             android:visible="true" />
+        <!--4 no-->
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/vector_drawable_setting_tools"
+            android:title="@string/tools"
+            android:visible="false" />
+        <!--5 no-->
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/efficiency"
+            android:title="@string/tools"
+            android:visible="false" />
+        <!--6 no-->
+        <item
+            android:id="@+id/nav_app_details"
+            android:icon="@drawable/vector_drawable_about"
+            android:title="@string/appDetails"
+            android:visible="false" />
+        <!--7 no-->
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/vector_drawable_help_1"
+            android:title="@string/help"
+            android:visible="false" />
+        <!--8 no-->
         <item
             android:id="@+id/nav_direction"
             android:icon="@drawable/vector_drawablelocation"
             android:title="@string/directions"
             android:visible="false" />
+        <!--9-->
         <item
             android:id="@+id/nav_Others"
             android:icon="@drawable/vector_drawable_plan"
             android:title="@string/Schemes"
             android:visible="true" />
+        <!--10-->
+        <item
+            android:id="@+id/nav_glossery"
+            android:icon="@drawable/vector_drawable_book"
+            android:title="@string/glossary" />
+        <!--11-->
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/vector_drawablelocation"
+            android:title="@string/locator"
+            android:visible="true" />
+        <!--12-->
         <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/vector_drawable_feedback"
             android:title="@string/Feedback"
             android:visible="true" />
+        <!--13-->
         <item
             android:id="@+id/nav_others"
             android:icon="@drawable/vector_drawable_update_settings"
             android:title="@string/action_settings"
             android:visible="true" />
+        <!--14 no-->
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout"

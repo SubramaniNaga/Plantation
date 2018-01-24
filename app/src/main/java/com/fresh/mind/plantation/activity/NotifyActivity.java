@@ -21,7 +21,6 @@ import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
-import com.fresh.mind.plantation.fragment.menu_page.SplashScreen;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 import com.fresh.mind.plantation.sqlite.server.ContactUs;
 import com.fresh.mind.plantation.sqlite.server.DistrictNameList;
@@ -57,7 +56,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.fresh.mind.plantation.Constant.Config.updateCounting;
-import static com.fresh.mind.plantation.Constant.Config.url;
 
 
 /**
@@ -122,7 +120,7 @@ public class NotifyActivity extends AppCompatActivity {
         textView12 = (CustomTextView) findViewById(R.id.textView12);
         languageChage = (LinearLayout) findViewById(R.id.languageChage);
         languageChageTxt = (CustomTextView) findViewById(R.id.languageChageTxt);
-        img = (ImageView) findViewById(R.id.img);
+        //img = (ImageView) findViewById(R.id.img);
         languageChage.setVisibility(View.GONE);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
         appBarLayout.setVisibility(View.VISIBLE);

@@ -1,26 +1,35 @@
 package com.fresh.mind.plantation.adapter.base_adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
 
 import com.fresh.mind.plantation.Constant.Config;
+import com.fresh.mind.plantation.Constant.Holder;
 import com.fresh.mind.plantation.R;
+import com.fresh.mind.plantation.customized.CustomTextView;
 import com.fresh.mind.plantation.tab_pager.ViewDetailsTabView;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.fresh.mind.plantation.R.id.cardView2;
+import static com.fresh.mind.plantation.R.id.mLocationBasedSeletedTree;
+import static com.fresh.mind.plantation.R.id.mSubName;
+import static com.fresh.mind.plantation.R.id.oval;
 
 
 /**
@@ -50,13 +59,11 @@ public class Adapter_LocationBasedSeletedTree extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        // return the total number of view types. this value should never change at runtime
         return 2;
     }
 
     @Override
     public int getItemViewType(int position) {
-        // return a value between 0 and (getViewTypeCount - 1)
         return position % 2;
     }
 
@@ -65,62 +72,74 @@ public class Adapter_LocationBasedSeletedTree extends BaseAdapter {
         return position;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        TextView treeName, mSubName, mPart2Title, mPart2SubName;
-        ImageView imageView, mPart2Img;
-        LinearLayout cardView1, cardView2;
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
-        convertView = layoutInflater.inflate(R.layout.adapter_tree_specis, null);
-        int viewType = getItemViewType(position);
-        cardView1 = (LinearLayout) convertView.findViewById(R.id.cardView2);
-        cardView2 = (LinearLayout) convertView.findViewById(R.id.cardView3);
+        Holder holder;
+        if (convertView == null) {
+            holder = new Holder();
+            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.adapter_tree_specis, null);
+            int viewType = getItemViewType(position);
+            holder.cardView1 = (LinearLayout) convertView.findViewById(cardView2);
+            holder.cardView2 = (LinearLayout) convertView.findViewById(R.id.cardView3);
 
-        if (viewType == 0) {
-            cardView1.setVisibility(View.VISIBLE);
-            cardView2.setVisibility(View.GONE);
-            cardView2.setVisibility(View.GONE);
-        } else if (viewType == 1) {
-            cardView1.setVisibility(View.GONE);
-            cardView2.setVisibility(View.VISIBLE);
+
+            holder.cardView1.setVisibility(View.VISIBLE);
+            holder.cardView2.setVisibility(View.GONE);
+
+            holder.treeName = (CustomTextView) convertView.findViewById(R.id.mTreeName);
+            holder.mSubName = (CustomTextView) convertView.findViewById(mSubName);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView2);
+            holder.mPart2Title = (CustomTextView) convertView.findViewById(R.id.textView2);
+            holder.mPart2SubName = (CustomTextView) convertView.findViewById(R.id.textView4);
+            holder.mPart2Img = (ImageView) convertView.findViewById(R.id.imageView3);
+            holder.cnsLayout1 = (ConstraintLayout) convertView.findViewById(R.id.cnsLayout1);
+            convertView.setTag(holder);
+        } else {
+            holder = (Holder) convertView.getTag();
         }
-        treeName = (TextView) convertView.findViewById(R.id.mTreeName);
-        mSubName = (TextView) convertView.findViewById(R.id.mSubName);
-        imageView = (ImageView) convertView.findViewById(R.id.imageView2);
-        mPart2Title = (TextView) convertView.findViewById(R.id.textView2);
-        mPart2SubName = (TextView) convertView.findViewById(R.id.textView4);
-        mPart2Img = (ImageView) convertView.findViewById(R.id.imageView3);
+        if (Config.checkMaterial() == 1) {
+            holder.cnsLayout1.setBackground(mContext.getDrawable(R.drawable.ripple_location));
+        }
 
-        treeName.setText("" + mListItemValies.get(position).get("treeName"));
-        mSubName.setText("" + mListItemValies.get(position).get("subTreeName"));
-        mPart2Title.setText("" + mListItemValies.get(position).get("treeName"));
-        mPart2SubName.setText("" + mListItemValies.get(position).get("subTreeName"));
         String imag = mListItemValies.get(position).get("storagePath");
         //Log.d("imag", "" + imag);
-        if (imag != null) {
-                                /*ByteArrayInputStream imageStream = new ByteArrayInputStream(imag);
-            Bitmap theImage = BitmapFactory.decodeStream(imageStream);*/
-            for (int i = 0; i < mImages.size(); i++) {
-                String storagePath = mImages.get(i).get("storagePath");
-                if (storagePath.equals(imag)) {
-                    Bitmap theImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imag), 64, 64);
-                    imageView.setImageBitmap(theImage);
-                    mPart2Img.setImageBitmap(theImage);
-                }
+        if (getItemViewType(position) == 0) {
+            holder.treeName.setText("" + mListItemValies.get(position).get("treeName"));
+            holder.mSubName.setText("" + mListItemValies.get(position).get("subTreeName"));
+            if (imag != null) {
+                Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.imageView);
+                // Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.mPart2Img);
             }
-        }
-        //  Log.d("imgpath", "" + imgpath);
+            holder.cardView1.setVisibility(View.VISIBLE);
+            holder.cardView2.setVisibility(View.GONE);
 
+        } else if (getItemViewType(position) == 1) {
+            holder.mPart2Title.setText("" + mListItemValies.get(position).get("treeName"));
+            holder.mPart2SubName.setText("" + mListItemValies.get(position).get("subTreeName"));
+            if (imag != null) {
+                //   Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.imageView);
+                Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.mPart2Img);
+            }
+            holder.cardView1.setVisibility(View.GONE);
+            holder.cardView2.setVisibility(View.VISIBLE);
+        }
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                Config.LISTVIEW_SMOOTH_VIEW_POSITION_2 = position;
                 ViewDetailsTabView viewTreeDetails = new ViewDetailsTabView();
                 Bundle bundle = new Bundle();
                 bundle.putString("titleName", "Choose By Location1");
                 Config.TREE_NAME = mListItemValies.get(position).get("treeName");
+                Config.COMMON_KEY = mListItemValies.get(position).get("common_key");
                 bundle.putString("treeName", "" + mListItemValies.get(position).get("treeName"));
+
                 viewTreeDetails.setArguments(bundle);
-                mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, viewTreeDetails).commit();
+                mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, viewTreeDetails).addToBackStack(null).commit();
 
             }
         });

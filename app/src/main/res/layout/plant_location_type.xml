@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ctc="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,15 +15,41 @@
         android:padding="8dp"
         android:text="@string/notfoundLocation"
         android:textColor="@color/black"
+        android:visibility="gone"
         app:typeface="lato_bold" />
 
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvDistrictName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:numColumns="3" />
+
+    <com.fresh.mind.plantation.imagemap.ImageMap
+        android:id="@+id/imageMaping"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tn_map"
+        android:visibility="gone"
+        ctc:fitImageToScreen="true"
+        ctc:map="usamap"
+        ctc:maxSizeFactor="1.5"
+        ctc:scaleFromOriginal="true" />
+
+    <GridView
         android:id="@+id/locationListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
         android:divider="@null"
-        android:dividerHeight="0dp"></ListView>
+        android:dividerHeight="0dp"
+        android:numColumns="3"
+        android:visibility="gone" />
 </LinearLayout>

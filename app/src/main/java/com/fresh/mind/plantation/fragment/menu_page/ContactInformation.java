@@ -44,6 +44,8 @@ public class ContactInformation extends Fragment {
             Utils.setLocalLanguage("en", getActivity());
         }
         rootView = inflater.inflate(R.layout.plant_contact, null);
+        MainActivity.menuItem.setVisible(false);
+        MainActivity.menuItem1.setVisible(false);
         mContactList = (ListView) rootView.findViewById(R.id.contactDetals);
         rootView.findViewById(R.id.mLine).setVisibility(View.VISIBLE);
         CustomTextView districtName, contactDetails;

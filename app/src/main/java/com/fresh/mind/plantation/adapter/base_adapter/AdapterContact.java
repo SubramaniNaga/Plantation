@@ -74,6 +74,8 @@ public class AdapterContact extends BaseAdapter {
         mDes.setTextColor(mContext.getResources().getColor(R.color.light_black));
         mAdd.setTextColor(mContext.getResources().getColor(R.color.light_black));
         mNo.setTextColor(mContext.getResources().getColor(R.color.light_black));
+
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

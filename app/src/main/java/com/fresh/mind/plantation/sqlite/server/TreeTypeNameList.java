@@ -7,15 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+
 import org.json.JSONArray;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-/**
- * Created by AND I5 on 20-02-2017.
- */
 
 public class TreeTypeNameList extends SQLiteOpenHelper {
     SQLiteDatabase sqLiteDatabase;
@@ -27,7 +26,7 @@ public class TreeTypeNameList extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String table = "create table TreeTypeNameList(id INTEGER PRIMARY KEY AUTOINCREMENT, treeType text, treeIcon blob, lastUpdate text,treeTypeTamil text,storagePath text)";
+        String table = "create table TreeTypeNameList(id INTEGER PRIMARY KEY AUTOINCREMENT,treeType text,treeIcon blob,lastUpdate text,treeTypeTamil text,storagePath text,common_key text)";
         db.execSQL(table);
 
     }
@@ -70,8 +69,35 @@ public class TreeTypeNameList extends SQLiteOpenHelper {
                     status.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
                     mDistrinListName.add(status);
                 }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return mDistrinListName;
+    }
 
+    public ArrayList<KeyPairBoolData> getTreTypeeNamesKayPair(String language) {
+        ArrayList<KeyPairBoolData> mDistrinListName = new ArrayList<>();
 
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from TreeTypeNameList", null);
+        Log.d("sdasdFormCursor", "" + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            do {
+                KeyPairBoolData keyPairBoolData = new KeyPairBoolData();
+                if (language.equals("1")) {
+                    keyPairBoolData.setName(""+cursor.getString(cursor.getColumnIndex("treeTypeTamil")));
+                    /*status.put("treeType", cursor.getString(cursor.getColumnIndex("treeTypeTamil")));
+                    status.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
+                    mDistrinListName.add(status);*/
+                } else {
+                   /* HashMap<String, String> status = new HashMap<>();
+                    status.put("treeType", cursor.getString(cursor.getColumnIndex("treeType")));
+                    status.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
+                    mDistrinListName.add(status);*/
+                    keyPairBoolData.setName(""+cursor.getString(cursor.getColumnIndex("treeType")));
+                }
+                mDistrinListName.add(keyPairBoolData);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -98,7 +124,6 @@ public class TreeTypeNameList extends SQLiteOpenHelper {
                 }
             } while (cursor.moveToNext());
         }
-
         return mDistrinListName;
     }
 
@@ -120,7 +145,7 @@ public class TreeTypeNameList extends SQLiteOpenHelper {
 
     public String getTreeType(String treeType) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String query = "SELECT * FROM TreeTypeNameList WHERE treeType='" + treeType + "'";
+        String query = "SELECT * FROM TreeTypeNameList WHERE treeType like '%" + treeType + "%'";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         String mLastDate = null;
         if (cursor.moveToFirst()) {
@@ -135,7 +160,7 @@ public class TreeTypeNameList extends SQLiteOpenHelper {
 
     public int getId(String treeTypeDb) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String query = "SELECT * FROM TreeTypeNameList WHERE treeType='" + treeTypeDb + "'";
+        String query = "SELECT * FROM TreeTypeNameList WHERE treeType like '%" + treeTypeDb + "%'";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         int id = 0;
         if (cursor.moveToFirst()) {

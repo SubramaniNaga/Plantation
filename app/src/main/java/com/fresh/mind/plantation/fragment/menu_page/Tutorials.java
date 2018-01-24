@@ -3,14 +3,10 @@ package com.fresh.mind.plantation.fragment.menu_page;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
-import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -43,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,9 +53,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-
-import static com.fresh.mind.plantation.Constant.Config.mVIDEO_LIST;
-import static com.fresh.mind.plantation.Constant.Config.mVIDEO_PATH;
+import static com.fresh.mind.plantation.Constant.Config.fileLocationOnServer;
+import static com.fresh.mind.plantation.api.RetrofitCall.BASE_URL;
 
 
 /**
@@ -69,111 +63,55 @@ import static com.fresh.mind.plantation.Constant.Config.mVIDEO_PATH;
 
 public class Tutorials extends Fragment {
     private View rootView;
-    int downloadedSize = 0;
-    int totalSize = 0;
-
-    private String fileLocationOnServer = "http://plantation.kambaa.com/admin2017/images/";
+    private int totalSize = 0;
     private String sdCardLocation = "sdcard/Treepedia/Videos";
     private VideoPath videoPath;
     private CustomTextView mTutorial;
     private ListView mListView;
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        try {
+            LanguageChange languageChange = new LanguageChange(getActivity());
+            String languages = languageChange.getStatus();
 
-        LanguageChange languageChange = new LanguageChange(getActivity());
-        String languages = languageChange.getStatus();
-
-        if (languages.equals("1")) {
-            Utils.setLocalLanguage("ta", getActivity());
-        } else {
-            Utils.setLocalLanguage("en", getActivity());
-        }
-
-        ((MainActivity) getActivity()).setTutorials(getActivity().getResources().getString(R.string.tutorials));
-        videoPath = new VideoPath(getActivity());
-        rootView = inflater.inflate(R.layout.tutorials, null);
-        mTutorial = (CustomTextView) rootView.findViewById(R.id.mTutorial);
-        mListView = (ListView) rootView.findViewById(R.id.mListView);
-
-        if (mVIDEO_LIST.size() == 0) {
-            new LoaderVideos().execute();
-        } else {
-            mListView.setAdapter(new VideoTutorialAdapter(getActivity(), mVIDEO_PATH, mVIDEO_LIST));
-            mTutorial.setVisibility(View.GONE);
-            mListView.setVisibility(View.VISIBLE);
-        }
-        //  new FeachingVideos().execute();
-
-        return rootView;
-    }
-
-    class LoaderVideos extends AsyncTask<ArrayList<HashMap<String, byte[]>>, Void, ArrayList<HashMap<String, byte[]>>> {
-        ProgressDialog progressDialog;
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setTitle(null);
-            progressDialog.setMessage(getActivity().getString(R.string.fetchingData));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected ArrayList<HashMap<String, byte[]>> doInBackground(ArrayList<HashMap<String, byte[]>>... params) {
-
-            mVIDEO_PATH = videoPath.getViewPath(AppData.checkLanguage(getActivity()));
-            for (int l = 0; l < mVIDEO_PATH.size(); l++) {
-                String storagePath = mVIDEO_PATH.get(l).get("path");
-                //Log.d("storaVideoiogePath", "" + storagePath);
-                if (storagePath != null) {
-                    byte[] byteArray = new byte[0];
-                    HashMap<String, byte[]> mHashBitMap = new HashMap<>();
-                    Bitmap ThumbImage = ThumbnailUtils.createVideoThumbnail(new File(storagePath).getAbsolutePath(), MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
-                    //Log.d("ThumbImage", "" + ThumbImage);
-                    if (ThumbImage != null) {
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        ThumbImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byteArray = stream.toByteArray();
-                        mHashBitMap.put("ThumbImage", byteArray);
-                        mVIDEO_LIST.add(mHashBitMap);
-                    } else {
-                        mHashBitMap.put("ThumbImage", byteArray);
-                        mVIDEO_LIST.add(mHashBitMap);
-                    }
-                }
-
+            if (languages.equals("1")) {
+                Utils.setLocalLanguage("ta", getActivity());
+            } else {
+                Utils.setLocalLanguage("en", getActivity());
             }
 
-            return mVIDEO_LIST;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<HashMap<String, byte[]>> hashMaps) {
-            super.onPostExecute(hashMaps);
-
-            if (mVIDEO_LIST != null) {
-                if (mVIDEO_LIST.size() > +1) {
-                    mListView.setAdapter(new VideoTutorialAdapter(getActivity(), mVIDEO_PATH, mVIDEO_LIST));
-                    mTutorial.setVisibility(View.GONE);
-                    mListView.setVisibility(View.VISIBLE);
-                } else {
-                    mTutorial.setVisibility(View.VISIBLE);
-                    mListView.setVisibility(View.GONE);
-                }
+            ((MainActivity) getActivity()).setTutorials(getActivity().getResources().getString(R.string.tutorials));
+            videoPath = new VideoPath(getActivity());
+            rootView = inflater.inflate(R.layout.tutorials, null);
+            MainActivity.menuItem.setVisible(false);
+            MainActivity.menuItem1.setVisible(false);
+            mTutorial = (CustomTextView) rootView.findViewById(R.id.mTutorial);
+            mListView = (ListView) rootView.findViewById(R.id.mListView);
+            ArrayList<HashMap<String, String>> hashMaps = videoPath.getViewPath(AppData.checkLanguage(getActivity()));
+            if (hashMaps.size() >= 1) {
+                //new LoaderVideos().execute();
+                mListView.setAdapter(new VideoTutorialAdapter(getActivity(), hashMaps));
+                mTutorial.setVisibility(View.GONE);
+                mListView.setVisibility(View.VISIBLE);
             } else {
+
                 mTutorial.setVisibility(View.VISIBLE);
                 mListView.setVisibility(View.GONE);
             }
-            progressDialog.dismiss();
-            progressDialog = null;
+            //  new FeachingVideos().execute();
+        } catch (NullPointerException e) {
+
         }
+        return rootView;
     }
 
 
@@ -203,7 +141,7 @@ public class Tutorials extends Fragment {
         protected String doInBackground(String... params) {
             String result = null;
             HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://plantation.kambaa.com/webservices/webservice1.php");
+            HttpPost httpPost = new HttpPost(BASE_URL + "webservice1.php");
             InputStream is = null;
             List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("task", "getdata"));
@@ -269,134 +207,6 @@ public class Tutorials extends Fragment {
                         }
 
 
-                        /*if (mp3List != null) {
-                            if (result.length() > mp3List.length) {
-                                Log.d("asaspl", "1");
-                                //videoPath.delete();
-                                // Log.d("valuesss Length", "" + result.length() + "  " + mp3List.length);
-                                for (int h = 0; h < mp3List.length; h++) {
-                                    File file = mp3List[h];
-                                    String fileName = file.getName();
-                                    for (int i = 0; i < result.length(); i++) {
-                                        JSONObject loopObj = result.getJSONObject(i);
-                                        String video = loopObj.getString("video");
-                                        String Description = loopObj.getString("Description");
-                                        String DescriptionTamil = loopObj.getString("DescriptionTamil");
-                                        String LastUpdate = loopObj.getString("LastUpdate");
-                                        Log.d("1267loop", "loop" + video + "  " + i);
-                                        if (fileName.equals(video)) {
-                                            Log.d("1267equals", "equals " + fileName + "  " + video);
-                                        } else {
-                                            Log.d("1267Notequals", "Notequals " + fileName + "  " + video);
-                                            downloadFile(fileLocationOnServer + video);
-                                            ContentValues contentValues = new ContentValues();
-                                            contentValues.put("video", video);
-                                            contentValues.put("Description", "" + Description);
-                                            contentValues.put("DescriptionTamil", "" + DescriptionTamil);
-                                            contentValues.put("lastUpdate", "" + LastUpdate);
-                                            videoPath.onInsert(contentValues);
-                                        }
-                                    }
-                                }
-                            } else if (result.length() == mp3List.length) {
-                                Log.d("asaspl", "2");
-                                dialog.dismiss();
-                                ArrayList<HashMap<String, String>> mVideoPath = videoPath.getViewPath(AppData.checkLanguage(getActivity()));
-                                ArrayList<HashMap<String, String>> mDetailsList = new ArrayList<>();
-                                // Log.d("valuesss mVideoPath", "" + mVideoPath.size());
-                                for (int l = 0; l < mVideoPath.size(); l++) {
-                                    String fileName = mVideoPath.get(l).get("path");
-                                    File dir = new File("" + sdCardLocation);
-                                    File[] mp3List = dir.listFiles();
-                                    if (mp3List != null) {
-                                        for (int m = 0; m < mp3List.length; m++) {
-                                            File file = mp3List[m];
-                                            String externalFileName = file.getName();
-                                            //  Log.d("adsasd", "" + fileName + "  " + externalFileName);
-                                            if (fileName.equals(externalFileName)) {
-                                                //   Log.d("asasassa", "equals");
-                                                HashMap<String, String> hashMapHashMap = new HashMap();
-                                                hashMapHashMap.put("path", "" + file);
-                                                hashMapHashMap.put("description", mVideoPath.get(l).get("Description"));
-                                                mDetailsList.add(hashMapHashMap);
-                                            } else {
-                                                // Log.d("asasassa", "equals not");
-                                            }
-                                        }
-                                    }
-                                }
-                                //  Log.d("mDetailsList", "" + mDetailsList.size());
-                                HashSet<HashMap<String, String>> hashSet = new HashSet<HashMap<String, String>>();
-                                hashSet.addAll(mDetailsList);
-                                mDetailsList.clear();
-                                mDetailsList.addAll(hashSet);
-                                if (mDetailsList.size() >= 1) {
-                                    mListView.setAdapter(new VideoTutorialAdapter(getActivity(), mDetailsList));
-                                    mTutorial.setVisibility(View.GONE);
-                                    mListView.setVisibility(View.VISIBLE);
-                                } else {
-                                    mTutorial.setVisibility(View.VISIBLE);
-                                    mListView.setVisibility(View.GONE);
-                                }
-                            } else {
-                                Log.d("asaspl", "3");
-                                // Log.d("valuesss Length", "Low" + result.length() + "  " + mp3List.length);
-                                if (mp3List != null) {
-                                    for (int h = 0; h < mp3List.length; h++) {
-                                        File file = mp3List[h];
-                                        //Log.d("asaa", "" + file);
-
-                                        for (int i = 0; i < result.length(); i++) {
-                                            JSONObject loopObj = result.getJSONObject(i);
-                                            String video = loopObj.getString("video");
-                                            String Description = loopObj.getString("Description");
-                                            String DescriptionTamil = loopObj.getString("DescriptionTamil");
-                                            String LastUpdate = loopObj.getString("LastUpdate");
-                                            //  Log.d("valuesss jh4546", "" + video + "  " + Description + "  " + DescriptionTamil + "  " + LastUpdate);
-                                            downloadFile(fileLocationOnServer + video);
-                                            ContentValues contentValues = new ContentValues();
-                                            contentValues.put("video", video);
-                                            contentValues.put("Description", "" + Description);
-                                            contentValues.put("DescriptionTamil", "" + DescriptionTamil);
-                                            contentValues.put("lastUpdate", "" + LastUpdate);
-                                            videoPath.onInsert(contentValues);
-                                        }
-                                    }
-                                } else {
-                                    for (int i = 0; i < result.length(); i++) {
-                                        JSONObject loopObj = result.getJSONObject(i);
-                                        String video = loopObj.getString("video");
-                                        String Description = loopObj.getString("Description");
-                                        String DescriptionTamil = loopObj.getString("DescriptionTamil");
-                                        String LastUpdate = loopObj.getString("LastUpdate");
-                                        //  Log.d("valuesss jh4546", "" + video + "  " + Description + "  " + DescriptionTamil + "  " + LastUpdate);
-                                        downloadFile(fileLocationOnServer + video);
-                                        ContentValues contentValues = new ContentValues();
-                                        contentValues.put("video", video);
-                                        contentValues.put("Description", "" + Description);
-                                        contentValues.put("DescriptionTamil", "" + DescriptionTamil);
-                                        contentValues.put("lastUpdate", "" + LastUpdate);
-                                        videoPath.onInsert(contentValues);
-                                    }
-                                }
-                            }
-                        } else {
-                            for (int i = 0; i < result.length(); i++) {
-                                JSONObject loopObj = result.getJSONObject(i);
-                                String video = loopObj.getString("video");
-                                String Description = loopObj.getString("Description");
-                                String DescriptionTamil = loopObj.getString("DescriptionTamil");
-                                String LastUpdate = loopObj.getString("LastUpdate");
-                                //   Log.d("valuesss else", "" + video + "  " + Description + "  " + DescriptionTamil + "  " + LastUpdate);
-                                downloadFile(fileLocationOnServer + video);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("video", video);
-                                contentValues.put("Description", "" + Description);
-                                contentValues.put("DescriptionTamil", "" + DescriptionTamil);
-                                contentValues.put("lastUpdate", "" + LastUpdate);
-                                videoPath.onInsert(contentValues);
-                            }
-                        }*/
                         ArrayList<HashMap<String, String>> mVideoPath = videoPath.getViewPath(AppData.checkLanguage(getActivity()));
                         ArrayList<HashMap<String, String>> mDetailsList = new ArrayList<>();
                         // Log.d("valuesss mVideoPath", "" + mVideoPath.size());
@@ -413,6 +223,7 @@ public class Tutorials extends Fragment {
                                     //   Log.d("asasassa", "equals");
                                     HashMap<String, String> hashMapHashMap = new HashMap();
                                     hashMapHashMap.put("path", "" + file);
+                                    hashMapHashMap.put("tutorial_title", "" + mVideoPath.get(l).get("tutorial_title"));
                                     hashMapHashMap.put("description", mVideoPath.get(l).get("Description"));
                                     mDetailsList.add(hashMapHashMap);
                                     //} else {

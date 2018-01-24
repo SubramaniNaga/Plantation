@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+import com.fresh.mind.plantation.setter.SetterDistrict;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -21,20 +24,21 @@ import static com.fresh.mind.plantation.R.id.count;
 
 public class DistrictNameList extends SQLiteOpenHelper {
 
-
     public DistrictNameList(Context context) {
-        super(context, "District", null, 1);
+        super(context, "DistrictListName", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String tableName = "create table DistrictListName (Id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,districtNameTamil text )";
+        String tableName = "create table DistrictListName(Id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,districtNameTamil text,common_key text,treetypes text,treetypesTamil text)";
         db.execSQL(tableName);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS DistrictListName");
+
+        // Log.d("dsadfasdf", "" + oldVersion + "  " + newVersion);
         onCreate(db);
     }
 
@@ -43,12 +47,11 @@ public class DistrictNameList extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.insert("DistrictListName", null, contentValues);
         sqLiteDatabase.close();
-        //Log.d("Databessee ", "Insert Sucess");
+        // Log.d("Databessee ", "Insert Sucess");
     }
 
 
     public int getCount() {
-
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("select * from DistrictListName", null);
         int count = cursor.getCount();
@@ -109,4 +112,85 @@ public class DistrictNameList extends SQLiteOpenHelper {
         return mLastDate;
     }
 
+    public ArrayList<KeyPairBoolData> getSetter(String languages) {
+        ArrayList<KeyPairBoolData> mDistrinListName = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from DistrictListName order by districtName ASC", null);
+        //Log.d("cur12343sor", "" + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            do {
+                KeyPairBoolData setterDistrict = new KeyPairBoolData();
+                if (languages.equals("2")) {
+                    String name = cursor.getString(cursor.getColumnIndex("districtName"));
+                    if (name != null) {
+                        setterDistrict.setName(name);
+                        setterDistrict.setSelected(false);
+                    }
+                } else {
+                    String name = cursor.getString(cursor.getColumnIndex("districtNameTamil"));
+                    //Log.d("name", "" + name);
+                    if (name != null) {
+                        setterDistrict.setName(name);
+                        setterDistrict.setSelected(false);
+
+                    }
+                }
+                mDistrinListName.add(setterDistrict);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return mDistrinListName;
+    }
+
+    public ArrayList<String> getDistrictBaseTreeType(String languages, String selectedDistrictName) {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String query;
+        if (languages.equals("2")) {
+            query = "SELECT * FROM DistrictListName WHERE districtName like '%" + selectedDistrictName + "%'";
+        } else {
+            query = "SELECT * FROM DistrictListName WHERE districtNameTamil like '%" + selectedDistrictName + "%'";
+        }
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        String values;
+        if (cursor.moveToFirst()) {
+            do {
+                if (languages.equals("2")) {
+                    values = cursor.getString(cursor.getColumnIndex("treetypes"));
+
+                } else {
+                    values = cursor.getString(cursor.getColumnIndex("treetypesTamil"));
+                }
+                if (values != null && !values.isEmpty()) {
+                    //stringArrayList.add("Select Tree Types");
+                    String[] valuesSplit = values.split(",");
+                    for (int i = 0; i < valuesSplit.length; i++) {
+                        stringArrayList.add(capitalize(valuesSplit[i]));
+                    }
+                } else {
+                    stringArrayList.add("No Tree Types");
+                }
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return stringArrayList;
+    }
+
+    public static String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
+        }
+    }
 }

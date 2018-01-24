@@ -2,7 +2,6 @@ package com.fresh.mind.plantation.Constant;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 

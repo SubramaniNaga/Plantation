@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,16 +17,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.fresh.mind.plantation.Constant.Config;
 
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.activity.MainActivity;
+import com.fresh.mind.plantation.customized.CustomSpinner;
 import com.fresh.mind.plantation.customized.CustomTextView;
+import com.fresh.mind.plantation.sqlite.server.AllRainFall;
+import com.fresh.mind.plantation.sqlite.server.AllSoilType;
+import com.fresh.mind.plantation.sqlite.server.AllTerrainType;
+import com.fresh.mind.plantation.sqlite.sorting.SortOrder;
 import com.fresh.mind.plantation.tab_pager.HomeTabView;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 import com.fresh.mind.plantation.sqlite.server.ContactUs;
@@ -56,7 +61,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,17 +78,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.fresh.mind.plantation.Constant.Config.celsiu;
+import static com.fresh.mind.plantation.Constant.Config.fileLocationOnServer;
 import static com.fresh.mind.plantation.Constant.Config.updateCounting;
-import static com.fresh.mind.plantation.R.id.img;
 
 
 /**
  * Created by AND I5 on 18-02-2017.
  */
 public class SettingUpdate extends Fragment {
-    CustomTextView mUpdate, textView12, languageChageTxt;
-    LinearLayout languageChage;
-    ImageView back;
+    private CustomTextView mUpdate, textView12, languageChageTxt;
+    private LinearLayout languageChage;
+    private ImageView back;
     private View rootView;
 
     private Asyn asyn;
@@ -99,11 +103,19 @@ public class SettingUpdate extends Fragment {
     private ImageDb imageDb;
     private ContactUs contactUs;
     private AsynCheck asynCheck;
-    LanguageChange languageChange;
-    int downloadedSize = 0;
-    int totalSize = 0;
+    private LanguageChange languageChange;
+    private CustomSpinner mSortBySpinner;
+    private int downloadedSize = 0;
+    private int totalSize = 0;
     public static ProgressDialog progressDialog;
-    String filePath;/*= "http://plantation.kambaa.com/admin2017/images/izysxI916lcNefETrRtGQqtGFIFtf9.mp4";*/
+    private CustomTextView mCheck;
+    private String filePath;/*= "http://plantation.kambaa.com/admin2017/images/izysxI916lcNefETrRtGQqtGFIFtf9.mp4";*/
+    private String[] SortOrderList = {"A-Z ", "Z-A"};
+    private SortOrder sortOrder;
+
+    private AllRainFall allRainFall;
+    private AllSoilType allSoilType;
+    private AllTerrainType allTerrainType;
 /*
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -126,6 +138,10 @@ public class SettingUpdate extends Fragment {
         treeTypeInfo = new TreeTypeInfo(getActivity());
         imageDb = new ImageDb(getActivity());
         contactUs = new ContactUs(getActivity());
+        sortOrder = new SortOrder(getActivity());
+        allRainFall = new AllRainFall(getActivity());
+        allSoilType = new AllSoilType(getActivity());
+        allTerrainType = new AllTerrainType(getActivity());
         updateCounting = 0;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -141,30 +157,42 @@ public class SettingUpdate extends Fragment {
         ((MainActivity) getActivity()).setUpdatePage(getActivity().getString(R.string.UpdateData));
         //setContentView(R.layout.update_view);
         rootView = inflater.inflate(R.layout.update_view, null);
+        MainActivity.menuItem.setVisible(false);
+        MainActivity.menuItem1.setVisible(false);
         mUpdate = (CustomTextView) rootView.findViewById(R.id.mUpdate);
         back = (ImageView) rootView.findViewById(R.id.back);
         textView12 = (CustomTextView) rootView.findViewById(R.id.textView12);
         languageChage = (LinearLayout) rootView.findViewById(R.id.languageChage);
         languageChageTxt = (CustomTextView) rootView.findViewById(R.id.languageChageTxt);
+        mCheck = (CustomTextView) rootView.findViewById(R.id.mCheck);
+        mSortBySpinner = (CustomSpinner) rootView.findViewById(R.id.mSortBySpinner);
+        mSortBySpinner.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.adapter_spinner, R.id.mSPinnerText, SortOrderList));
         NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancelAll();
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            // Do something for lollipop and above versions
+            languageChageTxt.setBackground(getActivity().getDrawable(R.drawable.riiple_oval));
+            mCheck.setBackground(getActivity().getDrawable(R.drawable.riiple_oval));
 
+        }
         treeList = new TreeList(getActivity());
         Log.d("das32143", "" + Config.celsiu);
 
         if (languages.equals("1")) {
-            languageChageTxt.setText(getResources().getString(R.string.Tamil));
+            languageChageTxt.setText("English");
         } else {
-            languageChageTxt.setText(getResources().getString(R.string.English));
+            languageChageTxt.setText("தமிழ்");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mUpdate.setBackground(getActivity().getDrawable(R.drawable.riiple_oval));
             back.setBackground(getActivity().getDrawable(R.drawable.ripple_back));
         }
+
+        Log.d("s2342354", "" + Config.main);
         if (celsiu >= 0) {
             MainActivity.tempTxt.setText("" + celsiu + "℃");
             MainActivity.tempTxt.setVisibility(View.VISIBLE);
-
             if (Config.main.toLowerCase().contains("Sunny".toLowerCase())) {
                 MainActivity.weatherImage.setImageResource(R.drawable.sunny);
             } else if (Config.main.toLowerCase().contains("Clouds".toLowerCase())) {
@@ -175,8 +203,10 @@ public class SettingUpdate extends Fragment {
                 MainActivity.weatherImage.setImageResource(R.drawable.clear);
             } else if (Config.main.toLowerCase().equals("Rain".toLowerCase())) {
                 MainActivity.weatherImage.setImageResource(R.drawable.rain);
-            } else if (Config.main.toLowerCase().equals("Somke".toLowerCase()) || Config.main.toLowerCase().equals("miste".toLowerCase())) {
+            } else if (Config.main.toLowerCase().equals("Smoke".toLowerCase()) || Config.main.toLowerCase().equals("miste".toLowerCase())) {
                 MainActivity.weatherImage.setImageResource(R.drawable.cloudy_10);
+            } else if (Config.main.toLowerCase().equals("Haze".toLowerCase()) || Config.main.toLowerCase().equals("Fog".toLowerCase())) {
+                MainActivity.weatherImage.setImageResource(R.drawable.haze);
             } else {
                 MainActivity.weatherImage.setImageResource(R.drawable.partly_cloudy_29);
             }
@@ -184,6 +214,7 @@ public class SettingUpdate extends Fragment {
             MainActivity.weatherImage.setImageResource(R.drawable.vector_drawable_questions);
             MainActivity.tempTxt.setVisibility(View.GONE);
         }
+
         mUpdate.setVisibility(View.VISIBLE);
         Log.d("updateCountingForUpdatePage", "" + updateCounting);
         if (updateCounting == 0) {
@@ -193,6 +224,41 @@ public class SettingUpdate extends Fragment {
             mUpdate.setVisibility(View.VISIBLE);
             textView12.setVisibility(View.VISIBLE);
         }
+        mCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Config.checkInternetConenction(getActivity())) {
+
+                    textView12.setVisibility(View.GONE);
+                    mUpdate.setVisibility(View.GONE);
+
+                    asynCheck = new AsynCheck();
+                    asynCheck.execute();
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.netConnection), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        mSortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String byType = SortOrderList[position];
+                Log.d("ddsds", "" + byType);
+                int count = sortOrder.getCount();
+                if (count >= 1) {
+                    sortOrder.update(byType, 1);
+                } else {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("byType", byType);
+                    sortOrder.onInsert(contentValues);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 /*
         Bundle bundle = getArguments();
         String task = bundle.getString("task");*/
@@ -220,6 +286,7 @@ public class SettingUpdate extends Fragment {
             public void onClick(View v) {
                 Config.pass = "not";
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
+                getActivity().overridePendingTransition(0, 0);
 
             }
         });
@@ -327,7 +394,9 @@ public class SettingUpdate extends Fragment {
         rainfallType.delete();
         terrainType.delete();
         treeTypeInfo.delete();
-        //imageDb.delete();
+        allTerrainType.delete();
+        allSoilType.delete();
+        allRainFall.delete();
         contactUs.delete();
     }
 
@@ -401,7 +470,7 @@ public class SettingUpdate extends Fragment {
             String status = languageStatus.get("languages");
             String id = languageStatus.get("id");
             if (status.equals("1")) {
-              //  languageChageTxt.setText(getResources().getString(R.string.English));
+                //  languageChageTxt.setText(getResources().getString(R.string.English));
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("languages", "2");
                 languageChange.update("2", Integer.parseInt(id));
@@ -415,7 +484,7 @@ public class SettingUpdate extends Fragment {
             progressDialog.setTitle("Loading");
             progressDialog.show();*/
             //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new Sesss()).commit();
-            Config.mLocation.clear();
+            //mLocation.clear();
             Config.mImages.clear();
             Config.mImagePaths.clear();
             Config.mTREE_TYPES_IMAGES.clear();
@@ -425,6 +494,7 @@ public class SettingUpdate extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
             getActivity().finish();
+            getActivity().overridePendingTransition(0, 0);
         }
     }
 
@@ -473,10 +543,9 @@ public class SettingUpdate extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            deleteAll();
             if (s != null) {
-                deleteAll();
                 Log.d("Response", "" + s);
-
             }
 
             progressDialog.dismiss();
@@ -548,7 +617,7 @@ public class SettingUpdate extends Fragment {
 
                         for (int i = 0; i < result1Array.length(); i++) {
                             JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String mLastDate_fromDb = treeList.getLastDate(Last_Update_fromServer);
 
                             Log.d("mLastDLast_Updateate 1", "" + mLastDate_fromDb + "  " + Last_Update_fromServer);
@@ -562,9 +631,9 @@ public class SettingUpdate extends Fragment {
                                 String District = jsonObject.getString("District");
                                 String common_key = jsonObject.getString("common_key");
                                 String Image = jsonObject.getString("Images");
-                                String Last_Update = jsonObject.getString("Last Update");
+                                String Last_Update = jsonObject.getString("LastUpdate");
                                 Image = Image.replaceAll(" ", "%20");
-                                Image = "http://plantation.kambaa.com/admin2017/images/" + Image;
+                                Image = fileLocationOnServer + Image;
                                 Log.d("ImageImage", " " + Image);
                                 URL imageUrl = new URL(Image);
                                 URLConnection ucon = imageUrl.openConnection();
@@ -614,7 +683,7 @@ public class SettingUpdate extends Fragment {
 
                             String Image = jsonObject.getString("Image");
                             Image = Image.replaceAll(" ", "%20");
-                            Image = "http://plantation.kambaa.com/admin2017/images/" + Image;
+                            Image = fileLocationOnServer + Image;
                             Log.d("ImageImage TreeType", " " + Image);
                             URL imageUrl = new URL(Image);
                             URLConnection ucon = imageUrl.openConnection();
@@ -628,7 +697,7 @@ public class SettingUpdate extends Fragment {
                             }
                             byte[] imgByte = byteBuffer.toByteArray();
 
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String mLastDate_fromDb = treeTypeNameList.getLastDate(Last_Update_fromServer);
                             Log.d("mLastDLast_Updateate 2", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                             if (mLastDate_fromDb != null) {
@@ -670,23 +739,24 @@ public class SettingUpdate extends Fragment {
                     if (status) {
                         JSONArray result1Array = json1Object.getJSONArray("result");
 
-                        int distCount = districtNameList.getCount();
+                      /*  int distCount = districtNameList.getCount();
                         if (distCount == result1Array.length()) {
-                        } else {
-                            districtNameList.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                String District = jsonObject.getString("District");
-                                String Last_Update = jsonObject.getString("Last Update");
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("districtName", District);
-                                contentValues.put("lastUpdate", Last_Update);
-                                districtNameList.onCreate(contentValues);
-                                Log.d("Insertrt", "Successs");
-                            }
+                        } else {*/
+                        districtNameList.delete();
+                        for (int i = 0; i < result1Array.length(); i++) {
+                            JSONObject jsonObject = result1Array.getJSONObject(i);
+                            String District = jsonObject.getString("District");
+                            String Last_Update = jsonObject.getString("LastUpdate");
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put("districtName", District);
+                            contentValues.put("lastUpdate", Last_Update);
+
+                            districtNameList.onCreate(contentValues);
+                            Log.d("Insertrt", "Successs");
+                            //}
                         }
                     }
-
+/*
                     json1Object = parentObject.getJSONObject("Json4");
                     status = json1Object.getBoolean("status");
                     if (status) {
@@ -697,7 +767,7 @@ public class SettingUpdate extends Fragment {
                             String Soil = jsonObject.getString("Soil");
                             String Treetype = jsonObject.getString("Treetype");
 
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String mLastDate_fromDb = soilType.getLastDate(Last_Update_fromServer);
                             Log.d("mLastDLast_Updateate 4", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                             if (mLastDate_fromDb != null) {
@@ -727,15 +797,15 @@ public class SettingUpdate extends Fragment {
                                 }
                             }
                         }
-                    }
+                    }*/
 
-                    json1Object = parentObject.getJSONObject("Json5");
+                   /* json1Object = parentObject.getJSONObject("Json5");
                     status = json1Object.getBoolean("status");
                     if (status) {
                         JSONArray result1Array = json1Object.getJSONArray("result");
                         for (int i = 0; i < result1Array.length(); i++) {
                             JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String mLastDate_fromDb = treeTypeInfo.getLastDate(Last_Update_fromServer);
                             Log.d("mLastDLast_Updateate 5", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                             if (mLastDate_fromDb != null) {
@@ -746,7 +816,7 @@ public class SettingUpdate extends Fragment {
 
                             }
                         }
-                    }
+                    }*/
 
                     json1Object = parentObject.getJSONObject("Json6");
                     status = json1Object.getBoolean("status");
@@ -781,10 +851,10 @@ public class SettingUpdate extends Fragment {
                             String Other = jsonObject.getString("Other");
                             String Benefits = jsonObject.getString("Benefits");
                             String Additional = jsonObject.getString("Additional");
-                            String Last_Update = jsonObject.getString("Last Update");
+                            String Last_Update = jsonObject.getString("LastUpdate");
                             String common_key = jsonObject.getString("common_key");
 
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String mLastDate_fromDb = verifyDetails.getLastDate(Last_Update_fromServer);
                             Log.d("mLastDLast_Updateate 6", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
 
@@ -835,7 +905,7 @@ public class SettingUpdate extends Fragment {
                                             JSONObject jsonObject1 = Images.getJSONObject(arr);
                                             String Image = jsonObject1.getString("Image");
                                             Image = Image.replaceAll(" ", "%20");
-                                            Image = "http://plantation.kambaa.com/admin2017/images/" + Image;
+                                            Image = fileLocationOnServer + Image;
                                             Log.d("ImageImage", " " + Image);
                                             URL imageUrl = new URL(Image);
                                             URLConnection ucon = imageUrl.openConnection();
@@ -895,7 +965,7 @@ public class SettingUpdate extends Fragment {
                                         JSONObject jsonObject1 = Images.getJSONObject(arr);
                                         String Image = jsonObject1.getString("Image");
                                         Image = Image.replaceAll(" ", "%20");
-                                        Image = "http://plantation.kambaa.com/admin2017/images/" + Image;
+                                        Image = fileLocationOnServer + Image;
                                         Log.d("ImageImage", " " + Image);
                                         URL imageUrl = new URL(Image);
                                         URLConnection ucon = imageUrl.openConnection();
@@ -915,13 +985,13 @@ public class SettingUpdate extends Fragment {
                             }
                         }
                     }
-                    json1Object = parentObject.getJSONObject("Json7");
+                   /* json1Object = parentObject.getJSONObject("Json7");
                     status = json1Object.getBoolean("status");
                     if (status) {
                         JSONArray result1Array = json1Object.getJSONArray("result");
                         for (int i = 0; i < result1Array.length(); i++) {
                             JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String District = jsonObject.getString("District");
                             String Rainfall = jsonObject.getString("Rainfall");
 
@@ -938,14 +1008,14 @@ public class SettingUpdate extends Fragment {
                                 Log.d("whatCome", "Update 7");
                             }
                         }
-                    }
-                    json1Object = parentObject.getJSONObject("Json8");
+                    }*/
+                    /*json1Object = parentObject.getJSONObject("Json8");
                     status = json1Object.getBoolean("status");
                     if (status) {
                         JSONArray result1Array = json1Object.getJSONArray("result");
                         for (int i = 0; i < result1Array.length(); i++) {
                             JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                            String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             String District = jsonObject.getString("District");
                             String Terrain = jsonObject.getString("Terrain");
 
@@ -962,7 +1032,7 @@ public class SettingUpdate extends Fragment {
                                 Log.d("whatCome", "Update 8");
                             }
                         }
-                    }
+                    }*/
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -984,29 +1054,30 @@ public class SettingUpdate extends Fragment {
     }
 
 
-    public class AsynCheck extends AsyncTask<String, Void, String> {
+    public class AsynCheck extends AsyncTask<String, Void, Integer> {
         ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setTitle("Checking for updates…");
+
             progressDialog.setTitle(null);
-            progressDialog.setMessage("Checking for updates…");
+            progressDialog.setMessage(getString(R.string.chekingUpdates));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            String result = null;
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(Config.url);
-            InputStream is = null;
-            List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("task", "getdata"));
+        protected Integer doInBackground(String... params) {
+            String s = null;
             try {
+
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(Config.url);
+                InputStream is = null;
+                List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
+                nameValuePairs.add(new BasicNameValuePair("task", "getdata"));
                 httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpClient.execute(httpPost);
                 HttpEntity entity = response.getEntity();
@@ -1017,62 +1088,163 @@ public class SettingUpdate extends Fragment {
                 while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
                 }
-                result = sb.toString();
-
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            //progressDialog.dismiss();
-
-            if (s != null) {
-                Log.d("Response checking", "" + s);
-
-                JSONObject parentObject = null;
-                try {
-                    parentObject = new JSONObject(s);
-                    JSONObject json1Object = parentObject.getJSONObject("Json1");
-                    boolean status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            String mLastDate_fromDb = treeList.getLastDate(Last_Update_fromServer);
-                            Log.d("mLastDLast_Updateate_one", "" + mLastDate_fromDb + "  " + Last_Update_fromServer);
-                            if (mLastDate_fromDb != null) {
-                                if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
-                                    Log.d("whatCome", "Fine 12");
+                s = sb.toString();
+                Log.d("Responsevvv", "" + s);
+                if (s.isEmpty()) {
+                    Log.d("Response", "" + s);
+                    return -2;
+                } else {
+                    JSONObject parentObject = null;
+                    try {
+                        parentObject = new JSONObject(s);
+                        JSONObject json1Object = parentObject.getJSONObject("Json1");
+                        boolean status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String TreeName = jsonObject.getString("TreeName");
+                                if (TreeName.equals("null") || TreeName.isEmpty()) {
                                 } else {
-                                    Log.d("whatCome", "Fine 12 not es");
+                                    String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                    String mLastDate_fromDb = treeList.getLastDate(Last_Update_fromServer);
+                                    Log.d("mLastDLast_Updateate_one  ", i + "  " + mLastDate_fromDb + "  " + Last_Update_fromServer);
+                                    if (mLastDate_fromDb != null) {
+                                        if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
+                                            Log.d("whatCome", "Fine 111");
+                                        } else {
+                                            Log.d("whatCome", "Fine 11 not es");
+                                        }
+                                    } else {
+                                        //  Log.d("whatCome", "Update 12 ");
+                                        updateCounting = updateCounting + 1;
+                                    }
                                 }
-
-                            } else {
-                                Log.d("whatCome", "Update 12 ");
-                                updateCounting = updateCounting + 1;
                             }
                         }
-                    }
 
-                    json1Object = parentObject.getJSONObject("Json2");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
+                        json1Object = parentObject.getJSONObject("Json2");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
 
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            String mLastDate_fromDb = treeTypeNameList.getLastDate(Last_Update_fromServer);
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = treeTypeNameList.getLastDate(Last_Update_fromServer);
+                                Log.d("mLastDLast_Updateate", "22 mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
+                                        Log.d("whatCome", "Fine 22");
+                                    } else {
+                                        //   Log.d("whatCome", "Fine 12 not es");
+                                    }
+                                } else {
+                                    //  Log.d("whatCome", "Update ");
+                                    updateCounting = updateCounting + 1;
+                                }
+                            }
+                        }
+
+                        json1Object = parentObject.getJSONObject("Json3");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = districtNameList.getLastDate(Last_Update_fromServer);
+                                Log.d("mLastDLast_Updateate", "33 mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
+                                        Log.d("whatCome", "Fine 33");
+                                    } else {
+                                        Log.d("whatCome", "Fine 33 not es");
+                                    }
+                                } else {
+                                    //  Log.d("whatCome", "Update ");
+                                    updateCounting = updateCounting + 1;
+                                }
+                            }
+                        }
+/*
+                        json1Object = parentObject.getJSONObject("Json4");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = soilType.getLastDate(Last_Update_fromServer);
+                                Log.d("mLastDLast_Updateate", "44 mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
+                                        Log.d("whatCome", "Fine 444");
+                                    } else {
+                                        Log.d("whatCome", "Fine 44 not es");
+                                    }
+                                } else {
+                                    //  Log.d("whatCome", "Update ");
+                                    updateCounting = updateCounting + 1;
+
+                                }
+                            }
+                        }
+
+                        json1Object = parentObject.getJSONObject("Json5");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            Log.d("sdresult1Array", "" + result1Array.length());
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = treeTypeInfo.getLastDate(Last_Update_fromServer);
+                                Log.d("mLastDLast_Updateate", "55 mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
+                                        Log.d("whatCome", "Fine 55  " + i);
+                                    } else {
+                                        Log.d("whatCome", "Fine 55 not es  " + i);
+                                    }
+                                } else {
+                                    // Log.d("whatCome", "Update ");
+                                    updateCounting = updateCounting + 1;
+
+                                }
+                            }
+                        }*/
+
+                        json1Object = parentObject.getJSONObject("Json6");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = verifyDetails.getLastDate(Last_Update_fromServer);
+                                Log.d("mLastDLast_Updateate", "66 mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
+                                        Log.d("whatCome", "Fine 66");
+                                    } else {
+                                        Log.d("whatCome", "Fine 66 not es");
+                                    }
+                                } else {
+                                    // Log.d("whatCome", "Update 66");
+                                    updateCounting = updateCounting + 1;
+                                    return updateCounting;
+                                }
+                            }
+                        }/*
+                        json1Object = parentObject.getJSONObject("Json7");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                            *//*String mLastDate_fromDb = rainfallType.getLastDate(Last_Update_fromServer);
                             Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                             if (mLastDate_fromDb != null) {
                                 //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
@@ -1080,110 +1252,16 @@ public class SettingUpdate extends Fragment {
                             } else {
                                 Log.d("whatCome", "Update ");
                                 updateCounting = updateCounting + 1;
+                            }*//*
                             }
-                        }
-                    }
-
-                    json1Object = parentObject.getJSONObject("Json3");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            String mLastDate_fromDb = districtNameList.getLastDate(Last_Update_fromServer);
-                            Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
-                            if (mLastDate_fromDb != null) {
-                                //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                Log.d("whatCome", "Fine");
-                            } else {
-                                Log.d("whatCome", "Update ");
-                                updateCounting = updateCounting + 1;
-                            }
-                        }
-                    }
-
-                    json1Object = parentObject.getJSONObject("Json4");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            String mLastDate_fromDb = soilType.getLastDate(Last_Update_fromServer);
-                            Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
-                            if (mLastDate_fromDb != null) {
-                                //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                Log.d("whatCome", "Fine");
-                            } else {
-                                Log.d("whatCome", "Update ");
-                                updateCounting = updateCounting + 1;
-                            }
-                        }
-                    }
-
-                    json1Object = parentObject.getJSONObject("Json5");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            String mLastDate_fromDb = treeTypeInfo.getLastDate(Last_Update_fromServer);
-                            Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
-                            if (mLastDate_fromDb != null) {
-                                //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                Log.d("whatCome", "Fine");
-                            } else {
-                                Log.d("whatCome", "Update ");
-                                updateCounting = updateCounting + 1;
-                            }
-                        }
-                    }
-
-                    json1Object = parentObject.getJSONObject("Json6");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            String mLastDate_fromDb = verifyDetails.getLastDate(Last_Update_fromServer);
-                            Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
-                            if (mLastDate_fromDb != null) {
-                                //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                Log.d("whatCome", "Fine 6");
-                            } else {
-                                Log.d("whatCome", "Update 66");
-                                updateCounting = updateCounting + 1;
-                            }
-                        }
-                    }
-                    json1Object = parentObject.getJSONObject("Json7");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
-                            /*String mLastDate_fromDb = rainfallType.getLastDate(Last_Update_fromServer);
-                            Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
-                            if (mLastDate_fromDb != null) {
-                                //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                Log.d("whatCome", "Fine");
-                            } else {
-                                Log.d("whatCome", "Update ");
-                                updateCounting = updateCounting + 1;
-                            }*/
-                        }
-                    }
-                    json1Object = parentObject.getJSONObject("Json8");
-                    status = json1Object.getBoolean("status");
-                    if (status) {
-                        JSONArray result1Array = json1Object.getJSONArray("result");
-                        for (int i = 0; i < result1Array.length(); i++) {
-                            JSONObject jsonObject = result1Array.getJSONObject(i);
-                            String Last_Update_fromServer = jsonObject.getString("Last Update");
+                        }*/
+                        json1Object = parentObject.getJSONObject("Json8");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                             /*String mLastDate_fromDb = terrainType.getLastDate(Last_Update_fromServer);
                             Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                             if (mLastDate_fromDb != null) {
@@ -1193,23 +1271,69 @@ public class SettingUpdate extends Fragment {
                                 Log.d("whatCome", "Update ");
                                 updateCounting = updateCounting + 1;
                             }*/
+                            }
                         }
+
+                        JSONObject json9Object = parentObject.getJSONObject("Json9");
+                        boolean statusMsg9 = json9Object.getBoolean("status");
+                        String messageStus9 = json9Object.getString("message");
+                        if (statusMsg9) {
+                            JSONArray result1Array = json9Object.getJSONArray("result");
+                            //Log.d("result1Array  9", "" + result1Array.length());
+                        }
+                        JSONObject json10Object = parentObject.getJSONObject("Json10");
+                        boolean statusMsg10 = json10Object.getBoolean("status");
+                        String messageStus10 = json10Object.getString("message");
+                        if (statusMsg10) {
+                            JSONArray result1Array = json10Object.getJSONArray("result");
+                            //  Log.d("result1Array  10", "" + result1Array.length());
+                            return updateCounting;
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return -1;
+                        //startService(new Intent(getApplicationContext(), UpdateData.class));
                     }
-                    Log.d("updateCounting", "" + updateCounting);
-                    if (updateCounting >= 1) {
-                        Log.d("smapeldd55454", "111111  " + updateCounting);
-                        mUpdate.setVisibility(View.VISIBLE);
-                        textView12.setText(updateCounting + " Update is available. This update take few minutes, downlading files from Server. Please click Update Now Button.");
-                    } else {
-                        Log.d("smapeldd55454", "22222  " + updateCounting);
-                        textView12.setText("Plantation is up to date.");
-                    }
-                    progressDialog.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+                return -1;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return -1;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return -1;
+            }
+            return updateCounting;
+        }
+
+        @Override
+        protected void onPostExecute(Integer s) {
+            super.onPostExecute(s);
+            Log.d("updateCounting", "" + s);
+            progressDialog.dismiss();
+            mCheck.setVisibility(View.GONE);
+            if (s >= 1) {
+                Log.d("smapeldd55454", "111111  " + s);
+                textView12.setVisibility(View.VISIBLE);
+                mUpdate.setVisibility(View.VISIBLE);
+                textView12.setText(getString(R.string.updateAvailable));
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new SplashScreen()).commit();
+            } else if (s == -2) {
+                Log.d("smapeldd55454", "22222  " + s);
+                textView12.setText(getString(R.string.upToDateServerIssue));
+                textView12.setVisibility(View.GONE);
+                mCheck.setVisibility(View.VISIBLE);
+                mCheck.setText(R.string.tryAgain);
+            } else {
+                Log.d("smapeldd55454", "3333  " + s);
+                textView12.setText(getString(R.string.tryAgain));
+                textView12.setVisibility(View.GONE);
+                mCheck.setVisibility(View.VISIBLE);
+                mCheck.setText(R.string.tryAgain);
             }
         }
     }
-
 }

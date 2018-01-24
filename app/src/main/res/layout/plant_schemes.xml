@@ -1,31 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/bc_gray"
     android:orientation="vertical"
     android:scrollbars="none">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mSchemsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.5dp"
+        android:groupIndicator="@drawable/group_indicator"
+        android:visibility="visible" />
+
+    <com.fresh.mind.plantation.customized.CustomTextView
+        android:id="@+id/sch_nodata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_data_found"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        app:typeface="lato_bold" />
+
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scrollbars="none"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <include
                 layout="@layout/plant_weather"
                 android:visibility="gone" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Scheme Set 1"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
 
             <com.fresh.mind.plantation.customized.CustomTextView
                 android:id="@+id/about_plantantion"
@@ -43,6 +83,7 @@
                 app:typeface="lato_bold" />
 
             <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/sch1text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -76,7 +117,6 @@
                 android:padding="8dp"
                 android:text="\t\t\t Treepedia,Waiting Schemes2"
                 android:textColor="@color/black"
-
                 app:typeface="lato_regular" />
 
             <com.fresh.mind.plantation.customized.CustomTextView
@@ -131,6 +171,128 @@
                 app:typeface="lato_regular" />
 
 
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Scheme Set 2"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/about_plantantion2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Schemes 1"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/sch1text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Treepedia,Waiting Schemes1"
+                android:textColor="@color/black"
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mistral2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Schemes 2"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/mistralDetails2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Treepedia,Waiting Schemes2"
+                android:textColor="@color/black"
+
+                app:typeface="lato_regular" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/projectTeam2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Schemes 3"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/projectTeamDetails2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Treepedia,Waiting Schemes 3"
+                android:textColor="@color/black"
+                app:typeface="lato_regular" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/acknowledgement2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Schemes 4"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:id="@+id/acknowledgementDetails2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_shadow"
+                android:padding="8dp"
+                android:text="\t\t\t Treepedia,Waiting Schemes 4"
+                android:textColor="@color/black"
+                app:typeface="lato_regular" />
+
+
         </LinearLayout>
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

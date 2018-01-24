@@ -36,6 +36,10 @@ public class AppDetails extends Fragment {
         }
         ((MainActivity) getActivity()).setAppDetails(getActivity().getResources().getString(R.string.appDetails));
         rootView = inflater.inflate(R.layout.plant_app_details, null);
+
+        MainActivity.menuItem.setVisible(false);
+        MainActivity.menuItem1.setVisible(false);
+
         init();
 
         Config.SELECTED_TAB_VIEW_POSITION = 0;

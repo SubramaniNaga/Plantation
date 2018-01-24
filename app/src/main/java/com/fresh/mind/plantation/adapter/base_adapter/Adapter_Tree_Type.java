@@ -1,7 +1,8 @@
 package com.fresh.mind.plantation.adapter.base_adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,19 +12,24 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
 import com.fresh.mind.plantation.fragment.Inside.SelectedTreeType;
 import com.fresh.mind.plantation.tab_pager.HomeTabView;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.fresh.mind.plantation.R.id.imageView;
+import static com.fresh.mind.plantation.Constant.Config.LISTVIEW_SMOOTH_VIEW_POSITION;
+import static com.fresh.mind.plantation.R.id.cardView;
+import static com.fresh.mind.plantation.R.id.holo_dark;
+import static com.fresh.mind.plantation.R.id.view;
 
 /**
  * Created by AND I5 on 18-01-2017.
@@ -32,17 +38,17 @@ public class Adapter_Tree_Type extends BaseAdapter implements Filterable {
     private final FragmentActivity mContext;
     private final ArrayList<HashMap<String, String>> mListItemValies;
     private ArrayList<HashMap<String, String>> mListItemValiesFilter;
-    private final ArrayList<HashMap<String, byte[]>> mImageList;
+    // private final ArrayList<HashMap<String, byte[]>> mImageList;
     private ArrayList<HashMap<String, byte[]>> mImageList1;
     ItemFilter itemFilter = new ItemFilter();
 
-    public Adapter_Tree_Type(FragmentActivity activity, ArrayList<HashMap<String, String>> mLocation, ArrayList<HashMap<String, byte[]>> mImageList) {
+    public Adapter_Tree_Type(FragmentActivity activity, ArrayList<HashMap<String, String>> mLocation) {
 
         this.mContext = activity;
         this.mListItemValies = mLocation;
         this.mListItemValiesFilter = mLocation;
-        this.mImageList = mImageList;
-        this.mImageList1 = mImageList;
+        // this.mImageList = mImageList;
+        //this.mImageList1 = mImageList;
         // Log.d("mListItemValiesFilter", "" + mListItemValiesFilter.size() + " " + mImageList.size() + " " + mImageList1.size() + "  " + mListItemValies.size());
     }
 
@@ -66,29 +72,25 @@ public class Adapter_Tree_Type extends BaseAdapter implements Filterable {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder(convertView);
-
-            //LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
-            //convertView = layoutInflater.inflate(R.layout.adapter_location_seleted_tree, parent, false);
             convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_location_seleted_tree, parent, false);
             viewHolder.treeName = (CustomTextView) convertView.findViewById(R.id.textView5);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView4);
+            viewHolder.cardView = (LinearLayout) convertView.findViewById(R.id.cardView);
+            viewHolder.cnsLayoutLocation = (ConstraintLayout) convertView.findViewById(R.id.cnsLayoutLocation);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        if (Config.checkMaterial() == 1) {
+            viewHolder.cardView.setBackground(mContext.getDrawable(R.drawable.ripple_location));
+        }
         viewHolder.treeName.setText("" + mListItemValiesFilter.get(position).get("treeType"));
-        byte[] photo = mImageList.get(position).get("storagePath");
-        //Log.d("photo", "" + photo);
-        if (photo != null) {
+        String mImg = mListItemValiesFilter.get(position).get("storagePath");
+      //  Log.d("photo", "" + mImg);
+        if (mImg != null) {
             try {
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
-                Bitmap theImage = BitmapFactory.decodeStream(imageStream);
-                if (theImage != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    theImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    viewHolder.imageView.setImageBitmap(Bitmap.createScaledBitmap(theImage, 64, 64, false));
-                    ///viewHolder.imageView.setImageBitmap(theImage);
-                }
+                Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.logo_3).into(viewHolder.imageView);
             } catch (IndexOutOfBoundsException outOfMemoryError) {
                 mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
                 outOfMemoryError.printStackTrace();
@@ -100,8 +102,11 @@ public class Adapter_Tree_Type extends BaseAdapter implements Filterable {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Config.SELECTED_TREE_TYPE = mListItemValiesFilter.get(position).get("treeType");
-                mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new SelectedTreeType()).commit();
+
+                        Config.SELECTED_TREE_TYPE = mListItemValiesFilter.get(position).get("treeType");
+                        LISTVIEW_SMOOTH_VIEW_POSITION = position;
+                        mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new SelectedTreeType()).addToBackStack(null).commit();
+
             }
         });
 
@@ -112,6 +117,8 @@ public class Adapter_Tree_Type extends BaseAdapter implements Filterable {
 
         CustomTextView treeName;
         private ImageView imageView;
+        private ConstraintLayout cnsLayoutLocation;
+        private LinearLayout cardView;
 
         public ViewHolder(View view) {
             //ButterKnife.bind(this, view);

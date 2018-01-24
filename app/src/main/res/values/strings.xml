@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Treepedia</string>
     <string name="permission_required">Permission required</string>
-    <string name="settings_message">This app needs permission to access your device.Select "Permission" in App info to re-enable.</string>
+    <string name="settings_message">This app needs permission to access your device. Select "Permission" in App info to re-enable.</string>
     <string name="app_info">App Info</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -11,7 +11,7 @@
     <string name="treeType">Tree Type</string>
     <string name="tools">Tools</string>
     <string name="home">Home</string>
-    <string name="chooseByLocation">Choose By Location</string>
+    <string name="chooseByLocation">Location</string>
     <string name="tutorials">Tutorials</string>
     <string name="directions">Get Direction</string>
     <string name="search">Search</string>
@@ -22,7 +22,7 @@
     <string name="help">Help</string>
     <string name="weathr">Weather</string>
     <string name="checkUpdate">Check Update</string>
-    <string name="searchTree">Search Tree</string>
+    <string name="searchTree">Search</string>
     <string name="ContactUs">Contact Us</string>
     <string name="Schemes">Schemes</string>
     <string name="Feedback">Feedback / Query</string>
@@ -37,6 +37,9 @@
     <string name="UpdateData">Update Data</string>
     <string name="UpdateNow">Update Now</string>
     <string name="location">Location</string>
+    <string name="locator">Locator</string>
+    <string name="plantationCalculation">Plantation Calculator</string>
+    <string name="agroForestry">Agro Forestry</string>
     <string name="inMeter">In meter</string>
     <string name="not_available_location">Location Not Enabled. Please Enabled Now?.</string>
     <string name="notDatafoundTreeType">Not Found Tree Type</string>
@@ -44,13 +47,13 @@
     <string name="notfoundLocation">Not Found Location</string>
     <string name="district">District</string>
     <string name="soiltype">Soil Type</string>
-    <string name="rainFall">Rain Fall</string>
+    <string name="rainFall">Rainfall</string>
     <string name="terraintype">Terrain Type</string>
     <string name="searchResult">Search Result</string>
     <string name="viewDetails">View Details</string>
     <string name="images">Images</string>
     <string name="noImages">Not found images</string>
-    <string name="descriptions">Description</string>
+    <string name="descriptions">General Information</string>
 
     <string name="areaTobePlanted">Area to be Planted</string>
     <string name="estimatePlantation">Estimate Plantation</string>
@@ -80,6 +83,7 @@
     <string name="Rainfall">Rainfall </string>
     <string name="Terrain">Terrain </string>
 
+    <string name="no_tutorials">Not found Tutorial Videos</string>
 
     <string name="plantationMaterial">Plantation Material </string>
     <string name="plantationTec">Plantation Technique </string>
@@ -114,7 +118,6 @@
     <string name="MarketDetails">Market Details</string>
 
     <string name="Intercrops">Intercrops</string>
-
     <string name="MajorUses">Major Uses</string>
     <string name="OtherUses">Other Uses</string>
 
@@ -133,15 +136,72 @@
 
     <string name="name">Name</string>
     <string name="mobileNumber">Mobile Number</string>
+    <string name="email">Email</string>
+    <string name="hint_Email">Enter Email</string>
+    <string name="hint_Location">Enter Location</string>
+    <string name="select_dis">Select District</string>
+    <string name="select_email">Select Email</string>
     <string name="Feedback_Suggestion">Suggestion Feedback</string>
+    <string name="hint_email_validation">Enter valid Email</string>
+    <string name="enter_sug">Enter Your Suggestion</string>
     <string name="hint_Name">Enter Name</string>
     <string name="hint_MobileNumber">Enter Mobile Number</string>
+
     <string name="hint_Feedback">Enter Feedback</string>
     <string name="submit">Submit</string>
     <string name="enterAllField">Enter All Field</string>
 
     <string name="fetchingData">Fetching data</string>
     <string name="feedbackSend">Sending your feedback...</string>
+    <string name="selectDistrictName">Select District Name</string>
+    <string name="selectSoilName">Select Soil Type</string>
+    <string name="selectRainFallName">Select Rainfall</string>
+    <string name="selectTerrainName">Select Terrain</string>
+    <string name="selectTreeName">Select Tree Type</string>
+    <string name="shortMap">Current Location</string>
+    <string name="netConnection">Unable to connect to server. Please check network.</string>
+    <string name="netConnectionLocation">Unable to get location. Please check network.</string>
+    <string name="pressAgain">Press again to exit</string>
+    <string name="networkmesg">\t\tTreepedia works without internet connection. To get latest update to the application,
+    \n 1. Enable Mobile Internet or WiFi
+    \n 2. Open Treepedia> Menu> Settings> Check Update.
+    \n 3. Treepedia takes a few minutes to download content after app installation.</string>
+    <string name="internetConnection">Network Connection</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Go</string>
+    <string name="enable">Enable</string>
+    <string name="required">The number of planting material required for your land is</string>
+    <string name="updateAvailable">This update take few minutes downloading files from Server. Please click Update Now Button</string>
 
+    <string name="topic">Help Topic 1</string>
+    <string name="topic1">Help Topic 2</string>
+    <string name="topic2">Help Topic 3</string>
+    <string name="topic3">Help Topic 4</string>
+
+    <string name="chekingUpdates">Checking for updates…</string>
+    <string name="upToDate">Treepedia is up to date.</string>
+    <string name="menuNormalName">Common Name</string>
+    <string name="menuCientificName">Scientific Name</string>
+
+    <string name="upToDateServerIssue">Treepedia Server not connect. Try again.</string>
+    <string name="a_z">A-Z</string>
+    <string name="z_a">Z-A</string>
+
+    <string name="description_not_found">Descriptions not found</string>
+    <string name="models">Models</string>
+    <string name="inter_crops">Inter crops</string>
+    <string name="tryAgain">Try Again</string>
+    <string name="no_data_found">No data found</string>
+    <string name="bgm_success">Running Background</string>
+    <string name="bgm_failed">Running Background Service Failed</string>
+    <string name="server_500">500 Internal Server Error.Try again later.</string>
+
+    <string name="agro_model">Model</string>
+    <string name="agro_intercorp">InterCrop</string>
+    <string name="download_error">Download Format Error</string>
+    <string name="server_not_found">Server not found or check your connection</string>
+    <string name="link"><a href="http://www.www.com">ForGet Password</a></string>
+
+    <string name="select_hyper_link">Find Glossary Item </string>
 </resources>
 

@@ -1,52 +1,37 @@
 package com.fresh.mind.plantation.activity;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.VideoView;
 
-import com.fresh.mind.plantation.Constant.SessionManager;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.duration;
-import static android.R.attr.layout_gravity;
-import static android.R.attr.path;
-import static com.fresh.mind.plantation.R.id.indeterminate;
-import static com.fresh.mind.plantation.R.id.mForward;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 
 /**
@@ -92,7 +77,9 @@ public class PlayingVideo extends Activity implements SurfaceHolder.Callback, Me
         System.gc();
         Intent extras = getIntent();
         filename = extras.getStringExtra("videofilename");
+        String dil = "sdcard/Treepedia/Videos/2017-12-04.mp4";
         File file = new File(filename);
+
         Log.d("fileName", "" + filename + " " + file.length());
         Uri uri = Uri.fromFile(file);
         try {
@@ -164,6 +151,7 @@ public class PlayingVideo extends Activity implements SurfaceHolder.Callback, Me
 
     }
 
+
     public void play() {
 
         mMediaPlayer.start();
@@ -176,10 +164,16 @@ public class PlayingVideo extends Activity implements SurfaceHolder.Callback, Me
         timeElapsed = mMediaPlayer.getCurrentPosition();
         seekbar.setMax((int) finalTime);
         seekbar.setProgress((int) finalTime);
-        String timeFinal = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeInMillisec), TimeUnit.MILLISECONDS.toMinutes(timeInMillisec) +
+        /*String timeFinal = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeInMillisec), TimeUnit.MILLISECONDS.toMinutes(timeInMillisec) +
                 TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeInMillisec)), TimeUnit.MILLISECONDS.toSeconds(timeInMillisec) + TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeInMillisec)));
-
+*/
+        int seconds = (int) (timeInMillisec / 1000) % 60;
+        int minutes = (int) ((timeInMillisec / (1000 * 60)) % 60);
+        int hours = (int) ((timeInMillisec / (1000 * 60 * 60)) % 24);
+        String timeFinal = "" + hours + ":" + minutes + ":" + seconds;
+        Log.d("hdjasfhoi43", "" + hours + ":" + minutes + ":" + seconds);
         mDurationTxt.setText("" + timeFinal);
+        Log.d("timeFinal", "" + timeFinal);
         durationHandler.postDelayed(updateSeekBarTime, 100);
 
     }
@@ -190,16 +184,37 @@ public class PlayingVideo extends Activity implements SurfaceHolder.Callback, Me
                 finalTime = mMediaPlayer.getDuration();
                 timeElapsed = mMediaPlayer.getCurrentPosition();
                 seekbar.setProgress((int) timeElapsed);
-                long timeRemaining = (long) (finalTime - timeElapsed);
-                String elaspedTimeFinal = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeRemaining), TimeUnit.MILLISECONDS.toMinutes(timeRemaining) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeRemaining)), TimeUnit.MILLISECONDS.toSeconds(timeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeRemaining)));
-                mDurationElapsed.setText("" + elaspedTimeFinal);
-                durationHandler.postDelayed(this, 100);
+                seekbar.setVisibility(View.GONE);
 
+                long timeRemaining = (long) (finalTime - timeElapsed);
+                long timeElapsed1 = (long) timeElapsed;
+
+                Log.d("dsareawr", "" + finalTime + "  " + timeElapsed + "  " + timeRemaining);
+                String elaspedTimeFinal = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeElapsed1),
+                        TimeUnit.MILLISECONDS.toMinutes(timeElapsed1) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeElapsed1)),
+                        TimeUnit.MILLISECONDS.toSeconds(timeElapsed1) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeElapsed1)));
+                mDurationElapsed.setText("" + timeElapsed1);
+                Log.d("timeElapsed1", "" + timeElapsed1);
+
+                int seconds = (int) (timeElapsed1 / 1000) % 60;
+                int minutes = (int) ((timeElapsed1 / (1000 * 60)) % 60);
+                int hours = (int) ((timeElapsed1 / (1000 * 60 * 60)) % 24);
+                Log.d("hdjasfhoi43", "" + hours + ":" + minutes + ":" + seconds);
+                durationHandler.postDelayed(this, 100);
+                Log.d("timeFinalelaspedTimeFinal", "" + elaspedTimeFinal);
                 if (elaspedTimeFinal.equals("00:00:00")) {
                     ic_media_play.setBackgroundResource(android.R.drawable.ic_media_play);
                 }
             }
+        }
+
+        private String getDate(long timeElapsed, String dateFormat) {
+            SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+            // Create a calendar object that will convert the date and time value in milliseconds to date.
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(timeElapsed);
+            return formatter.format(calendar.getTime());
         }
     };
 
@@ -221,8 +236,12 @@ public class PlayingVideo extends Activity implements SurfaceHolder.Callback, Me
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setDisplay(mSurfaceHolder);
         try {
-            FileInputStream fis = new FileInputStream(filename);
             File file = new File(filename);
+            File videoFiles = new File(String.valueOf(Environment.getExternalStorageDirectory()));
+            Log.d("sdafadsf", "" + videoFiles);
+
+            Uri uri1 = Uri.parse(Environment.getExternalStorageDirectory() + "/Treepedia/Videos/" + file.getName());
+            Log.d("uri1", "" + uri1);
             Uri uri = Uri.fromFile(file);
             mMediaPlayer.setOnPreparedListener(PlayingVideo.this);
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

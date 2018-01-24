@@ -17,7 +17,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,11 +46,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import static android.R.attr.country;
-import static android.R.id.message;
-import static com.fresh.mind.plantation.R.string.temp;
 
 /**
  * Created by AND I5 on 10-03-2017.
@@ -81,6 +75,8 @@ public class Others extends Fragment implements LocationListener {
         }
         ((MainActivity) getActivity()).setOtherPage(getActivity().getResources().getString(R.string.Schemes));
         rootView = inflater.inflate(R.layout.others, null);
+        MainActivity.menuItem.setVisible(false);
+        MainActivity.menuItem1.setVisible(false);
         mSample = (CustomTextView) rootView.findViewById(R.id.mSample);
         dateTxt = (CustomTextView) rootView.findViewById(R.id.date);
         mainTxt = (CustomTextView) rootView.findViewById(R.id.main);
@@ -109,7 +105,6 @@ public class Others extends Fragment implements LocationListener {
         }
         if (!gps_enabled && !network_enabled) {
 
-            Log.d("sadd", "eeeeee");
             // notify user
             android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(getActivity());
             dialog.setMessage(getActivity().getResources().getString(R.string.not_available_location));

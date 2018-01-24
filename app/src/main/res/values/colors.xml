@@ -12,11 +12,12 @@
     <color name="nav_bg">#e2d708</color>
     <color name="blue">#0c3bca</color>
     <color name="gray">#dfdfdf</color>
-    <color name="bc_gray">#dcdcdc</color>
+    <color name="bc_gray">#e6e4e4</color>
     <color name="orange">#954569</color>
     <color name="orange1">#ff9007</color>
     <color name="light_green">#77e46b</color>
-
+    <color name="ripple">#FFDDDDDD</color>
     <color name="appYellow">#dfff2a</color>
+    <color name="black_transparent_50_op">#44000000</color>
 
 </resources>

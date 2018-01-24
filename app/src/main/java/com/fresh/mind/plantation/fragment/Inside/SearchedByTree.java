@@ -1,20 +1,14 @@
 package com.fresh.mind.plantation.fragment.Inside;
 
-import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -26,20 +20,23 @@ import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.adapter.base_adapter.Adapter_Tree_Species;
 import com.fresh.mind.plantation.customized.CustomTextView;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
-import com.fresh.mind.plantation.sqlite.not_need.VerifiedDatabase;
-import com.fresh.mind.plantation.sqlite.server.ImageDb;
-import com.fresh.mind.plantation.sqlite.server.TreeList;
-import com.fresh.mind.plantation.sqlite.server.TreeTypeInfo;
-import com.fresh.mind.plantation.sqlite.server.TreeTypeNameList;
-import com.fresh.mind.plantation.sqlite.server.VerifyDetails;
 
-import java.io.ByteArrayOutputStream;
+import com.fresh.mind.plantation.sqlite.sorting.SortOrder;
+import com.fresh.mind.plantation.sqlite.server.TreeTypeInfo;
+import com.fresh.mind.plantation.sqlite.server.VerifyDetails;
+import com.fresh.mind.plantation.sqlite.sorting.SortOrderAZ;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static com.fresh.mind.plantation.Constant.Config.mSELECTED_TREE_NAME;
+import static com.fresh.mind.plantation.Constant.Config.LISTVIEW_SMOOTH_VIEW_POSITION_2;
+import static com.fresh.mind.plantation.Constant.Config.SOIL_TYPE;
+import static com.fresh.mind.plantation.Constant.Config.districtName;
+import static com.fresh.mind.plantation.Constant.Config.rainFallType;
+import static com.fresh.mind.plantation.Constant.Config.soillType;
+import static com.fresh.mind.plantation.Constant.Config.terrainType;
+import static com.fresh.mind.plantation.Constant.Config.treeType;
 
 
 /**
@@ -50,14 +47,12 @@ public class SearchedByTree extends Fragment {
     private CustomTextView mSelectedDisticName, mNodata;
     private Spinner mLocationBasedSeletedTree;
     private ListView listView;
-    private VerifiedDatabase verifiedDatabase;
-    ArrayList<HashMap<String, String>> mTreeTypeValues;
+    private ArrayList<HashMap<String, String>> mTreeTypeValues;
     private VerifyDetails verifyDetails;
-    private TreeTypeNameList treeType;
-    private TreeList treeList;
-    private ArrayList<HashMap<String, byte[]>> mImageList;
-    private ImageDb imageDb;
     private TreeTypeInfo treeTypeInfo;
+    private SortOrderAZ sortOrder;
+    private String bySortType;
+    private LinearLayout mSpner;
 
     @Nullable
     @Override
@@ -70,51 +65,82 @@ public class SearchedByTree extends Fragment {
         } else {
             Utils.setLocalLanguage("en", getActivity());
         }
+        sortOrder = new SortOrderAZ(getActivity());
+
         ((MainActivity) getActivity()).viewTreeDetails(getResources().getString(R.string.searchResult), getResources().getString(R.string.searchResult));
         rootView = inflater.inflate(R.layout.plant_selecte_location, null);
-
+        MainActivity.menuItem.setVisible(false);
+        MainActivity.menuItem1.setVisible(false);
         mSelectedDisticName = (CustomTextView) rootView.findViewById(R.id.mSelectedDisticName);
         mSelectedDisticName.setVisibility(View.VISIBLE);
+        mSpner = (LinearLayout) rootView.findViewById(R.id.mSpner);
+        mSpner.setVisibility(View.GONE);
         mNodata = (CustomTextView) rootView.findViewById(R.id.mNodata);
         mLocationBasedSeletedTree = (Spinner) rootView.findViewById(R.id.LocationBasedTreeTypeSpr);
         listView = (ListView) rootView.findViewById(R.id.mLocationBasedSeletedTree);
-        verifiedDatabase = new VerifiedDatabase(getActivity());
         verifyDetails = new VerifyDetails(getActivity());
-        treeType = new TreeTypeNameList(getActivity());
-        treeList = new TreeList(getActivity());
-        imageDb = new ImageDb(getActivity());
         treeTypeInfo = new TreeTypeInfo(getActivity());
-
-        //  mTreeTypeValues = treeType.getTreTypeeNames(AppData.checkLanguage(getActivity()));
-        mTreeTypeValues = treeTypeInfo.getTreeType(Config.DISTRICT_NAME, Config.SOIL_TYPE, AppData.checkLanguage(getActivity()));
-        Log.d("sadddas52198418", "   " + mTreeTypeValues.size());
+        mTreeTypeValues = treeTypeInfo.getTreeType(Config.DISTRICT_NAME, SOIL_TYPE, AppData.checkLanguage(getActivity()));
         mLocationBasedSeletedTree.setAdapter(new TreeTypeAdapter(getActivity(), mTreeTypeValues));
         mLocationBasedSeletedTree.setSelected(false);
         mLocationBasedSeletedTree.setSelection(Config.SELECTE_TREE_TYPE);
-        mSelectedDisticName.setText(Config.DISTRICT_NAME + "(Dt), " + Config.SOIL_TYPE);
+        mSelectedDisticName.setText(Config.DISTRICT_NAME + "(Dt), " + SOIL_TYPE);
+        mSelectedDisticName.setVisibility(View.GONE);
+        bySortType = sortOrder.getSort();
+
+        mSelectedDisticName.setVisibility(View.GONE);
+        mLocationBasedSeletedTree.setVisibility(View.GONE);
+        Config.mSELECTED_TREE_NAME = verifyDetails.getQureyBaseTreeName(treeType, districtName, rainFallType, terrainType, soillType, AppData.checkLanguage(getActivity()));
+        if (Config.mSELECTED_TREE_NAME.size() >= 1) {
+            Adapter_Tree_Species adapter_tree_species = new Adapter_Tree_Species(getActivity(), Config.mSELECTED_TREE_NAME, "null"/*, treImagesFromHere*/, "Search");
+            listView.setAdapter(adapter_tree_species);
+            mNodata.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            mNodata.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+
+
+/*
 
         mLocationBasedSeletedTree.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, lo   ng id) {
                 Config.SELECTE_TREE_TYPE = mLocationBasedSeletedTree.getSelectedItemPosition();
                 String treeType = mTreeTypeValues.get(position).get("Treetype");
-                //  mDistrinListName = verifiedDatabase.getQureyBaseTreeName(treeType, Config.DISTRICT_NAME, Config.RAIN_FALL, Config.TERRAIN_TYPE, Config.SOIL_TYPE);
-                /*if (mSELECTED_TREE_NAME.size() >= 1) {
-                    listView.setAdapter(new Adapter_Tree_Species(getActivity(), Config.mSELECTED_TREE_NAME, mImageList, mTreeImagePath, "Search"));
-                    mNodata.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                    mSelectedDisticName.setVisibility(View.VISIBLE);
-                } else {*/
-                Config.mSELECTED_TREE_NAME = verifyDetails.getQureyBaseTreeName(treeType, Config.DISTRICT_NAME, Config.RAIN_FALL, Config.TERRAIN_TYPE, Config.SOIL_TYPE, AppData.checkLanguage(getActivity()));
-                // mImageList = treeList.getTreeByImages(mTreeTypeValues.get(Config.SELECTE_TREE_TYPE).get("Treetype"), Config.DISTRICT_NAME, AppData.checkLanguage(getActivity()));
+
+                Config.mSELECTED_TREE_NAME = verifyDetails.getQureyBaseTreeName(treeType, Config.DISTRICT_NAME, RAIN_FALL, Config.TERRAIN_TYPE, SOIL_TYPE, AppData.checkLanguage(getActivity()));
 
                 if (mSELECTED_TREE_NAME.size() >= 1) {
-                    // Config.mTreeImagePath = verifyDetails.getTreeByImagePath(treeType, Config.DISTRICT_NAME, Config.RAIN_FALL, Config.TERRAIN_TYPE, Config.SOIL_TYPE, AppData.checkLanguage(getActivity()));
-                    Log.d("mDistrinListNameSearchedByTree", "" + Config.mSELECTED_TREE_NAME.size() + "  " + Config.mTreeImagePath.size());
+                    if (bySortType != null) {
+                        if (bySortType.equals("Z-A")) {
+                            Log.d("LocationSelected", "come");
+                            Collections.sort(mSELECTED_TREE_NAME, new Comparator<HashMap<String, String>>() {
+                                @Override
+                                public int compare(HashMap<String, String> s1, HashMap<String, String> s2) {
+                                    return s2.get("treeName").compareTo(s1.get("treeName"));
+                                }
+                            });
+                        } else {
+                            Log.d("LocationSelected", "not come");
+                            Collections.sort(mSELECTED_TREE_NAME, new Comparator<HashMap<String, String>>() {
+                                @Override
+                                public int compare(HashMap<String, String> s1, HashMap<String, String> s2) {
+                                    return s1.get("treeName").compareTo(s2.get("treeName"));
+                                }
+                            });
+                        }
+                    }
                     mSelectedDisticName.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.VISIBLE);
                     mNodata.setVisibility(View.GONE);
-                    new LoaderAsync(getActivity(), Config.mSELECTED_TREE_NAME, treeList.getTreImages(),/*, Config.mTreeImagePath,*/ "Search").execute();
+                    Adapter_Tree_Species adapter_tree_species = new Adapter_Tree_Species(getActivity(), Config.mSELECTED_TREE_NAME *//*
+*/
+/*, treImagesFromHere*//*
+*/
+/*, "Search");
+                            listView.setAdapter(adapter_tree_species);
                 } else {
                     listView.setVisibility(View.GONE);
                     mNodata.setVisibility(View.VISIBLE);
@@ -127,82 +153,13 @@ public class SearchedByTree extends Fragment {
 
             }
         });
+*/
+
+        listView.setSelectionFromTop(LISTVIEW_SMOOTH_VIEW_POSITION_2, 0);
+        LISTVIEW_SMOOTH_VIEW_POSITION_2 = 0;
         return rootView;
     }
 
-
-    class LoaderAsync extends AsyncTask<ArrayList<HashMap<String, byte[]>>, Void, ArrayList<HashMap<String, byte[]>>> {
-        private final FragmentActivity mContext;
-        private final ArrayList<HashMap<String, String>> mLocationFromHere;
-        private final ArrayList<HashMap<String, byte[]>> treImagesFromHere;
-
-        // private final ArrayList<HashMap<String, String>> mImagePathsFromHere;
-        private final String species;
-        private ProgressDialog progressDialog;
-
-        public LoaderAsync(FragmentActivity activity, ArrayList<HashMap<String, String>> mLocation, ArrayList<HashMap<String, byte[]>> treImages,/* ArrayList<HashMap<String, String>> mImagePaths,*/ String species) {
-            this.mContext = activity;
-            this.mLocationFromHere = mLocation;
-            this.treImagesFromHere = treImages;
-            // this.mImagePathsFromHere = mImagePaths;
-            this.species = species;
-            //Log.d("mImagePathstrey456 ", "" + mImagePaths.size());
-        }
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog.setMessage(getActivity().getString(R.string.fetchingData));
-            progressDialog.show();
-        }
-
-        @Override
-        protected ArrayList<HashMap<String, byte[]>> doInBackground(ArrayList<HashMap<String, byte[]>>... params) {
-            HashMap<String, byte[]> mHashBitMap;
-            ArrayList<HashMap<String, byte[]>> treImagesFromHereAdded = new ArrayList<>();
-            for (int i = 0; i < mLocationFromHere.size(); i++) {
-                String storagePath = mLocationFromHere.get(i).get("storagePath");
-                if (storagePath != null || storagePath != "") {
-
-                    mHashBitMap = new HashMap<>();
-                    Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(storagePath), 64, 64);
-                    if (ThumbImage != null) {
-
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        ThumbImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-
-                        mHashBitMap.put("ThumbImage", byteArray);
-                        treImagesFromHereAdded.add(mHashBitMap);
-                    } else {
-
-                        mHashBitMap.put("ThumbImage", null);
-                        treImagesFromHereAdded.add(mHashBitMap);
-                    }
-                } else {
-                    mHashBitMap = new HashMap<>();
-                    mHashBitMap.put("ThumbImage", null);
-                    treImagesFromHereAdded.add(mHashBitMap);
-                }
-            }
-            Log.d("smpleee", "size " + treImagesFromHereAdded.size());
-            return treImagesFromHereAdded;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<HashMap<String, byte[]>> treImagesFromHere) {
-            super.onPostExecute(treImagesFromHere);
-            Log.d("sdfjaghdfg", "" + treImagesFromHere.size());
-
-            if (treImagesFromHere.size() >= 1) {
-                Adapter_Tree_Species adapter_tree_species = new Adapter_Tree_Species(getActivity(), mLocationFromHere, treImagesFromHere, "Search");
-                listView.setAdapter(adapter_tree_species);
-            }
-            progressDialog.dismiss();
-        }
-    }
 
     private class TreeTypeAdapter extends BaseAdapter {
         private final ArrayList<HashMap<String, String>> mListOfTreeType;

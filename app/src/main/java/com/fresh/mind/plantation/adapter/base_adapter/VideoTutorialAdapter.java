@@ -1,10 +1,13 @@
 package com.fresh.mind.plantation.adapter.base_adapter;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,16 +17,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+
+import com.fresh.mind.plantation.Constant.Config;
+import com.fresh.mind.plantation.Constant.Holder;
 import com.fresh.mind.plantation.R;
+import com.fresh.mind.plantation.activity.CustomVideoPlayer;
 import com.fresh.mind.plantation.activity.PlayingVideo;
 import com.fresh.mind.plantation.customized.CustomTextView;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.fresh.mind.plantation.R.id.imageView;
+import static com.fresh.mind.plantation.R.id.imgDisplay;
+import static com.fresh.mind.plantation.R.id.mTreeName;
 
 /**
  * Created by AND I5 on 01-03-2017.
@@ -32,12 +40,12 @@ import static com.fresh.mind.plantation.R.id.imageView;
 public class VideoTutorialAdapter extends BaseAdapter {
     private final ArrayList<HashMap<String, String>> mDetails;
     private final FragmentActivity mContext;
-    private final ArrayList<HashMap<String, byte[]>> mVideoImagePah;
+    // private final ArrayList<HashMap<String, byte[]>> mVideoImagePah;
 
-    public VideoTutorialAdapter(FragmentActivity activity, ArrayList<HashMap<String, String>> mAllVidoe, ArrayList<HashMap<String, byte[]>> mVideoImagePah) {
+    public VideoTutorialAdapter(FragmentActivity activity, ArrayList<HashMap<String, String>> mAllVidoe) {
         this.mContext = activity;
         this.mDetails = mAllVidoe;
-        this.mVideoImagePah = mVideoImagePah;
+        //this.mVideoImagePah = mVideoImagePah;
     }
 
     @Override
@@ -55,58 +63,60 @@ public class VideoTutorialAdapter extends BaseAdapter {
         return position;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
-        convertView = layoutInflater.inflate(R.layout.adapter_tree_specis, null);
-        LinearLayout cardView = (LinearLayout) convertView.findViewById(R.id.cardView3);
-        cardView.setVisibility(View.GONE);
-        CustomTextView mSubtitle = (CustomTextView) convertView.findViewById(R.id.mSubName);
-        CustomTextView mTreeName = (CustomTextView) convertView.findViewById(R.id.mTreeName);
-        ImageView mVideoThumb = (ImageView) convertView.findViewById(R.id.imageView2);
-        final File file = new File(mDetails.get(position).get("path"));
-        mTreeName.setText("" + file.getName());
-        Log.d("skjdahh", "" + mDetails.get(position).get("Description"));
-        mSubtitle.setText("" + mDetails.get(position).get("Description"));
-
-
-        //mVideoThumb.setImageBitmap(ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.FULL_SCREEN_KIND));
-        byte[] mImagePath = mVideoImagePah.get(position).get("ThumbImage");
-        Bitmap bmp = BitmapFactory.decodeByteArray(mImagePath, 0, mImagePath.length);
-        try {
-            if (bmp != null) {
-                mVideoThumb.setImageBitmap(Bitmap.createScaledBitmap(bmp, 64, 64, false));
-            }
-
-        } catch (OutOfMemoryError ex) {
-            ex.printStackTrace();
+        Holder holder;
+        if (convertView == null) {
+            holder = new Holder();
+            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.adapter_tree_specis, null);
+            LinearLayout cardView = (LinearLayout) convertView.findViewById(R.id.cardView3);
+            cardView.setVisibility(View.GONE);
+            holder.mSubName = (CustomTextView) convertView.findViewById(R.id.mSubName);
+            holder.treeName = (CustomTextView) convertView.findViewById(mTreeName);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView2);
+            holder.cnsLayout1 = (ConstraintLayout) convertView.findViewById(R.id.cnsLayout1);
+            convertView.getTag();
+        } else {
+            holder = (Holder) convertView.getTag();
         }
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+       /* if (Config.checkMaterial() == 1) {
+            holder.cnsLayout1.setBackground(mContext.getDrawable(R.drawable.ripple_location));
+        }*/
+        try {
+            final File file = new File(mDetails.get(position).get("path"));
+            String tutorial_title = mDetails.get(position).get("tutorial_title");
+            //holder.treeName.setText("" + file.getName());
+            holder.treeName.setText("" + tutorial_title);
+            holder.mSubName.setText("" + mDetails.get(position).get("Description"));
 
-                Intent intent = new Intent(mContext, PlayingVideo.class);
-                intent.putExtra("videofilename", "" + file.getAbsolutePath());
-                mContext.startActivity(intent);
-
-
-                /*
-                String filPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Plantation/" + file1.getName();
-                File file2 = new File(filPath);
-
-                Log.d("Asddvideoasd", "" + video + "  " + file2.length());
-                Dialog dialog = new Dialog(mContext);
-                dialog.setContentView(R.layout.dialog_video);
-                VideoView mVideoview = (VideoView) dialog.findViewById(R.id.mVideoview);
-                mVideoview.setVideoPath("" + file1.getAbsoluteFile());
-                mVideoview.setMediaController(new MediaController(mContext));
-                mVideoview.requestFocus();
-                mVideoview.start();
-                dialog.show();*/
+            String mImagePath = mDetails.get(position).get("path");
+            //Log.d("mImagePath", "" + mImagePath);
+            if (mImagePath != null) {
+                //Picasso.with(mContext).load(Uri.fromFile(new File(mImagePath))).into(holder.imageView);
+                holder.imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(mImagePath, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND));
             }
-        });
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(mContext, CustomVideoPlayer.class);
+                            intent.putExtra("videofilename", "" + file.getAbsolutePath());
+                            mContext.startActivity(intent);
+                        }
+                    }, 300);
+
+                }
+            });
+        } catch (NullPointerException e) {
+            Log.d("34r554", "" + e);
+        }
+
         return convertView;
     }
-
 
 }

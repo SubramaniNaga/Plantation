@@ -11,7 +11,7 @@
         android:id="@+id/toolbawr"
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"></include>
 
     <LinearLayout
         android:id="@+id/shadow"
@@ -20,7 +20,7 @@
         android:layout_below="@+id/toolbawr"
         android:background="@drawable/action_bar_shadow"
         android:orientation="vertical"
-        android:visibility="gone"></LinearLayout>
+        android:visibility="gone" />
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -29,7 +29,11 @@
         android:layout_below="@+id/shadow"
         tools:openDrawer="start">
 
-        <include layout="@layout/content_main" />
+
+        <include layout="@layout/content_main">
+
+
+        </include>
 
         <RelativeLayout
             android:layout_width="match_parent"

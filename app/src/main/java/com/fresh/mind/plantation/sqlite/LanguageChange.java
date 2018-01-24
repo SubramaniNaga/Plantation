@@ -18,7 +18,6 @@ import static android.R.attr.version;
 
 public class LanguageChange extends SQLiteOpenHelper {
 
-
     public LanguageChange(Context context) {
         super(context, "Language", null, 1);
     }

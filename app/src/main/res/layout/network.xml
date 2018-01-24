@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    
+
     <com.fresh.mind.plantation.customized.CustomTextView
         android:id="@+id/textView18"
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:layout_margin="8dp"
         android:gravity="center"
         android:padding="8dp"
-        android:text="Network Connection"
+        android:text="@string/internetConnection"
         android:textColor="@color/black"
         app:typeface="lato_bold" />
 
@@ -26,7 +26,7 @@
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="   Now your in Offline, So some Details fetching in local and it may be same values from previous uploading datas. Connect data connection and fetch fresh datas from server. Now goto data settings?"
+        android:text="@string/networkmesg"
         android:textColor="@color/light_black"
         app:typeface="lato_semibold" />
 
@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="8dp"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@color/colorPrimaryDark"
             app:typeface="lato_bold" />
 
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="8dp"
-            android:text="Enable"
+            android:text="@string/enable"
             android:textColor="@color/colorPrimaryDark"
             app:typeface="lato_bold" />
 
@@ -73,7 +73,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="8dp"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="@color/colorPrimaryDark"
             app:typeface="lato_bold" />
     </LinearLayout>

@@ -6,11 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import static android.R.attr.version;
+import static com.fresh.mind.plantation.R.id.districtName;
 
 /**
  * Created by AND I5 on 21-02-2017.
@@ -25,7 +29,7 @@ public class TerrainType extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String TerrainType = "create table Terrain(id INTEGER PRIMARY KEY AUTOINCREMENT, districtName text, lastUpdate text, Terrain text,districtNameTamil text, TerrainTamil text )";
+        String TerrainType = "create table Terrain(id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,Terrain text,districtNameTamil text,TerrainTamil text)";
         db.execSQL(TerrainType);
     }
 
@@ -117,5 +121,47 @@ public class TerrainType extends SQLiteOpenHelper {
         cursor.close();
         sqLiteDatabase.close();
         return cou;
+    }
+
+    public ArrayList<KeyPairBoolData> getSetter(String language) {
+        ArrayList<KeyPairBoolData> hashMaps = new ArrayList<>();
+        Cursor cursor = null;
+        sqLiteDatabase = this.getReadableDatabase();
+
+        cursor = sqLiteDatabase.rawQuery("select * from Terrain", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                KeyPairBoolData keyPairBoolData = new KeyPairBoolData();
+                if (language.equals("1")) {
+                    String TerrainTamil = cursor.getString(cursor.getColumnIndex("TerrainTamil"));
+                    if (TerrainTamil.isEmpty() || TerrainTamil.equals("null")) {
+                    } else {
+                        /*HashMap<String, String> status = new HashMap<>();
+                        status.put("Terrain", TerrainTamil);
+                        hashMaps.add(status);*/
+                        keyPairBoolData.setName(TerrainTamil);
+                        hashMaps.add(keyPairBoolData);
+                    }
+                } else {
+                    HashMap<String, String> status = new HashMap<>();
+                    String Terrain = cursor.getString(cursor.getColumnIndex("Terrain"));
+                    if (Terrain.isEmpty() || Terrain.equals("null")) {
+                    } else {
+                        /*status.put("Terrain", Terrain);
+                        hashMaps.add(status);*/
+                        keyPairBoolData.setName(Terrain);
+                        hashMaps.add(keyPairBoolData);
+                    }
+                }
+            } while (cursor.moveToNext());
+        }
+        HashSet<KeyPairBoolData> hashSet = new HashSet<>();
+        hashSet.addAll(hashMaps);
+        hashMaps.clear();
+        hashMaps.addAll(hashSet);
+        cursor.close();
+        sqLiteDatabase.close();
+        return hashMaps;
     }
 }

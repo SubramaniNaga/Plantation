@@ -10,10 +10,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.fresh.mind.plantation.Constant.Config.mImagePaths;
 
-/**
- * Created by AND I5 on 21-02-2017.
- */
 
 public class ImageDb extends SQLiteOpenHelper {
 
@@ -24,7 +22,7 @@ public class ImageDb extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String Imge = "create table tableImage(Id INTEGER PRIMARY KEY AUTOINCREMENT,treeIcon blob,common_key text,treeName text,treeNameTamil text,storagePath text)";
+        String Imge = "create table tableImage(Id INTEGER PRIMARY KEY AUTOINCREMENT,treeIcon blob,common_key text,treeName text,treeNameTamil text,storagePath text,thumbnail text)";
         db.execSQL(Imge);
     }
 
@@ -34,7 +32,7 @@ public class ImageDb extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void onInsert( String TreeName, String common_key, String treeNameTamil, String storagePath) {
+    public void onInsert(String TreeName, String common_key, String treeNameTamil, String storagePath, String thumbnail) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         //contentValues.put("treeIcon", imgByte);
@@ -42,6 +40,7 @@ public class ImageDb extends SQLiteOpenHelper {
         contentValues.put("treeName", TreeName);
         contentValues.put("storagePath", storagePath);
         contentValues.put("treeNameTamil", treeNameTamil);
+        contentValues.put("thumbnail", thumbnail);
         sqLiteDatabase.insertWithOnConflict("tableImage", null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         // Log.d("Create", "Successs Inseert" + contentValues);
 
@@ -67,7 +66,7 @@ public class ImageDb extends SQLiteOpenHelper {
         //Log.d("mDistrinListName come", "" + treeName + "  " + lang);
         if (lang.equals("1")) {
             cursor = sqLiteDatabase.rawQuery("select * from tableImage", null);
-            Log.d("mDistrinListNamedsdscursor", "" + cursor.getCount());
+            //  Log.d("mDistrinListNamedsdscursor", "" + cursor.getCount());
             if (cursor.getCount() == 0) {
                 cursor = sqLiteDatabase.rawQuery("select * from tableImage", null);
             }
@@ -120,9 +119,7 @@ public class ImageDb extends SQLiteOpenHelper {
         String treeNameDb = null;
         if (cursor.moveToFirst()) {
             do {
-
                 treeNameDb = cursor.getString(cursor.getColumnIndex("treeName"));
-
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -136,7 +133,6 @@ public class ImageDb extends SQLiteOpenHelper {
         int treeId = 0;
         if (cursor.moveToFirst()) {
             do {
-
                 treeNameDb = cursor.getString(cursor.getColumnIndex("Id"));
 
             } while (cursor.moveToNext());
@@ -149,28 +145,33 @@ public class ImageDb extends SQLiteOpenHelper {
     public void delteTreeNameImage(String treeNameDb) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         sqLiteDatabase.execSQL("delete from tableImage where='" + treeNameDb + "'");
-
-
     }
 
-
-    public ArrayList<HashMap<String, String>> getImagePaths(String languages, String treeName) {
+    public ArrayList<HashMap<String, String>> getImagePaths(String languages, String commonKey) {
         ArrayList<HashMap<String, String>> mImagePaths = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor = null;
-        cursor = sqLiteDatabase.rawQuery("select * from tableImage", null);
-        //Log.d("sa342134", "" + cursor.getCount() + "  " + languages + "  " + treeName);
+        // Log.d("tre12457872eName", "" + commonKey);
+
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from tableImage where common_key='" + commonKey + "'", null);
+        //  Log.d("cursorkjioucommonKey", "" + cursor.getCount());
         if (cursor.moveToFirst()) {
             do {
-                HashMap<String, String> mImages = new HashMap<>();
+                //Log.d("as22342as", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
                 String treeNameEng = cursor.getString(cursor.getColumnIndex("treeName"));
                 String treeNameTamil = cursor.getString(cursor.getColumnIndex("treeNameTamil"));
-                if (treeNameEng.toLowerCase().equals(treeName.toLowerCase())) {
-                    mImages.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
-                } else if (treeNameTamil.equals(treeName)) {
-                    mImages.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
-                }
+                //  Log.d("treeNatreeNameEngme", commonKey.length() + " firss " + commonKey + "  Second  " + treeNameEng.length() + "   " + treeNameEng + " " + treeNameTamil);
+                /*if (treeNameEng.trim().toLowerCase().equals(treeName.trim().toLowerCase())) {*/
+                // Log.d("sd23423412", "1");
+                HashMap<String, String> mImages = new HashMap<>();
+                mImages.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
                 mImagePaths.add(mImages);
+               /* } else if (treeNameTamil.equals(treeName)) {
+                    HashMap<String, String> mImages = new HashMap<>();
+                    // Log.d("sd23423412", "2");
+                    mImages.put("storagePath", "" + cursor.getString(cursor.getColumnIndex("storagePath")));
+                    mImagePaths.add(mImages);
+                }*/
+
             } while (cursor.moveToNext());
         }
         cursor.close();

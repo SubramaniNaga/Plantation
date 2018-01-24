@@ -8,19 +8,20 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical">
 
         <com.fresh.mind.plantation.customized.CustomTextView
             android:id="@+id/customTextView5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:padding="10dp"
             android:text="@string/Feedback"
             android:textAlignment="center"
             android:textColor="@color/black"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,10 +31,9 @@
             android:id="@+id/linearLayout7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/layout_shadow"
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -95,6 +95,85 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="10dp"
+                android:text="@string/select_dis"
+                android:textColor="@color/colorPrimaryDark"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomEditeText
+                android:id="@+id/mLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:hint="@string/hint_Location"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:et_supportSingleLine="true"
+                app:typeface="lato_semibold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/sp_district_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <AutoCompleteTextView
+                android:id="@+id/acLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:completionThreshold="1"
+                android:hint="@string/hint_Location"
+                android:padding="8dp"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:text="@string/email"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="gone"
+                app:typeface="lato_bold" />
+
+            <com.fresh.mind.plantation.customized.CustomEditeText
+                android:id="@+id/mEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/empty_edit"
+                android:hint="@string/hint_Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:et_supportSingleLine="true"
+                app:typeface="lato_semibold" />
+
+
+            <com.fresh.mind.plantation.customized.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
                 android:text="@string/Feedback_Suggestion"
                 android:textColor="@color/colorPrimaryDark"
                 app:typeface="lato_bold" />
@@ -110,7 +189,6 @@
                 android:hint="@string/hint_Feedback"
                 android:nextFocusDown="@+id/mSubmit"
                 android:padding="10dp"
-                android:singleLine="true"
                 android:textSize="15sp"
                 app:typeface="lato_semibold" />
         </LinearLayout>
@@ -126,10 +204,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="@color/colorPrimaryDark"
-            android:paddingBottom="10dp"
+            android:paddingBottom="16dp"
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
-            android:paddingTop="10dp"
+            android:paddingTop="16dp"
             android:text="@string/submit"
             android:textAlignment="center"
             android:textColor="@color/white"

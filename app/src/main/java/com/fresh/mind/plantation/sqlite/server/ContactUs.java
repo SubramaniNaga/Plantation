@@ -7,13 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.fresh.mind.plantation.Constant.Config;
-import com.fresh.mind.plantation.customized.CustomTextView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static android.R.attr.version;
+import static com.fresh.mind.plantation.Constant.Config.districtName;
 
 /**
  * Created by AND I5 on 01-03-2017.
@@ -28,7 +25,8 @@ public class ContactUs extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String contact = "create table contactAddress(id INTEGER PRIMARY KEY AUTOINCREMENT, districtName text, lastUpdate text,districtNameTamil text ,address text, addressTamil text,phoneNo text,direction text )";
+        String contact = "create table contactAddress(id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,districtNameTamil text,address text,addressTamil text," +
+                "phoneNo text,direction text,common_key text,Email text)";
         db.execSQL(contact);
     }
 
@@ -86,6 +84,43 @@ public class ContactUs extends SQLiteOpenHelper {
                     mHash.put("address", address);
                     mHash.put("direction", cursors.getString(cursors.getColumnIndex("direction")));
                     mHash.put("phoneNo", phoneNo);
+                    hashMaps.add(mHash);
+                }
+            } while (cursors.moveToNext());
+        }
+        cursors.close();
+        sql.close();
+        return hashMaps;
+    }
+
+    public ArrayList<HashMap<String, String>> getDistrictWithEmails(String languages) {
+        SQLiteDatabase sql = this.getReadableDatabase();
+        Cursor cursors = sql.rawQuery("select * from contactAddress", null);
+        ArrayList<HashMap<String, String>> hashMaps = new ArrayList<>();
+        HashMap<String, String> mHash = new HashMap<>();
+        if (languages.equals("2")) {
+            mHash.put("districtName", "Select District");
+            mHash.put("Email", "Select Email");
+            hashMaps.add(mHash);
+        } else if (languages.equals("1")) {
+            mHash.put("districtName", "மாவட்டத்தைத் தேர்ந்தெடுக்கவும்");
+            mHash.put("Email", "Select Email");
+            hashMaps.add(mHash);
+        }
+        if (cursors.moveToFirst()) {
+
+            do {
+                if (languages.equals("1")) {
+                    mHash = new HashMap<>();
+                    String districtName = cursors.getString(cursors.getColumnIndex("districtNameTamil"));
+                    mHash.put("districtName", districtName);
+                    mHash.put("Email", cursors.getString(cursors.getColumnIndex("Email")));
+                    hashMaps.add(mHash);
+                } else {
+                    mHash = new HashMap<>();
+                    String districtName = cursors.getString(cursors.getColumnIndex("districtName"));
+                    mHash.put("districtName", districtName);
+                    mHash.put("Email", cursors.getString(cursors.getColumnIndex("Email")));
                     hashMaps.add(mHash);
                 }
             } while (cursors.moveToNext());

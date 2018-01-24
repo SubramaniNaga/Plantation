@@ -1,11 +1,8 @@
 package com.fresh.mind.plantation.adapter.pager_adapter;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
@@ -17,34 +14,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
-import com.fresh.mind.plantation.fragment.Inside.ImagesView;
 import com.fresh.mind.plantation.tab_pager.ViewDetailsTabView;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.fresh.mind.plantation.fragment.Inside.ImagesView.size;
 
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
-    private final ArrayList<HashMap<String, byte[]>> mListOfImages;
+    private final ArrayList<HashMap<String, String>> mListOfImages;
     private FragmentActivity _activity;
-    private int[] _imagePaths;
-    private LayoutInflater inflater;
-    //int[] images = {R.drawable.grevillea_robusta, R.drawable.thespesia_populnnea, R.drawable.tectona_gradis, R.drawable.tree_timber, R.drawable.acacia, R.drawable.acacia_holosericea, R.drawable.acrocarpus, R.drawable.ailanthus, R.drawable.toona_siliata, R.drawable.thespesia_populnnea, R.drawable.tectona_gradis, R.drawable.pink_edar};
-    String[] fileName = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
 
     // constructor
-    public FullScreenImageAdapter(FragmentActivity activity, ArrayList<HashMap<String, byte[]>> mListOfImages) {
+    public FullScreenImageAdapter(FragmentActivity activity, ArrayList<HashMap<String, String>> mListOfImages) {
         this._activity = activity;
         //this._imagePaths = imagePaths;
         this.mListOfImages = mListOfImages;
+        Log.d("mListOfImages", "" + mListOfImages.size());
     }
 
     @Override
@@ -59,20 +52,30 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+
         LayoutInflater inflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.adapter_fullscreen_image, container, false);
-        ImageView imgDisplay = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
+        PhotoView imgDisplay = (PhotoView) viewLayout.findViewById(R.id.imgDisplay);
         CustomTextView count = (CustomTextView) viewLayout.findViewById(R.id.count);
-        byte[] imag = mListOfImages.get(position).get("storagePath");
+        String imag = mListOfImages.get(position).get("storagePath");
+        Log.d("imagimag", "" + imag);
         //Log.d("imagimag", mListOfImages.size() + " " + imag);
-        if (imag.equals("null")) {
+        if (imag == null) {
         } else {
             try {
-                Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
+                /*Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                imgDisplay.setImageBitmap(bmp);
+                imgDisplay.setImageBitmap(bmp);*/
+
+              /*  Glide.with(_activity).load(Uri.fromFile(new File(imag)))
+                        .into(imgDisplay);*/
+                Picasso.with(_activity)
+                        .load((Uri.fromFile(new File(imag))))
+                        .error(R.drawable.logo_3)         // optional
+                        .into(imgDisplay);
                 count.setText("" + (position + 1) + "/" + mListOfImages.size());
+                Log.d("dsf234", "" + (position + 1) + "/" + mListOfImages.size());
                 //ImagesView.size.setText("" + (position + 1) + "/" + mListOfImages.size());
                 ((ViewPager) container).addView(viewLayout);
             } catch (OutOfMemoryError ex) {

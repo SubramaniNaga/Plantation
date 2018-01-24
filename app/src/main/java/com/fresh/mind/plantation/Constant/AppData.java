@@ -1,10 +1,9 @@
 package com.fresh.mind.plantation.Constant;
 
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 
 import com.fresh.mind.plantation.sqlite.LanguageChange;
-
-import java.lang.ref.SoftReference;
 
 /**
  * Created by AND I5 on 04-02-2017.
@@ -1282,7 +1281,7 @@ public class AppData {
 
 
 
-    public static String checkLanguage(FragmentActivity fragmentActivity) {
+    public static String checkLanguage(Context fragmentActivity) {
         LanguageChange languageChange = new LanguageChange(fragmentActivity);
         String languages = languageChange.getStatus();
 

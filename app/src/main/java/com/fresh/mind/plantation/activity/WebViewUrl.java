@@ -24,7 +24,7 @@ import com.fresh.mind.plantation.customized.CustomTextView;
  */
 public class WebViewUrl extends Activity {
 
-    private static final String TAG = "WEbViewwww";
+    private static final String TAG = "WebViewwww";
     private WebView webview;
     private ProgressDialog progressBar;
     private CustomTextView mUrlTitle;

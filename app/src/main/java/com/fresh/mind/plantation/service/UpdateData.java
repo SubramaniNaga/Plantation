@@ -18,9 +18,10 @@ import android.util.Log;
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.activity.NotifyActivity;
-import com.fresh.mind.plantation.fragment.menu_page.SplashScreen;
+import com.fresh.mind.plantation.sqlite.Intercrops;
 import com.fresh.mind.plantation.sqlite.server.DistrictNameList;
 import com.fresh.mind.plantation.sqlite.server.ImageDb;
+import com.fresh.mind.plantation.sqlite.server.Modelinfo;
 import com.fresh.mind.plantation.sqlite.server.RainfallType;
 import com.fresh.mind.plantation.sqlite.server.SoilType;
 import com.fresh.mind.plantation.sqlite.server.TerrainType;
@@ -52,7 +53,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.fresh.mind.plantation.Constant.Config.updateCounting;
-import static com.fresh.mind.plantation.Constant.Config.url;
 
 /**
  * Created by AND I5 on 18-02-2017.
@@ -65,9 +65,12 @@ public class UpdateData extends Service {
     private TreeTypeNameList treeTypeNameList;
     private SoilType soilType;
     private VerifyDetails verifyDetails;
+    private TreeTypeInfo treeTypeInfo;
     private TerrainType terrainType;
     private RainfallType rainfallType;
-    private TreeTypeInfo treeTypeInfo;
+    private Modelinfo modelinfo;
+    private Intercrops intercrops;
+
     private ImageDb imageDb;
 
 
@@ -80,7 +83,7 @@ public class UpdateData extends Service {
     @Override
     public void onCreate() {
         // Code to execute when the service is first created
-
+        Log.d("dsadsd", "StartService");
         treeList = new TreeList(getApplicationContext());
         districtNameList = new DistrictNameList(getApplicationContext());
         treeTypeNameList = new TreeTypeNameList(getApplicationContext());
@@ -184,15 +187,15 @@ public class UpdateData extends Service {
                                 } else {
                                     String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                                     String mLastDate_fromDb = treeList.getLastDate(Last_Update_fromServer);
-                                    Log.d("mLastDLast_Updateate_one  ", i + "  " + mLastDate_fromDb + "  " + Last_Update_fromServer);
+                                    //Log.d("mLastDLast_Updateate_one  ", i + "  " + mLastDate_fromDb + "  " + Last_Update_fromServer);
                                     if (mLastDate_fromDb != null) {
                                         if (Last_Update_fromServer.equals(mLastDate_fromDb)) {
                                             Log.d("whatCome", "Fine 12");
                                         } else {
-                                            Log.d("whatCome", "Fine 12 not es");
+                                            //   Log.d("whatCome", "Fine 12 not es");
                                         }
                                     } else {
-                                        Log.d("whatCome", "Update 12 ");
+                                        //  Log.d("whatCome", "Update 12 ");
                                         updateCounting = updateCounting + 1;
                                     }
                                 }
@@ -208,12 +211,52 @@ public class UpdateData extends Service {
                                 JSONObject jsonObject = result1Array.getJSONObject(i);
                                 String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                                 String mLastDate_fromDb = treeTypeNameList.getLastDate(Last_Update_fromServer);
-                                Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                               // Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                                 if (mLastDate_fromDb != null) {
-                                    //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                    Log.d("whatCome", "Fine");
+                                    //checkUpdates(mLastDate_fromDb, Last_Update_fromServer)
+                                    // Log.d("whatCome", "Fine");
                                 } else {
-                                    Log.d("whatCome", "Update ");
+                                    //  Log.d("whatCome", "Update ");
+                                    updateCounting = updateCounting + 1;
+                                }
+                            }
+                        }
+
+                        json1Object = parentObject.getJSONObject("Json15");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = modelinfo.getModelLastDate(Last_Update_fromServer);
+                                // Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    //checkUpdates(mLastDate_fromDb, Last_Update_fromServer)
+                                    // Log.d("whatCome", "Fine");
+                                } else {
+                                    //  Log.d("whatCome", "Update ");
+                                    updateCounting = updateCounting + 1;
+                                }
+                            }
+                        }
+
+                        json1Object = parentObject.getJSONObject("Json16");
+                        status = json1Object.getBoolean("status");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Last_Update_fromServer = jsonObject.getString("LastUpdate");
+                                String mLastDate_fromDb = intercrops.getModelLastDate(Last_Update_fromServer);
+                                // Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                if (mLastDate_fromDb != null) {
+                                    //checkUpdates(mLastDate_fromDb, Last_Update_fromServer)
+                                    // Log.d("whatCome", "Fine");
+                                } else {
+                                    //  Log.d("whatCome", "Update ");
                                     updateCounting = updateCounting + 1;
                                 }
                             }
@@ -227,12 +270,12 @@ public class UpdateData extends Service {
                                 JSONObject jsonObject = result1Array.getJSONObject(i);
                                 String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                                 String mLastDate_fromDb = districtNameList.getLastDate(Last_Update_fromServer);
-                                Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                //   Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                                 if (mLastDate_fromDb != null) {
                                     //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                    Log.d("whatCome", "Fine");
+                                    //   Log.d("whatCome", "Fine");
                                 } else {
-                                    Log.d("whatCome", "Update ");
+                                    //  Log.d("whatCome", "Update ");
                                     updateCounting = updateCounting + 1;
                                 }
                             }
@@ -246,12 +289,12 @@ public class UpdateData extends Service {
                                 JSONObject jsonObject = result1Array.getJSONObject(i);
                                 String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                                 String mLastDate_fromDb = soilType.getLastDate(Last_Update_fromServer);
-                                Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                // Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                                 if (mLastDate_fromDb != null) {
                                     //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                    Log.d("whatCome", "Fine");
+                                    //  Log.d("whatCome", "Fine");
                                 } else {
-                                    Log.d("whatCome", "Update ");
+                                    //  Log.d("whatCome", "Update ");
                                     updateCounting = updateCounting + 1;
                                 }
                             }
@@ -265,12 +308,12 @@ public class UpdateData extends Service {
                                 JSONObject jsonObject = result1Array.getJSONObject(i);
                                 String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                                 String mLastDate_fromDb = treeTypeInfo.getLastDate(Last_Update_fromServer);
-                                Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                // Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                                 if (mLastDate_fromDb != null) {
                                     //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                    Log.d("whatCome", "Fine");
+                                    // Log.d("whatCome", "Fine");
                                 } else {
-                                    Log.d("whatCome", "Update ");
+                                    // Log.d("whatCome", "Update ");
                                     updateCounting = updateCounting + 1;
                                 }
                             }
@@ -284,12 +327,12 @@ public class UpdateData extends Service {
                                 JSONObject jsonObject = result1Array.getJSONObject(i);
                                 String Last_Update_fromServer = jsonObject.getString("LastUpdate");
                                 String mLastDate_fromDb = verifyDetails.getLastDate(Last_Update_fromServer);
-                                Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
+                                // Log.d("mLastDLast_Updateate", " mLastDate_fromDb " + mLastDate_fromDb + "  Last_Update_fromServer " + Last_Update_fromServer);
                                 if (mLastDate_fromDb != null) {
                                     //checkUpdates(mLastDate_fromDb, Last_Update_fromServer);
-                                    Log.d("whatCome", "Fine 6");
+                                    //  Log.d("whatCome", "Fine 6");
                                 } else {
-                                    Log.d("whatCome", "Update 66");
+                                    // Log.d("whatCome", "Update 66");
                                     updateCounting = updateCounting + 1;
                                 }
                             }
@@ -336,26 +379,34 @@ public class UpdateData extends Service {
                         String messageStus9 = json9Object.getString("message");
                         if (statusMsg9) {
                             JSONArray result1Array = json9Object.getJSONArray("result");
-                            Log.d("result1Array  9", "" + result1Array.length());
+                            //Log.d("result1Array  9", "" + result1Array.length());
                         }
                         JSONObject json10Object = parentObject.getJSONObject("Json10");
                         boolean statusMsg10 = json10Object.getBoolean("status");
                         String messageStus10 = json10Object.getString("message");
                         if (statusMsg10) {
                             JSONArray result1Array = json10Object.getJSONArray("result");
-                            Log.d("result1Array  10", "" + result1Array.length());
+                            //  Log.d("result1Array  10", "" + result1Array.length());
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        stopService(new Intent(getApplicationContext(), UpdateData.class));
+                        //startService(new Intent(getApplicationContext(), UpdateData.class));
                     }
                 }
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
+                stopService(new Intent(getApplicationContext(), UpdateData.class));
+               // startService(new Intent(getApplicationContext(), UpdateData.class));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+                stopService(new Intent(getApplicationContext(), UpdateData.class));
+               // startService(new Intent(getApplicationContext(), UpdateData.class));
             } catch (IOException e) {
                 e.printStackTrace();
+                stopService(new Intent(getApplicationContext(), UpdateData.class));
+                //startService(new Intent(getApplicationContext(), UpdateData.class));
             }
             return updateCounting;
         }
@@ -364,7 +415,7 @@ public class UpdateData extends Service {
         protected void onPostExecute(Integer updateCounting) {
             super.onPostExecute(updateCounting);
             //progressDialog.dismiss();
-            Log.d("updateCounting", "" + updateCounting);
+            //  Log.d("updateCounting", "" + updateCounting);
             if (updateCounting >= 1) {
                 showNotification(updateCounting);
             } else {
@@ -414,6 +465,7 @@ public class UpdateData extends Service {
         // Add as notification
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
+
     }
 
     public boolean isNetworkAvailable() {

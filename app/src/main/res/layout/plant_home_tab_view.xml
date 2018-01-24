@@ -10,8 +10,7 @@
         android:id="@+id/customTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="android:id=@+id/listView"
-        android:visibility="gone"
+                android:visibility="gone"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/listView"
         app:layout_constraintRight_toRightOf="@+id/listView"
@@ -33,7 +32,7 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"></ListView>
+        tools:layout_constraintTop_creator="1"/>
 
     <com.fresh.mind.plantation.customized.CustomTabLayout
         android:id="@+id/tab_layout"
@@ -76,6 +75,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"></FrameLayout>
+        tools:layout_constraintTop_creator="1"/>
 
 </android.support.constraint.ConstraintLayout>

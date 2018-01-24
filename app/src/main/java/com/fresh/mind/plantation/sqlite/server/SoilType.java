@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,8 +29,8 @@ public class SoilType extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SoilType = "create table SoilType(id INTEGER PRIMARY KEY AUTOINCREMENT, soilType text, districtName text, Treetype text, terrainType text, rainFallType text, lastUpdate text," +
-                "soilTypeTamil text, districtNameTamil text, TreetypeTamil text, terrainTypeTamil text, rainFallTypeTamil text)";
+        String SoilType = "create table SoilType(id INTEGER PRIMARY KEY AUTOINCREMENT,soilType text,districtName text,Treetype text,terrainType text,rainFallType text,lastUpdate text," +
+                "soilTypeTamil text,districtNameTamil text,TreetypeTamil text,terrainTypeTamil text,rainFallTypeTamil text)";
         db.execSQL(SoilType);
     }
 
@@ -103,6 +106,7 @@ public class SoilType extends SQLiteOpenHelper {
         } else {
             cursor = sqLiteDatabase.rawQuery("select * from SoilType where districtName like '%" + districtName + "%'", null);
         }
+        Log.d("mSoiltypeListcursor", "" + cursor.getCount());
         if (cursor.moveToFirst()) {
             do {
                 String soilType = "";
@@ -155,7 +159,7 @@ public class SoilType extends SQLiteOpenHelper {
                 String soilType = cursor.getString(cursor.getColumnIndex("soilType"));
                 HashMap<String, String> mHash = new HashMap<>();
                 mHash.put("rainFall", soilType);
-                Log.d("soilType Ghashag", "" + soilType);
+               // Log.d("soilType Ghashag", "" + soilType);
                 mSoilList.add(mHash);
 
             } while (cursor.moveToNext());
@@ -170,7 +174,7 @@ public class SoilType extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String qury = "select * from SoilType where districtName like '%" + districtName + "%'and soilType like '%" + soillType + "%'";
         Cursor cursor = sqLiteDatabase.rawQuery(qury, null);
-        Log.d("vasss545564", "" + cursor.getCount());
+      //  Log.d("vasss545564", "" + cursor.getCount());
         if (cursor.moveToFirst()) {
             do {
                 String soilType = cursor.getString(cursor.getColumnIndex("Treetype"));
@@ -254,5 +258,42 @@ public class SoilType extends SQLiteOpenHelper {
         cursor.close();
         sqLiteDatabase.close();
         return cou;
+    }
+
+    public ArrayList<KeyPairBoolData> getSetter(String language) {
+        ArrayList<KeyPairBoolData> mSoilList = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        cursor = sqLiteDatabase.rawQuery("select * from SoilType", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                KeyPairBoolData keyPairBoolData = new KeyPairBoolData();
+                String soilType = "";
+                if (language.equals("1")) {
+
+                    soilType = cursor.getString(cursor.getColumnIndex("soilTypeTamil"));
+                } else {
+                    soilType = cursor.getString(cursor.getColumnIndex("soilType"));
+                }
+
+                if (soilType.equals("null") || soilType.isEmpty()) {
+                } else {
+                    HashMap<String, String> mHash = new HashMap<>();
+                    keyPairBoolData.setName(soilType);
+                    mSoilList.add(keyPairBoolData);
+                }
+
+
+            } while (cursor.moveToNext());
+        }
+        HashSet<KeyPairBoolData> hashSet = new HashSet<>();
+        hashSet.addAll(mSoilList);
+        mSoilList.clear();
+        mSoilList.addAll(hashSet);
+        cursor.close();
+        sqLiteDatabase.close();
+        return mSoilList;
     }
 }
