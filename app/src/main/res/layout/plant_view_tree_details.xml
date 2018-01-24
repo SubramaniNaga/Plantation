@@ -336,6 +336,32 @@
                     android:text="@string/Propagation"
                     app:typeface="lato_regular" />
 
+
+                <com.fresh.mind.plantation.customized.CustomTextView
+                    android:id="@+id/artificial_regeneration"
+                    style="@style/CustomFontStyleStarting"
+                    android:text="@string/artificial_regeneration"
+                    app:typeface="lato_regular" />
+
+                <com.fresh.mind.plantation.customized.CustomTextView
+                    android:id="@+id/seed_collection"
+                    style="@style/CustomFontStyleStarting"
+                    android:text="@string/seed_collection"
+                    app:typeface="lato_regular" />
+
+                <com.fresh.mind.plantation.customized.CustomTextView
+                    android:id="@+id/seed_treatment"
+                    style="@style/CustomFontStyleStarting"
+                    android:text="@string/seed_treatment"
+                    app:typeface="lato_regular" />
+
+                <com.fresh.mind.plantation.customized.CustomTextView
+                    android:id="@+id/nursery_technique"
+                    style="@style/CustomFontStyleStarting"
+                    android:text="@string/nursery_technique"
+                    app:typeface="lato_regular" />
+
+
                 <com.fresh.mind.plantation.customized.CustomTextView
                     android:id="@+id/PlantationTechnique"
                     style="@style/CustomFontStyleStarting"

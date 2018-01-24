@@ -113,7 +113,7 @@
     <string name="CultivationStatus">Cultivation Status</string>
     <string name="OtherDetails">Other Details</string>
 
-    <string name="Propagation">Propagation</string>
+    <string name="Propagation">Natural Regeneration</string>
     <string name="Yield">Yield</string>
     <string name="MarketDetails">Market Details</string>
 
@@ -201,6 +201,13 @@
     <string name="download_error">Download Format Error</string>
     <string name="server_not_found">Server not found or check your connection</string>
     <string name="link"><a href="http://www.www.com">ForGet Password</a></string>
+
+
+    <string name="artificial_regeneration">Artificial Regeneration</string>
+    <string name="seed_collection">Seed Collection</string>
+    <string name="seed_treatment">Seed Treatment</string>
+    <string name="nursery_technique">Nursery Technique</string>
+
 
     <string name="select_hyper_link">Find Glossary Item </string>
 </resources>
