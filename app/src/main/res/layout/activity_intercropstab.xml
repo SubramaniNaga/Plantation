@@ -11,6 +11,18 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:divider="@android:color/darker_gray"
+
+        android:dividerHeight="0.5dp"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+
+        android:visibility="gone" />
+    <!--android:groupIndicator="@drawable/group_indicator"-->
     <com.fresh.mind.plantation.customized.CustomTextView
         android:id="@+id/inter_no_data"
         android:layout_width="match_parent"

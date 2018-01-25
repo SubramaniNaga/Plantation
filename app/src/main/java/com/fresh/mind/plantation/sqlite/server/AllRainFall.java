@@ -10,7 +10,15 @@ import android.util.Log;
 import com.androidbuts.multispinnerfilter.KeyPairBoolData;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
+import static android.R.attr.key;
 import static android.R.attr.version;
 
 /**
@@ -64,6 +72,14 @@ public class AllRainFall extends SQLiteOpenHelper {
         }
         cursor.close();
         sqLiteDatabase.close();
+
+
+        HashSet<KeyPairBoolData> hashSet = new HashSet<KeyPairBoolData>();
+        hashSet.addAll(mDistrinListName);
+        mDistrinListName.clear();
+        mDistrinListName.addAll(hashSet);
+
+
         return mDistrinListName;
     }
 

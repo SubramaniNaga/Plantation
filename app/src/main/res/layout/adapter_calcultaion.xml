@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
@@ -11,7 +12,7 @@
         android:id="@+id/mSPinnerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="10dp"
         android:text="Title"
         android:textColor="@color/black"
         app:typeface="lato_semibold" />
@@ -23,5 +24,6 @@
         android:paddingBottom="8dp"
         android:paddingLeft="16dp"
         android:text="Description"
+        android:visibility="gone"
         app:typeface="lato_regular" />
 </LinearLayout>

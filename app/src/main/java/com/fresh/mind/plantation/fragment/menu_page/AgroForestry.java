@@ -27,6 +27,8 @@ import com.fresh.mind.plantation.fragment.ModelInter_tabs.Models;
 
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 
+import static com.fresh.mind.plantation.Constant.Config.AGRO_MODE;
+
 /**
  * Created by AND I5 on 08-07-2017.
  */
@@ -76,7 +78,9 @@ public class AgroForestry extends Fragment {
                 tabTextView.setTypeface(typface2, Typeface.NORMAL);
             }
         }
-
+        
+        viewPager.setCurrentItem(AGRO_MODE);
+        AGRO_MODE = 0;
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

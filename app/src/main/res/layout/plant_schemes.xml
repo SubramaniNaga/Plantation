@@ -21,7 +21,7 @@
         android:layout_margin="8dp"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="0.5dp"
-        android:groupIndicator="@drawable/group_indicator"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
         android:visibility="visible" />
 
     <com.fresh.mind.plantation.customized.CustomTextView

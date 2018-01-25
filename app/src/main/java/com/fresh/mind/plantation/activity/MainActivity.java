@@ -56,8 +56,10 @@ import com.fresh.mind.plantation.fragment.Inside.LocationSelected;
 import com.fresh.mind.plantation.fragment.Inside.SearchedByTree;
 import com.fresh.mind.plantation.fragment.Inside.SelectedTreeType;
 
+import com.fresh.mind.plantation.fragment.ModelInter_tabs.VIewAgreoForestryImage;
 import com.fresh.mind.plantation.fragment.menu_page.AgroForestry;
 import com.fresh.mind.plantation.fragment.menu_page.AppDetails;
+import com.fresh.mind.plantation.fragment.menu_page.Calculation;
 import com.fresh.mind.plantation.fragment.menu_page.FeedBack;
 import com.fresh.mind.plantation.fragment.menu_page.Glossary;
 import com.fresh.mind.plantation.fragment.menu_page.Help;
@@ -517,6 +519,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (mCurrentFragment.equals("Tree Species11")) {
             pass(new SearchedByTree());
 
+        } else if (mCurrentFragment.equals("View Details")) {
+            pass(new AgroForestry());
+        } else if (mCurrentFragment.equals("Calculation")) {
+            pass(new PlantationCalculation());
         } else {
             if (mCurrentFragment.equals(getResources().getString(R.string.treeSpecies)) || mCurrentFragment.equals(getResources().getString(R.string.treeType)) ||
                     mCurrentFragment.equals(getResources().getString(R.string.search)) || mCurrentFragment.equals(getResources().getString(R.string.chooseByLocation))) {

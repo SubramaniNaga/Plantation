@@ -90,7 +90,7 @@ public class Adapter_Tree_Type extends BaseAdapter implements Filterable {
       //  Log.d("photo", "" + mImg);
         if (mImg != null) {
             try {
-                Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.logo_3).into(viewHolder.imageView);
+                Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.no_thumbnail).into(viewHolder.imageView);
             } catch (IndexOutOfBoundsException outOfMemoryError) {
                 mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
                 outOfMemoryError.printStackTrace();

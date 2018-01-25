@@ -3,6 +3,7 @@ package com.fresh.mind.plantation.fragment.ModelInter_tabs;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.fresh.mind.plantation.Constant.Config.AGRO_MODE;
+import static com.fresh.mind.plantation.R.id.agroimages2;
 import static com.fresh.mind.plantation.R.id.modellists;
 import static com.fresh.mind.plantation.R.id.tvNodata;
 
@@ -64,7 +67,7 @@ public class Models extends Fragment {
         mModelinfos = modelinfo.getDescription(AppData.checkLanguage(getActivity()));
         ArrayList<HashMap<String, String>> Description = modelinfo.getDescription(languages);
         checkCondition(Description);
-        Log.d("modellistdata",""+modellistdata.size());
+        Log.d("modellistdata", "" + modellistdata.size());
         if (modellistdata.size() >= 1) {
             Modellistadapter adapter1 = new Modellistadapter(getActivity(), modellistdata);
             modellistsrecycle.setAdapter(adapter1);
@@ -133,19 +136,20 @@ public class Models extends Fragment {
 
 
         @Override
+
         public int getItemViewType(int position) {
             return position % 2;
         }
 
         @Override
-        public void onBindViewHolder(Modellistadapter.MyHolder holder, int position) {
+        public void onBindViewHolder(Modellistadapter.MyHolder holder, final int position) {
             holder.agrodes.setText(modellistdata1.get(position).get("des"));
             String imag = modellistdata1.get(position).get("images");
             //Log.d("imag", "" + imag);
             if (imag != null) {
                 try {
-                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.agroimages);
-                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.agroimages2);
+                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).error(R.drawable.no_thumbnail).into(holder.agroimages);
+                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).error(R.drawable.no_thumbnail).into(holder.agroimages2);
                     /*Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).placeholder(R.drawable.logo_3).error(R.drawable.logo_3).into(holder.agroimages);
                     Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).placeholder(R.drawable.logo_3).error(R.drawable.logo_3).into(holder.agroimages2);*/
                 } catch (OutOfMemoryError outOfMemoryError) {
@@ -153,17 +157,32 @@ public class Models extends Fragment {
                     activity1.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new AgroForestry()).commit();
                 }
             } else {
-                holder.agroimages.setImageResource(R.drawable.logo_3);
-                holder.agroimages2.setImageResource(R.drawable.logo_3);
+                holder.agroimages.setImageResource(R.drawable.no_thumbnail);
+                holder.agroimages2.setImageResource(R.drawable.no_thumbnail);
             }
 
             if (getItemViewType(position) == 1) {
                 holder.first.setVisibility(View.GONE);
                 holder.second.setVisibility(View.VISIBLE);
+
+
             } else {
                 holder.first.setVisibility(View.VISIBLE);
                 holder.second.setVisibility(View.GONE);
             }
+            holder.mLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AGRO_MODE = 0;
+                    Bundle bundle = new Bundle();
+                    bundle.putString("des", modellistdata1.get(position).get("des"));
+                    bundle.putString("class", "model");
+                    VIewAgreoForestryImage vIewAgreoForestryImage = new VIewAgreoForestryImage();
+                    vIewAgreoForestryImage.setArguments(bundle);
+                    activity1.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, vIewAgreoForestryImage).addToBackStack(null).commit();
+                }
+            });
+
 
         /*    Bitmap bmb= BitmapFactory.decodeFile(imag);
             holder.agroimages.setImageBitmap(bmb);*/
@@ -179,6 +198,7 @@ public class Models extends Fragment {
             CustomTextView description;
             CircleImageView agroimages, agroimages2;
             LinearLayout first, second;
+            ConstraintLayout mLayout;
 
             public MyHolder(View itemView) {
                 super(itemView);
@@ -186,6 +206,7 @@ public class Models extends Fragment {
                 second = (LinearLayout) itemView.findViewById(R.id.second);
                 agrodes = (CustomTextView) itemView.findViewById(R.id.agrodes);
                 agroimages2 = (CircleImageView) itemView.findViewById(R.id.agroimages2);
+                mLayout = (ConstraintLayout) itemView.findViewById(R.id.mLayout);
                 agroimages = (CircleImageView) itemView.findViewById(R.id.agroimages);
 
             }

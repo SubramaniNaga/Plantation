@@ -72,7 +72,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
                         .into(imgDisplay);*/
                 Picasso.with(_activity)
                         .load((Uri.fromFile(new File(imag))))
-                        .error(R.drawable.logo_3)         // optional
+                        .error(R.drawable.no_thumbnail)         // optional
                         .into(imgDisplay);
                 count.setText("" + (position + 1) + "/" + mListOfImages.size());
                 Log.d("dsf234", "" + (position + 1) + "/" + mListOfImages.size());

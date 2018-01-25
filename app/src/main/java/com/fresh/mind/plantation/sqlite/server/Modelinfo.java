@@ -90,4 +90,28 @@ public class Modelinfo extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return mLastDate;
     }
+
+    public ArrayList<HashMap<String, String>> getImges(String des, String languages) {
+        ArrayList<HashMap<String, String>> hashMaps = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String query;
+        if (languages.equals("1")) {
+            query = "SELECT * FROM Modelinfo WHERE Description_Tamil='" + des + "'";
+        } else {
+            query = "SELECT * FROM Modelinfo WHERE Description='" + des + "'";
+        }
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        String mLastDate = null;
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> stringStringHashMap = new HashMap<>();
+                stringStringHashMap.put("storagePath", cursor.getString(cursor.getColumnIndex("storagePath")));
+                hashMaps.add(stringStringHashMap);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return hashMaps;
+    }
 }

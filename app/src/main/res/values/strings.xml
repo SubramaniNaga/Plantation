@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Treepedia</string>
+
+    <string name="govt_of_tn">GOVERNMENT OF TAMILNADU FOREST DEPARTMENT</string>
+
     <string name="permission_required">Permission required</string>
     <string name="settings_message">This app needs permission to access your device. Select "Permission" in App info to re-enable.</string>
     <string name="app_info">App Info</string>
@@ -210,5 +213,21 @@
 
 
     <string name="select_hyper_link">Find Glossary Item </string>
+
+
+    <string name="radious">Radius</string>
+    <string name="height">Height (meters)</string>
+    <string name="farm_factor">Farm Factor</string>
+
+    <string name="average">Average of top, middle and bottom girth</string>
+    <string name="length">Length of the login (meters)</string>
+
+
+    <string name="radious_toast">Enter Radius</string>
+    <string name="height_toast">Enter Height </string>
+    <string name="farm_factor_toast">Enter Farm Factor</string>
+
+    <string name="average_toast">Enter Average of top, middle and bottom girth</string>
+    <string name="length_toast">Enter Length of the log (meters)</string>
 </resources>
 

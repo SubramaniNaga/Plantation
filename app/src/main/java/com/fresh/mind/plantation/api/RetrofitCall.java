@@ -18,7 +18,7 @@ public class RetrofitCall {
 
     //public static String BASE_URL = "http://plantation.kambaaincorporation.in/webservices/";
 
-    public static String BASE_URL = "http://plantation.roughnote.in//webservices/";
+    public static String BASE_URL = "http://plantation.roughnote.in/webservices/";
     //public static String BASE_URL = "http://roughnote.in/plantation/webservices/";
 
 

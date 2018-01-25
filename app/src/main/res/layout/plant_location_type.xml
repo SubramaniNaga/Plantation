@@ -29,7 +29,7 @@
         android:dividerHeight="0dp"
         android:numColumns="3" />
 
-    <com.fresh.mind.plantation.imagemap.ImageMap
+   <!-- <com.fresh.mind.plantation.imagemap.ImageMap
         android:id="@+id/imageMaping"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -40,7 +40,7 @@
         ctc:fitImageToScreen="true"
         ctc:map="usamap"
         ctc:maxSizeFactor="1.5"
-        ctc:scaleFromOriginal="true" />
+        ctc:scaleFromOriginal="true" />-->
 
     <GridView
         android:id="@+id/locationListView"

@@ -41,6 +41,9 @@ import com.fresh.mind.plantation.sqlite.server.VerifyDetails;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static android.view.View.Y;
+
 
 public class DescriptionView extends Fragment {
     private View rootView;
@@ -208,7 +211,11 @@ public class DescriptionView extends Fragment {
                         && (IrrigationStr.equals("null") || IrrigationStr.equals(""))) {
                     mPlantationGuideTitle.setVisibility(View.GONE);
                 }
-                Min_Temperature = Min_Temperature.replace("<li>", "<p>\u2022 ");
+
+                //Min_Temperature = Min_Temperature.replace("<li>", " ● ");
+                Log.d("GeneralIndo", "" + General_Info);
+                Min_Temperature = changeStyle(Min_Temperature);
+
                 setText(Temperature, Min_Temperature, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Climate) + " </font> : </b><br/>	" + Min_Temperature));
 
                 TemperatureMin.setVisibility(View.GONE);
@@ -216,45 +223,62 @@ public class DescriptionView extends Fragment {
                 //setText(TemperatureMin, Min_Temperature, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Climate) + " </font> : </b><br/>	" + Min_Temperature));
                 //setText(TemperatureMax, Max_Temperature, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.ClimateMax) + " </font> : </b><br/>	" + Max_Temperature));
 
-                Soil = Soil.replace("<li>", "<p>\u2022 ");
+                //  Soil = Soil.replace("<li>", " ● ");
+                Soil = changeStyle(Soil);
                 setText(mSoilTxt, Soil, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Soil) + " </font> : </b><br/>	" + Soil));
 
-                Altitude = Altitude.replace("<li>", "<p>\u2022 ");
+                // Altitude = Altitude.replace("<li>", " ● ");
+                Altitude = changeStyle(Altitude);
                 setText(mAltitudeTxt, Altitude, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Altitude) + " </font> : </b><br/>	" + Altitude));
 
-                Rainfall = Rainfall.replace("<li>", "<p>\u2022 ");
+                // Rainfall = Rainfall.replace("<li>", " ● ");
+                Rainfall = changeStyle(Rainfall);
                 setText(mRainfallTxt, Rainfall, Html.fromHtml("<b><font size='30' color='#0e7302'>" + getActivity().getString(R.string.Rainfall) + " </font> : </b><br/>\t  " + Rainfall));
 
-                Terrain = Terrain.replace("<li>", "<p>\u2022 ");
+                // Terrain = Terrain.replace("<li>", " ● ");
+                Terrain = changeStyle(Terrain);
                 setText(mTerrainTxt, Terrain, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Terrain) + " </font> : </b><br/>	" + Terrain));
 
-                Soil_PH = Soil_PH.replace("<li>", "<p>\u2022 ");
+                // Soil_PH = Soil_PH.replace("<li>", " ● ");
+                Soil_PH = changeStyle(Soil_PH);
                 setText(SoilpH, Soil_PH, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.SoilpH) + " </font> : </b><br/>	" + Soil_PH));
-                //General_Info = General_Info.replace("<li>", "<p>\u2022 ");
+                //General_Info = General_Info.replace("<li>", " \u2022 ");
 
+                General_Info = changeStyle(General_Info);
                 setText(GeneralInformation, General_Info, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.descriptions) + " </font> : </b><br/>	" + General_Info));
                 //GeneralInformation.setText( Html.fromHtml("www.google.com"));
-                //Tree_Char = Tree_Char.replace("<li>", "<p>\u2022 ");
+                //Tree_Char = Tree_Char.replace("<li>", " \u2022 ");
 
+                Tree_Char = changeStyle(Tree_Char);
                 setText(TreeCharacteristics, Tree_Char, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.TreeCharacteristics) + " </font> : </b><br/>	" + Tree_Char));
                 ConservationStatus.setVisibility(View.GONE);
                 //setText(ConservationStatus, Conservation, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.ConservationStatus) + " </font> : </b><br/>	" + Conservation));
 
-                HabitatStr = HabitatStr.replace("<li>", "<p>\u2022 ");
+                HabitatStr = changeStyle(HabitatStr);
+                // HabitatStr = HabitatStr.replace("<li>", " ● ");
                 setText(Habitat, HabitatStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Habitat) + " </font> : </b><br/>		 " + HabitatStr));
 
                 EdibilityRating.setVisibility(View.GONE);
                 MedicinalRating.setVisibility(View.GONE);
                 //setText(EdibilityRating, Edibility, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.EdibilityRating) + " </font> : </b><br/>	" + Edibility));
                 //setText(MedicinalRating, Medicinal, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.MedicinalRating) + " </font> : </b><br/>	" + Medicinal));
+                Log.d("sdlskldlkds", "" + PropagationStr);
 
-                Growth = Growth.replace("<li>", "<p>\u2022 ");
+                Log.d("PLansyiurutirtu", "" + Plantation_TechniqueStr);
+
+                Log.d("sdkslkdls", "" + IrrigationStr);
+                Log.d("sldksldk", "" + HabitStr);
+                Log.d("slkdlskdsldk", "" + YieldStr);
+                // Growth = Growth.replace("<li>", " ● ");
+                Growth = changeStyle(Growth);
                 setText(GrowthRate, Growth, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.GrowthRate) + " </font> : </b><br/>	" + Growth));
 
-                HeightStr = HeightStr.replace("<li>", "<p>\u2022 ");
+                // HeightStr = HeightStr.replace("<li>", " ● ");
+                HeightStr = changeStyle(HeightStr);
                 setText(Height, HeightStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Height) + " </font> : </b><br/>	" + HeightStr));
 
-                HabitStr = HabitStr.replace("<li>", "<p>\u2022 ");
+                //  HabitStr = HabitStr.replace("<li>", " ● ");
+                HabitStr = changeStyle(HabitStr);
                 setText(Habit, HabitStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Habit) + " </font> : </b><br/>	" + HabitStr));
 
                 CultivationStatus.setVisibility(View.GONE);
@@ -265,59 +289,82 @@ public class DescriptionView extends Fragment {
             setText(OtherUsesRating, Other_RatingStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.OtherUsesRating) + " </font> : </b><br/>	" + Other_RatingStr));
             setText(OtherDetails, Other_Details, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.OtherDetails) + " </font> : </b><br/>	" + Other_Details));*/
 
-                PropagationStr = PropagationStr.replace("<li>", "<p>\u2022 ");
+                //  PropagationStr = PropagationStr.replace("<li>", " ● ");
+                PropagationStr = changeStyle(PropagationStr);
                 setText(Propagation, PropagationStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Propagation) + " </font> : </b><br/>	" + PropagationStr));
 
-                Log.d("artificial_regenerationadsd", "" + artificial_regeneration);
-
-                artificial_regeneration = artificial_regeneration.replace("<li>", "<p>\u2022 ");
+                Log.d("artificial_regenerationassd", "" + artificial_regeneration);
+                //artificial_regeneration = artificial_regeneration.replace("<li>", "<p>\n ● ");
+                artificial_regeneration = changeStyle(artificial_regeneration);
                 setText(mArtificialRegeneration, artificial_regeneration, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.artificial_regeneration) + " </font> : </b><br/>	" + artificial_regeneration));
 
-                Log.d("seed_collectionsdsdsd", "" + seed_collection);
-                seed_collection = seed_collection.replace("<li>", "<p>\u2022 ");
+                Log.d("seed_collectisdsdon", "" + seed_collection);
+                //seed_collection = seed_collection.replace("<li>", "<p>\n ● ");
+                seed_collection = changeStyle(seed_collection);
                 setText(mSeedCollection, seed_collection, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.seed_collection) + " </font> : </b><br/>	" + seed_collection));
 
-                Log.d("seed_treatmentsdsds", "" + seed_treatment);
-                seed_treatment = seed_treatment.replace("<li>", "<p>\u2022 ");
+                Log.d("seed_treatmentsdsd", "" + seed_treatment);
+                //seed_treatment = seed_treatment.replace("<li>", "<p>\n ● ");
+                seed_treatment = changeStyle(seed_treatment);
                 setText(mSeedTreatment, seed_treatment, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.seed_treatment) + " </font> : </b><br/>	" + seed_treatment));
+
                 Log.d("nursery_techniquesdsd", "" + nursery_technique);
-                nursery_technique = nursery_technique.replace("<li>", "<p>\u2022 ");
+                //nursery_technique = nursery_technique.replace("<li>", "<p>\n ● ");
+                nursery_technique = changeStyle(nursery_technique);
                 setText(mNurseryTechnique, nursery_technique, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.nursery_technique) + " </font> : </b><br/>	" + nursery_technique));
 
-                Plantation_TechniqueStr = Plantation_TechniqueStr.replace("<li>", "<p>\u2022 ");
-                //PlantationTechnique.setText("" + Plantation_TechniqueStr);
+                //Plantation_TechniqueStr = Plantation_TechniqueStr.replace("<li>", "<p>\n ● ");
+                Plantation_TechniqueStr = changeStyle(Plantation_TechniqueStr);
                 setText(PlantationTechnique, Plantation_TechniqueStr, Html.fromHtml("<b><font color='#0e7302'> " + getActivity().getString(R.string.plantationTec) + " </font> : </b> <br/>" + Plantation_TechniqueStr));
 
-                Care_DiseaseStr = Care_DiseaseStr.replace("<li>", "<p>\u2022 ");
+
+                //Care_DiseaseStr = Care_DiseaseStr.replace("<li>", "<p> ● ");
+                Log.d("Care_DiseaseStr", "" + Care_DiseaseStr);
+                Care_DiseaseStr = changeStyle(Care_DiseaseStr);
                 setText(CareDiseaseControl, Care_DiseaseStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Diseasecontrol) + " </font> : </b><br/>\t" + Care_DiseaseStr));
 
-                IrrigationStr = IrrigationStr.replace("<li>", "<p>\u2022 ");
+                //IrrigationStr = IrrigationStr.replace("<li>", "<p> ● ");
+                IrrigationStr = changeStyle(IrrigationStr);
                 setText(Irrigation, IrrigationStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Irrigation) + " </font> : </b><br/>	" + IrrigationStr));
 
-                YieldStr = YieldStr.replace("<li>", "<p>\u2022 ");
+                //YieldStr = YieldStr.replace("<li>", "<p> ● ");
+                YieldStr = changeStyle(YieldStr);
                 setText(Yield, YieldStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Yield) + " </font> : </b><br/>	" + YieldStr));
 
-                Recommended_Harvest = Recommended_Harvest.replace("<li>", "<p>\u2022 ");
+
+                //Recommended_Harvest = Recommended_Harvest.replace("<li>", "<p> ● ");
+                Recommended_Harvest = changeStyle(Recommended_Harvest);
                 setText(RecommendedHarvest, Recommended_Harvest, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.RecommendedHarvest) + " </font> : </b><br/>	" + Recommended_Harvest));
 
-                Market_Details = Market_Details.replace("<li>", "<p>\u2022 ");
+                //Market_Details = Market_Details.replace("<li>", "<p> ● ");
+                Log.d("Market_Details", "" + Market_Details);
+                Market_Details = changeStyle(Market_Details);
                 setText(MarketDetails, Market_Details, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.MarketDetails) + " </font> : </b><br/>	" + Market_Details));
 
-                IntercropsStr = IntercropsStr.replace("<li>", "<p>\u2022 ");
+                //IntercropsStr = IntercropsStr.replace("<li>", "<p> ● ");
+                Log.d("IntercropsStr", "" + IntercropsStr);
+                IntercropsStr = changeStyle(IntercropsStr);
                 setText(Intercrops, IntercropsStr, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.Intercrops) + " </font> : </b><br/>	" + IntercropsStr));
 
-                Majar_Uses = Majar_Uses.replace("<li>", "<p>\u2022 ");
+
+                //Majar_Uses = Majar_Uses.replace("<li class=MsoNormal style=text-align: justify;>", "<p> ● ").replace("<li class=MsoNormal>", "<p> ● ");
+                Majar_Uses = changeStyle(Majar_Uses);
                 setText(MajorUses, Majar_Uses, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.MajorUses) + " </font> : </b><br/>	" + Majar_Uses));
 
-                Other_Uses = Other_Uses.replace("<li>", "<p>\u2022 ");
+                //Other_Uses = Other_Uses.replace("<li>", "<p> ● ");
+                Other_Uses = changeStyle(Other_Uses);
                 setText(OtherUses, Other_Uses, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.OtherUses) + " </font> : </b><br/>	" + Other_Uses));
 
-                Carbon_Stock = Carbon_Stock.replace("<li>", "<p>\u2022 ");
+                //Carbon_Stock = Carbon_Stock.replace("<li>", " ● ");
+                Carbon_Stock = changeStyle(Carbon_Stock);
                 setText(CarbonStockDetails, Carbon_Stock, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.CarbonStockDetails) + " </font> : </b><br/>	" + Carbon_Stock));
                 //  Log.d("Reference", "" + Reference);
 
-                Reference = Reference.replace("<li>", "<p>\u2022 ");
+                //Reference = Reference.replace("<li>", "<p> ● ");
+
                 setText(References, Reference, Html.fromHtml("<b><font color='#0e7302'>" + getActivity().getString(R.string.References) + " </font> : </b><br/>	 " + Reference));
+
+                References.setVisibility(View.GONE);
 
             /* Log.d("descriptionValues", " General_Info " + General_Info + " Habitat  " + Habitat + " Soil  " + Soil + " Soil_PH  " + Soil_PH + " Altitude  " + Altitude + "  Min_Temperature " + Min_Temperature +
                     "  Max_Temperature " + Max_Temperature + " Rainfall  " + Rainfall + " Terrain  " + Terrain + "  Medicinal " + Medicinal + " Tree_Char " + Tree_Char + "  Conservation " + Conservation +
@@ -366,6 +413,18 @@ public class DescriptionView extends Fragment {
         }
     }
 
+    private String changeStyle(String checkText) {
+        if (checkText != null) {
+            checkText = checkText.replace("<li>", "\t<p> ●  ").replace("<li class=MsoNormal style=text-align: justify;>", "\t<p> ●  ").replace("<li class=MsoNormal>", "\t<p> ●  ").
+                    replace("<li class=MsoNormal style=margin-left: 18.0pt;>", "\t<p> ●  ").replace("<p class=MsoNormal style=line-height: 150%; mso-layout-grid-align: none; text-autospace: none; margin: 0cm 9.0pt .0001pt 9.0pt;>", "\t<p> ●  ").
+                    replace("<li style=text-align: justify;>", "\t<p> ●  ").replace("<li style=text-align: justify;><span lang=EN-US style=font-family: 'Verdana','sans-serif'; mso-bidi-font-family: 'Times New Roman';>", "\t<p> ●  ").replace("<p style=text-align: justify;>", "\t<p> ●  ").
+                    replace("<li class=MsoNormal style=line-height: 150%; mso-layout-grid-align: none; text-autospace: none; margin: 0cm 9.0pt .0001pt 0cm;>", "\t<p> ●  ").replace(" <li class=MsoNormal style=line-height: 150%; mso-layout-grid-align: none; text-autospace: none; margin: 0cm 9.0pt .0001pt 9.0pt;>", "\t<p> ●  ").
+                    replace("&bull;&nbsp;&nbsp;&nbsp;", "\t<p> ●  ")
+            ;
+        }
+        return checkText;
+    }
+
     private void onClick(final ArrayList<HashMap<String, String>> description, final ArrayList<HashMap<String, String>> glossaryDetails, CustomTextView textView, final String disc, final String wordFind) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -398,7 +457,7 @@ public class DescriptionView extends Fragment {
                     ListView listView = (ListView) dialog.findViewById(R.id.listView);
                     listView.setAdapter(new ItemHyper(getActivity(), noOfUnderLines, dialog));
                     dialog.show();
-                } else {
+                } else if (noOfUnderLines.size() == 1) {
 
                     Intent bundle = new Intent(getActivity(), GlossaryCompare.class);
                     bundle.putExtra("itemPoistion", itemPoistion);
@@ -480,13 +539,13 @@ public class DescriptionView extends Fragment {
         }
     }
 
-    private void setText(CustomTextView textView, String text, Spanned spanned) {
+    private void setText(CustomTextView textView, String compare, Spanned settextView) {
 
-        if (text.equals("null") || text.equals("")) {
+        if (compare.equals("null") || compare.equals("")) {
             textView.setVisibility(View.GONE);
         } else {
             textView.setVisibility(View.VISIBLE);
-            textView.setText(spanned);
+            textView.setText(settextView);
         }
     }
 

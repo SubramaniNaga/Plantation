@@ -806,8 +806,11 @@ public class ImagesDownloadService extends IntentService {
                     int status = Integer.parseInt(statusDownload) + 1;
                     statusForDownload.onUpdate(idDownload, status);
                 }
-            } else {
+            } else if (s.equals("false")) {
                 statusForDownload.onUpdate(idDownload, -1);
+            } else {
+                int status = Integer.parseInt(statusDownload);
+                statusForDownload.onUpdate(idDownload, status);
             }
 
             HashMap<String, String> stringHashMap = statusForDownload.getStatus();
@@ -815,7 +818,6 @@ public class ImagesDownloadService extends IntentService {
             idDownload = stringHashMap.get("id");
             Log.d("soadjslkdjs", "" + idDownload + "  " + statusDownload);
             if (statusDownload.equals("-1")) {
-
             } else {
                 runBackground();
             }

@@ -298,6 +298,8 @@ public class SearchTree extends Fragment {
                                      {
                                          @Override
                                          public void onClick(View v) {
+
+                                             Log.d("sldksldsk", "dsds");
                                              Config.SELECTED_DIS = 0;
                                              districtName = "";
                                              soillType = getResources().getString(R.string.noSoilType);

@@ -9,12 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.customized.CustomTextView;
+import com.fresh.mind.plantation.fragment.ModelInter_tabs.VIewAgreoForestryImage;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 
 import static com.fresh.mind.plantation.R.id.tvNodata;
@@ -77,7 +79,7 @@ public class PlantationCalculation extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(HolderAgro holder, int position) {
+        public void onBindViewHolder(HolderAgro holder, final int position) {
             holder.mSPinnerText.setText(values[position]);
             if (languages.equals("1")) {
                 holder.tvSubText.setText("தோட்டக்கலை கணக்கிடுதலக்கு சில உப உள்ளடக்கங்களை வழங்குக...");
@@ -86,11 +88,24 @@ public class PlantationCalculation extends Fragment {
 
             }
             final String element = values[position];
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            holder.mSPinnerText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(activity, element, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(activity, element, Toast.LENGTH_SHORT).show();
+//                    Calculation calculation = new Calculation();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("values", "" + values[position]);
+//                    calculation.setArguments(bundle);
+//                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, calculation).addToBackStack(null).commit();
 
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("values", "" + values[position]);
+                    Calculation vIewAgreoForestryImage = new Calculation();
+                    vIewAgreoForestryImage.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, vIewAgreoForestryImage).addToBackStack(null).commit();
                 }
             });
         }
@@ -104,6 +119,7 @@ public class PlantationCalculation extends Fragment {
     class HolderAgro extends RecyclerView.ViewHolder {
         CustomTextView mSPinnerText;
         CustomTextView tvSubText;
+
 
         public HolderAgro(View itemView) {
             super(itemView);

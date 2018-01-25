@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import static android.R.attr.key;
 import static android.R.attr.name;
 import static android.R.attr.version;
 import static com.fresh.mind.plantation.R.id.count;
@@ -181,6 +182,52 @@ public class DistrictNameList extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return stringArrayList;
     }
+
+    public ArrayList<KeyPairBoolData> getDistrictBaseTreeTypeKeyPair(String languages, String selectedDistrictName) {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        ArrayList<KeyPairBoolData> mDistrinListName = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String query;
+        if (languages.equals("2")) {
+            query = "SELECT * FROM DistrictListName WHERE districtName like '%" + selectedDistrictName + "%'";
+        } else {
+            query = "SELECT * FROM DistrictListName WHERE districtNameTamil like '%" + selectedDistrictName + "%'";
+        }
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        String values;
+        if (cursor.moveToFirst()) {
+            do {
+
+                if (languages.equals("2")) {
+                    values = cursor.getString(cursor.getColumnIndex("treetypes"));
+
+                } else {
+                    values = cursor.getString(cursor.getColumnIndex("treetypesTamil"));
+                }
+                if (values != null && !values.isEmpty()) {
+                    //stringArrayList.add("Select Tree Types");
+                    String[] valuesSplit = values.split(",");
+                    for (int i = 0; i < valuesSplit.length; i++) {
+                        // stringArrayList.add(capitalize(valuesSplit[i]));
+                        KeyPairBoolData keyPairBoolData = new KeyPairBoolData();
+                        keyPairBoolData.setName("" + capitalize(valuesSplit[i]));
+                        mDistrinListName.add(keyPairBoolData);
+
+                    }
+
+                } else {
+                    stringArrayList.add("No Tree Types");
+                }
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+
+        return mDistrinListName;
+    }
+
 
     public static String capitalize(String s) {
         if (s == null || s.length() == 0) {

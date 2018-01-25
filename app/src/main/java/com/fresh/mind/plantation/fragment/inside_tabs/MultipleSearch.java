@@ -40,12 +40,14 @@ import com.fresh.mind.plantation.sqlite.server.SoilType;
 import com.fresh.mind.plantation.sqlite.server.TerrainType;
 import com.fresh.mind.plantation.sqlite.server.TreeTypeInfo;
 import com.fresh.mind.plantation.sqlite.server.TreeTypeNameList;
+import com.fresh.mind.plantation.tab_pager.HomeTabView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+import static com.fresh.mind.plantation.Constant.Config.SELECTED_TAB_VIEW_POSITION;
 import static com.fresh.mind.plantation.Constant.Config.districtName;
 import static com.fresh.mind.plantation.Constant.Config.rainFallType;
 import static com.fresh.mind.plantation.Constant.Config.soillType;
@@ -74,8 +76,12 @@ public class MultipleSearch extends Fragment {
     private AllTerrainType allTerrainType;
     private AllSoilType allSoilType;
     private AllRainFall allRainFall;
-    String languages;
+    private String languages;
     private ArrayList<HashMap<String, String>> mDistrictList;
+    private ArrayList<KeyPairBoolData> soilTypeList;
+    private ArrayList<KeyPairBoolData> mRainFallSpinnerList;
+    private ArrayList<KeyPairBoolData> mTerraintypeSpinnerList;
+    private ArrayList<KeyPairBoolData> mTreetypeSpinnerList;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
@@ -122,25 +128,12 @@ public class MultipleSearch extends Fragment {
         if (mDistrictList.size() >= 1) {
             mDistrictSpinner.setAdapter(new DistrictSpinner(getActivity(), mDistrictList));
         }
-/*
-ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages);
-        mDistrictSpinner.setItems(districtSetter, -1, new SpinnerListener() {
 
-            @Override
-            public void onItemsSelected(List<KeyPairBoolData> items) {
-
-                for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).isSelected()) {
-                        // Log.i("districtSetter", i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
-                    }
-                }
-            }
-        });
-*/
         mDistrictSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 districtName = mDistrictList.get(position).get("District");
+
             }
 
             @Override
@@ -148,7 +141,8 @@ ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages
 
             }
         });
-        ArrayList<KeyPairBoolData> soilTypeList = allSoilType.getSetter(languages);
+
+        soilTypeList = allSoilType.getSetter(languages);
         //Log.d("allSoilType", "" + soilTypeList.size());
         mSollTypeSpinner.setItems(soilTypeList, -1, new SpinnerListener() {
 
@@ -164,7 +158,7 @@ ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages
         });
 
 
-        ArrayList<KeyPairBoolData> mRainFallSpinnerList = allRainFall.getSetter(languages);
+        mRainFallSpinnerList = allRainFall.getSetter(languages);
         //   Log.d("allSoilTypemRainFallSpinnerList", "" + mRainFallSpinnerList.size());
         mRainFallSpinner.setItems(mRainFallSpinnerList, -1, new SpinnerListener() {
 
@@ -180,7 +174,7 @@ ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages
         });
 
 
-        ArrayList<KeyPairBoolData> mTerraintypeSpinnerList = allTerrainType.getSetter(languages);
+        mTerraintypeSpinnerList = allTerrainType.getSetter(languages);
         //  Log.d("allSoilTypemTerraintypeSpinnerList", "" + mTerraintypeSpinnerList.size());
         mTerraintypeSpinner.setItems(mTerraintypeSpinnerList, -1, new SpinnerListener() {
 
@@ -194,9 +188,31 @@ ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages
                 }
             }
         });
+        mTerraintypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mTreetypeSpinnerList = districtNameList.getDistrictBaseTreeTypeKeyPair(languages, districtName);
+                mTreetypeSpinner.setItems(mTreetypeSpinnerList, -1, new SpinnerListener() {
 
+                    @Override
+                    public void onItemsSelected(List<KeyPairBoolData> items) {
 
-        ArrayList<KeyPairBoolData> mTreetypeSpinnerList = treeTypeNameList.getTreTypeeNamesKayPair(AppData.checkLanguage(getActivity()));
+                        for (int i = 0; i < items.size(); i++) {
+                            if (items.get(i).isSelected()) {
+                                //Log.i("districtSetter", i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
+                            }
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+       /* mTreetypeSpinnerList = treeTypeNameList.getTreTypeeNamesKayPair(AppData.checkLanguage(getActivity()));
         mTreetypeSpinner.setItems(mTreetypeSpinnerList, -1, new SpinnerListener() {
 
             @Override
@@ -208,7 +224,7 @@ ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages
                     }
                 }
             }
-        });
+        });*/
 
 
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
@@ -257,6 +273,81 @@ ArrayList<KeyPairBoolData> districtSetter = districtNameList.getSetter(languages
 
                                           }
                                       }
+
+        );
+
+        mResetBtn.setOnClickListener(new View.OnClickListener()
+
+                                     {
+                                         @Override
+                                         public void onClick(View v) {
+
+                                             Log.d("sldksldsk", "dsds");
+                                             Config.SELECTED_DIS = 0;
+                                             districtName = "";
+                                             soillType = getResources().getString(R.string.noSoilType);
+                                             rainFallType = getResources().getString(R.string.noRainfall);
+                                             terrainType = getResources().getString(R.string.noTerrainType);
+                                             treeType = getResources().getString(R.string.noTreeType);
+                                             SELECTED_TAB_VIEW_POSITION = 3;
+                                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
+
+                                             /*mDistrictList = districtNameList.getDistrictNames(languages);
+                                             mDistrictSpinner.setAdapter(new DistrictSpinner(getActivity(), mDistrictList));*/
+
+
+                                            /* mSollTypeSpinner.setItems(soilTypeList, -1, new SpinnerListener() {
+
+                                                 @Override
+                                                 public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                                                     for (int i = 0; i < items.size(); i++) {
+                                                         if (items.get(i).isSelected()) {
+                                                             // Log.i("districtSetter", i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
+                                                         }
+                                                     }
+                                                 }
+                                             });
+
+                                             mSollTypeSpinner.setItems(soilTypeList, -1, new SpinnerListener() {
+
+                                                 @Override
+                                                 public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                                                     for (int i = 0; i < items.size(); i++) {
+                                                         if (items.get(i).isSelected()) {
+                                                             // Log.i("districtSetter", i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
+                                                         }
+                                                     }
+                                                 }
+                                             });
+                                             mRainFallSpinner.setItems(mRainFallSpinnerList, -1, new SpinnerListener() {
+
+                                                 @Override
+                                                 public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                                                     for (int i = 0; i < items.size(); i++) {
+                                                         if (items.get(i).isSelected()) {
+                                                             // Log.i("districtSetter", i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
+                                                         }
+                                                     }
+                                                 }
+                                             });
+                                             mTerraintypeSpinner.setItems(mTerraintypeSpinnerList, -1, new SpinnerListener() {
+
+                                                 @Override
+                                                 public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                                                     for (int i = 0; i < items.size(); i++) {
+                                                         if (items.get(i).isSelected()) {
+                                                             //Log.i("districtSetter", i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected());
+                                                         }
+                                                     }
+                                                 }
+                                             });*/
+
+                                         }
+                                     }
 
         );
         return rootView;

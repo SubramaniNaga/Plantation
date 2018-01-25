@@ -16,6 +16,7 @@ import static com.fresh.mind.plantation.api.RetrofitCall.BASE_URL;
 
 public class Config {
     public static boolean LOAD_MORE = false;
+    public static int AGRO_MODE = 0;
     /*  //http://plantation.kambaaincorporation.in
       public static String url = "http://plantation.kambaa.com/webservices/testapi.php";
       public static String urlVideo = "http://plantation.kambaa.com/webservices/plantation1.php";

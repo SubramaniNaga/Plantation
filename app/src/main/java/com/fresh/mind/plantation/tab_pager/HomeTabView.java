@@ -464,8 +464,6 @@ public class HomeTabView extends Fragment implements LocationListener, GoogleApi
     }
 
     private GoogleApiClient.ConnectionCallbacks connectionAddListener = new GoogleApiClient.ConnectionCallbacks() {
-
-
         @Override
         public void onConnected(Bundle bundle) {
             try {

@@ -167,12 +167,12 @@ public class Adapter_Tree_Species extends BaseAdapter implements Filterable {
         //  Log.d("storagePathAdapterssssss", "" + storagePath);
         try {
             if (storagePath == null || storagePath.isEmpty()) {
-                holder.imageView.setImageResource(R.drawable.logo_3);
-                holder.mPart2Img.setImageResource(R.drawable.logo_3);
+                holder.imageView.setImageResource(R.drawable.no_thumbnail);
+                holder.mPart2Img.setImageResource(R.drawable.no_thumbnail);
             } else {
                 try {
-                    Picasso.with(mContext).load((Uri.fromFile(new File(storagePath)))).error(R.drawable.logo_3).into(holder.mPart2Img);
-                    Picasso.with(mContext).load((Uri.fromFile(new File(storagePath)))).error(R.drawable.logo_3).into(holder.imageView);
+                    Picasso.with(mContext).load((Uri.fromFile(new File(storagePath)))).error(R.drawable.no_thumbnail).into(holder.mPart2Img);
+                    Picasso.with(mContext).load((Uri.fromFile(new File(storagePath)))).error(R.drawable.no_thumbnail).into(holder.imageView);
                 } catch (OutOfMemoryError ex) {
                     handleException(ex, position);
                 }

@@ -109,7 +109,7 @@ public class Adapter_LocationBasedSeletedTree extends BaseAdapter {
             holder.treeName.setText("" + mListItemValies.get(position).get("treeName"));
             holder.mSubName.setText("" + mListItemValies.get(position).get("subTreeName"));
             if (imag != null) {
-                Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.imageView);
+                Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.no_thumbnail).into(holder.imageView);
                 // Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.mPart2Img);
             }
             holder.cardView1.setVisibility(View.VISIBLE);
@@ -120,7 +120,7 @@ public class Adapter_LocationBasedSeletedTree extends BaseAdapter {
             holder.mPart2SubName.setText("" + mListItemValies.get(position).get("subTreeName"));
             if (imag != null) {
                 //   Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.imageView);
-                Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.logo_3).into(holder.mPart2Img);
+                Picasso.with(mContext).load((Uri.fromFile(new File(imag)))).error(R.drawable.no_thumbnail).into(holder.mPart2Img);
             }
             holder.cardView1.setVisibility(View.GONE);
             holder.cardView2.setVisibility(View.VISIBLE);

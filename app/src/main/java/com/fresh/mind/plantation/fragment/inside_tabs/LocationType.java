@@ -1,40 +1,29 @@
 package com.fresh.mind.plantation.fragment.inside_tabs;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
 import com.fresh.mind.plantation.fragment.Inside.LocationSelected;
-import com.fresh.mind.plantation.imagemap.ImageMap;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 import com.fresh.mind.plantation.sqlite.server.DistrictNameList;
 import com.fresh.mind.plantation.sqlite.sorting.SortOrder;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,18 +39,28 @@ import static com.fresh.mind.plantation.Constant.Config.LISTVIEW_SMOOTH_VIEW_POS
 public class LocationType extends Fragment {
 
     private View rootView;
-
     public static ArrayList<HashMap<String, String>> mLocation;
     private CustomTextView mNodata;
     private DistrictNameList districtNameList;
     private SortOrder sortOrder;
-    private ImageMap imageMaping;
+    //private ImageMap imageMaping;
     //private StaggeredGridLayoutManager stgaggeredGridLayoutManager;
-    int[] mDistrictImages = {R.drawable.d_ariyalur, R.drawable.d_chennai, R.drawable.d_coimbatore, R.drawable.d_cuddalore, R.drawable.d_dharmapuri, R.drawable.d_dindigul, R.drawable.d_erode,
+    private int[] mDistrictImages = {R.drawable.d_ariyalur, R.drawable.d_chennai, R.drawable.d_coimbatore, R.drawable.d_cuddalore, R.drawable.d_dharmapuri, R.drawable.d_dindigul, R.drawable.d_erode,
             R.drawable.d_kanchipuram, R.drawable.d_kanyakumari, R.drawable.d_karur, R.drawable.d_krishnagiri, R.drawable.d_madurai, R.drawable.d_nagapattinam, R.drawable.d_namakkal,
             R.drawable.d_nilgiris, R.drawable.d_perambalur, R.drawable.d_pudukottai, R.drawable.d_ramanathapuram, R.drawable.d_salem, R.drawable.d_sivagangai, R.drawable.d_thanjavur,
             R.drawable.d_theni, R.drawable.d_thiruvallur, R.drawable.d_thiruvannamalai, R.drawable.d_thiruvarur, R.drawable.d_thoothukudi, R.drawable.d_tiruchirapalli, R.drawable.d_tirunelvelli,
             R.drawable.d_tiruppur, R.drawable.d_vellore, R.drawable.d_vilupuram, R.drawable.d_virudhunagar};
+
+    /*  [{District=Ariyalur}, {District=Chennai}, {District=Coimbatore}, {District=Cudalore}, {District=Dharmapuri}, {District=Dindigul}, {District=Erode}, {District=Kanchipuram},
+      {District=Kanyakumari}, {District=Karur}, {District=Krishnagiri}, {District=Madurai}, {District=Nagapattinam}, {District=Namakkal}, {District=Nilgiris}, {District=Perambalur},
+      {District=Pudukottai}, {District=Ramanathapuram}, {District=Salem}, {District=Sivagangai}, {District=Thanjavur}, {District=Theni}, {District=Thiruvallur}, {District=Thiruvannamalai},
+      {District=Thiruvarur}, {District=Thoothukudi}, {District=Tiruchirapalli}, {District=Tirunelveli}, {District=Tiruppur}, {District=Tirupur-test}, {District=Vellore}, {District=Vilupuram}, {District=Virudhunagar}]
+  */
+    private int[] mDistrictImagesTamil = {R.drawable.d_ariyalur, R.drawable.d_erode, R.drawable.d_cuddalore, R.drawable.d_kanyakumari, R.drawable.d_karur, R.drawable.d_kanchipuram, R.drawable.d_krishnagiri,
+            R.drawable.d_coimbatore, R.drawable.d_sivagangai, R.drawable.d_chennai, R.drawable.d_salem, R.drawable.d_thanjavur, R.drawable.d_dharmapuri, R.drawable.d_dindigul,
+            R.drawable.d_tiruchirapalli, R.drawable.d_tirunelvelli, R.drawable.d_tiruppur, R.drawable.d_thiruvannamalai, R.drawable.d_thiruvallur, R.drawable.d_thiruvarur, R.drawable.d_thoothukudi,
+            R.drawable.d_theni, R.drawable.d_nagapattinam, R.drawable.d_namakkal, R.drawable.d_nilgiris, R.drawable.d_pudukottai, R.drawable.d_perambalur, R.drawable.d_madurai, R.drawable.d_ramanathapuram,
+            R.drawable.d_virudhunagar, R.drawable.d_vilupuram, R.drawable.d_vellore};
 
     @Override
     public void onDestroy() {
@@ -92,9 +91,9 @@ public class LocationType extends Fragment {
         //stgaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         GridLayoutManager gaggeredGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         rvDistrictName.setLayoutManager(gaggeredGridLayoutManager);
-        imageMaping = (ImageMap) rootView.findViewById(R.id.imageMaping);
+      /*  imageMaping = (ImageMap) rootView.findViewById(R.id.imageMaping);
 
-        imageMaping.setImageResource(R.drawable.tn_map);
+        imageMaping.setImageResource(R.drawable.tn_map);*/
 
         mNodata = (CustomTextView) rootView.findViewById(R.id.mNodata);
         districtNameList = new DistrictNameList(getActivity());
@@ -105,7 +104,14 @@ public class LocationType extends Fragment {
 
         Config.SELECTED_ID = 0;
         if (mLocation.size() >= 1) {
-            if (bySortType != null) {
+
+            Collections.sort(mLocation, new Comparator<HashMap<String, String>>() {
+                @Override
+                public int compare(HashMap<String, String> s1, HashMap<String, String> s2) {
+                    return s1.get("District").compareTo(s2.get("District"));
+                }
+            });
+            /*if (bySortType != null) {
                 if (bySortType.equals("Z-A")) {
                     Collections.sort(mLocation, new Comparator<HashMap<String, String>>() {
                         @Override
@@ -121,13 +127,19 @@ public class LocationType extends Fragment {
                         }
                     });
                 }
-            }
+            }*/
 
             mNodata.setVisibility(View.GONE);
 
             //locationListView.setAdapter(new Adapter_Location(getActivity(), mLocation));
             rvDistrictName.setVisibility(View.VISIBLE);
-            rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation, mDistrictImages));
+            Log.d("sdlksldskdl", "" + mDistrictImagesTamil.length + "  Name " + mLocation.size() + mLocation + "\n  dsds " + mDistrictImages.length);
+            if (languages.equals("1")) {
+                rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation, mDistrictImagesTamil));
+            } else {
+
+                rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation, mDistrictImages));
+            }
         } else {
             mNodata.setVisibility(View.VISIBLE);
 
@@ -137,7 +149,7 @@ public class LocationType extends Fragment {
 
             LISTVIEW_SMOOTH_VIEW_POSITION = 0;
         }
-
+/*
         imageMaping.addOnImageMapClickedHandler(new ImageMap.OnImageMapClickedHandler() {
             @Override
             public void onImageMapClicked(int id, ImageMap imageMap) {
@@ -151,7 +163,7 @@ public class LocationType extends Fragment {
             public void onBubbleClicked(int id) {
                 Log.d("onBubbleClicked", "" + id);
             }
-        });
+        });*/
         return rootView;
     }
 

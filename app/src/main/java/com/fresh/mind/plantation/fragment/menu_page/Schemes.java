@@ -21,6 +21,7 @@ import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.adapter.base_adapter.SchemeExpandableListAdapter;
 import com.fresh.mind.plantation.adapter.recycler_adapter.AdapterSchemes;
 import com.fresh.mind.plantation.customized.CustomTextView;
+import com.fresh.mind.plantation.sqlite.Intercrops;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 import com.fresh.mind.plantation.sqlite.server.SchecmesDb;
 
@@ -28,8 +29,6 @@ import com.fresh.mind.plantation.sqlite.server.SchecmesDb;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-
 
 
 public class Schemes extends Fragment {
@@ -72,23 +71,27 @@ public class Schemes extends Fragment {
         projectTeamDetails = (CustomTextView) rootView.findViewById(R.id.projectTeamDetails);
         acknowledgementDetails = (CustomTextView) rootView.findViewById(R.id.acknowledgementDetails);
         acknowledgementDetails2 = (CustomTextView) rootView.findViewById(R.id.acknowledgementDetails2);
-        ArrayList<HashMap<String, String>> schems = schecmesDb.getSchemes();
-        checkCondition(schems);
+       /* ArrayList<HashMap<String, String>> schems = schecmesDb.getSchemes();
+        checkCondition(schems);*/
         String language = AppData.checkLanguage(getActivity());
+
         HashMap<String, List<String>> expandableListDetail = schecmesDb.getExpandableValues(language);
         final List<String> expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         Log.d("expandableListTitle", "" + expandableListTitle.size() + "  " + expandableListDetail.size() + "  \n" + expandableListDetail);
+
         if (expandableListDetail.size() >= 1) {
             SchemeExpandableListAdapter schemeExpandableListAdapter = new SchemeExpandableListAdapter(getActivity(), expandableListTitle, expandableListDetail);
             expandableListView.setAdapter(schemeExpandableListAdapter);
-           // expandableListView.setIndicatorBounds(expandableListView.getWidth() -, expandableListView.getWidth() );
+            // expandableListView.setIndicatorBounds(expandableListView.getWidth() -, expandableListView.getWidth() );
             expandableListView.setVisibility(View.VISIBLE);
             mNoData.setVisibility(View.GONE);
         } else {
             mNoData.setVisibility(View.VISIBLE);
             expandableListView.setVisibility(View.GONE);
         }
-        if (schems != null) {
+
+
+       /* if (schems != null) {
             if (schems.size() >= 1) {
                 AdapterSchemes adapterSchemes = new AdapterSchemes(getActivity(), schems);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -96,7 +99,7 @@ public class Schemes extends Fragment {
                 mSchemsView.setItemAnimator(new DefaultItemAnimator());
                 mSchemsView.setAdapter(adapterSchemes);
             }
-        }
+        }*/
 
         final int[] prevExpandPosition = {-1};
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {

@@ -63,6 +63,7 @@ import com.fresh.mind.plantation.sqlite.server.AllRainFall;
 import com.fresh.mind.plantation.sqlite.server.AllSoilType;
 import com.fresh.mind.plantation.sqlite.server.AllTerrainType;
 import com.fresh.mind.plantation.sqlite.server.ContactUs;
+import com.fresh.mind.plantation.sqlite.server.DistrictLatLng;
 import com.fresh.mind.plantation.sqlite.server.DistrictNameList;
 import com.fresh.mind.plantation.sqlite.server.GlossaryTable;
 import com.fresh.mind.plantation.sqlite.server.ImageDb;
@@ -123,6 +124,7 @@ import static com.fresh.mind.plantation.Constant.Config.sdCardLocationModel;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeImages;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeType;
 import static com.fresh.mind.plantation.Constant.Config.url;
+import static java.lang.Boolean.getBoolean;
 
 /**
  * Created by AND I5 on 30-01-2017.
@@ -147,6 +149,7 @@ public class SplashScreen extends Fragment {
     private ImageView imageView8;
     private LanguageChange languageChange;
     private SchecmesDb schecmesDb;
+    private DistrictLatLng districtLatLng;
     int totalSize = 0;
     private CustomTextView mRefresh;
     private RippleView mTamil, mEnglish;
@@ -188,6 +191,7 @@ public class SplashScreen extends Fragment {
         StrictMode.setThreadPolicy(policy);
         languageChange = new LanguageChange(getActivity());
         statusForDownload = new StatusForDownload(getActivity());
+        districtLatLng = new DistrictLatLng(getActivity());
         int count = languageChange.getCount();
         if (count == 0) {
             ContentValues contentValues = new ContentValues();
@@ -858,113 +862,30 @@ public class SplashScreen extends Fragment {
                 if (result == null || result.isEmpty() || result.contains("500 Server Error")) {
                     return "server";
                 } else {
+
                     JSONObject parentObject = null;
                     try {
+
                         parentObject = new JSONObject(result);
-                        JSONObject json1Object = parentObject.getJSONObject("Json1");
-                        boolean status = json1Object.getBoolean("status");
-                        String message = json1Object.getString("message");
-                        if (status) {
-                            JSONArray result1Array = json1Object.getJSONArray("result");
-                            Log.d("result1Array 1", +treeList.getCount() + " " + result1Array.length());
-                       /* if (result1Array.length() == treeList.getCount()) {
+                        JSONObject json18Object = parentObject.getJSONObject("Json18");
+                        boolean isJson18Status = json18Object.getBoolean("status");
 
-                        } else {*/
-                            treeList.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                if (Config.checkInternetConenction(getActivity())) {
+                        if (isJson18Status) {
+                            JSONArray json18Result = json18Object.getJSONArray("result");
+                            for (int j18 = 0; j18 < json18Result.length(); j18++) {
+                                JSONObject jsonObject1 = json18Result.getJSONObject(j18);
+                                String District = jsonObject1.getString("District");
+                                String Lattitude = jsonObject1.getString("Lattitude");
+                                String Longitude = jsonObject1.getString("Longitude");
+                                String Office = jsonObject1.getString("Office");
+                                ContentValues contentValues = new ContentValues();
 
-                                    JSONObject jsonObject = result1Array.getJSONObject(i);
-                                    String TreeName = jsonObject.getString("TreeName").trim();
-                                    String TreeType = jsonObject.getString("TreeType").trim();
-                                    String Scientific_Name = jsonObject.getString("ScientificName").trim();
-                                    String District = jsonObject.getString("District").trim();
-                                    String common_key = jsonObject.getString("common_key");
+                                contentValues.put("districtName", District);
+                                contentValues.put("lat", Lattitude);
+                                contentValues.put("lng", Longitude);
+                                contentValues.put("office", Office);
+                                districtLatLng.onInsert(contentValues);
 
-
-                                    String Image = jsonObject.getString("thumbnail");
-                                    //String Image = jsonObject.getString("Images");
-
-                                    String Last_Update = jsonObject.getString("LastUpdate");
-                                    //Log.d("Last_U2342334ast_Update", "" + Last_Update);
-                                    String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
-                                    String TreeNameTamil = jsonObject.getString("TreeNameTamil").trim();
-                                    String TreeTypeTamil = jsonObject.getString("TreeTypeTamil").trim();
-                                    String Scientific_Tamil = jsonObject.getString("ScientificTamil").trim();
-                                    String extension = null;
-                                    String storagePath = null;
-                                    ContentValues contentValues = new ContentValues();
-                                    //byte[] imgByte = new byte[0];
-                                    Log.d("ImageFromSplash", "" + Image + "  " + TreeName);
-                                    if (TreeName.equals("null") || TreeName.isEmpty()) {
-                                    } else {
-                                        try {
-                                            if (Image.equals("null") || Image.isEmpty()) {
-                                                contentValues.put("storagePath", "" + storagePath);
-                                                contentValues.put("treeType", TreeType);
-                                                contentValues.put("districtName", "" + District);
-                                                contentValues.put("treeNameTamil", Scientific_Name);
-                                                contentValues.put("treeNameEng", TreeName);
-                                                contentValues.put("lastUpdate", Last_Update);
-                                                contentValues.put("Scientific_Tamil", Scientific_Tamil);
-                                                contentValues.put("treeTypeTamil", TreeTypeTamil);
-                                                contentValues.put("treeNameEngTamil", TreeNameTamil);
-                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
-                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
-                                                contentValues.put("common_key", "" + common_key);
-                                                Log.d("deded else", i + " exist " + common_key);
-                                                treeList.onInsertTreeType(contentValues);
-
-                                            } else {
-                                                extension = Image.substring(Image.lastIndexOf("."));
-                                                //Log.d("extension", "" + extension);
-                                                //  if (extension.toLowerCase().equals(".jpg".toLowerCase()) || extension.toLowerCase().equals(".png".toLowerCase())) {
-                                                File file = new File(sdCardLocation + "/" + Image);
-                                                if (file.exists()) {
-                                                    Log.d("deded", i + " exist");
-                                                    storagePath = sdCardLocation + "/" + Image;
-                                                    File file1 = new File(storagePath);
-                                                    int internalFileLength = (int) file1.length();
-                                                    if (internalFileLength == 0) {
-                                                        String ImageDpwnLoad = fileLocationOnServer + Image;
-                                                        Log.d("ImageImage Zeros", " " + ImageDpwnLoad);
-                                                        storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
-                                                    }
-
-                                                } else {
-                                                    Log.d("deded", i + " Not exist");
-                                                    //String ImageSpilt = Image.replaceAll(" ", "%20");
-                                                    String ImageDpwnLoad = fileLocationOnServer + Image;
-                                                    Log.d("ImageImage TreeType", " " + ImageDpwnLoad);
-                                                    storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
-                                                }
-
-                                                Log.d("storagePath OCmmon", "" + storagePath + common_key);
-                                                contentValues.put("storagePath", "" + storagePath);
-                                                contentValues.put("treeType", TreeType);
-                                                contentValues.put("districtName", "" + District);
-                                                contentValues.put("treeNameTamil", Scientific_Name);
-                                                contentValues.put("treeNameEng", TreeName);
-                                                contentValues.put("lastUpdate", Last_Update);
-                                                contentValues.put("Scientific_Tamil", Scientific_Tamil);
-                                                contentValues.put("treeTypeTamil", TreeTypeTamil);
-                                                contentValues.put("treeNameEngTamil", TreeNameTamil);
-                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
-                                                contentValues.put("common_key", "" + common_key);
-                                                treeList.onInsertTreeType(contentValues);
-
-                                            }
-
-                                        } catch (Exception ex) {
-                                            Log.d("whtaComes", "Here");
-                                            ex.printStackTrace();
-                                            //return "return";
-                                        }
-                                        //   }
-                                    }
-                                } else {
-                                    Log.d("comnnnnn", "json1");
-                                }
                             }
                         }
 
@@ -1137,6 +1058,363 @@ public class SplashScreen extends Fragment {
                             }
 
                         }*/
+
+
+
+/*
+                        JSONObject json7Object = parentObject.getJSONObject("Json7");
+                        boolean statusMsg7 = json7Object.getBoolean("status");
+                        String messageStus7 = json7Object.getString("message");
+                        if (statusMsg7) {
+                            JSONArray result1Array = json7Object.getJSONArray("result");
+                            Log.d("result1Array  7", "" + result1Array);
+                           *//* if (result1Array.length() == rainfallType.getCount()) {
+
+                            } else {*//*
+                            rainfallType.delete();
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String District = jsonObject.getString("District").trim();
+                                String Rainfall = jsonObject.getString("Rainfall").trim();
+                                String Last_Update = jsonObject.getString("LastUpdate").trim();
+                                String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
+                                String RainfallTamil = jsonObject.getString("RainfallTamil").trim();
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("districtName", District);
+                                contentValues.put("Rainfall", Rainfall);
+                                contentValues.put("lastUpdate", Last_Update);
+                                contentValues.put("districtNameTamil", DistrictTamil);
+                                contentValues.put("RainfallTamil", RainfallTamil);
+                                rainfallType.onInsert(contentValues);
+                            }
+                        }*/
+                        // }
+
+                        /*JSONObject json8Object = parentObject.getJSONObject("Json8");
+                        boolean statusMsg8 = json8Object.getBoolean("status");
+                        String messageStus8 = json8Object.getString("message");
+                        if (statusMsg8) {
+
+                            JSONArray result1Array = json8Object.getJSONArray("result");
+                            Log.d("result1Array  8", "" + result1Array);
+                        *//*    if (result1Array.length() == terrainType.getCount()) {
+
+                            } else {*//*
+                            terrainType.delete();
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String District = jsonObject.getString("District").trim();
+                                String Terrain = jsonObject.getString("Terrain").trim();
+                                String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
+                                String TerrainTamil = jsonObject.getString("TerrainTamil").trim();
+                                String Last_Update = jsonObject.getString("LastUpdate");
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("districtName", District);
+                                contentValues.put("Terrain", Terrain);
+                                contentValues.put("lastUpdate", Last_Update);
+
+                                contentValues.put("districtNameTamil", DistrictTamil);
+                                contentValues.put("TerrainTamil", TerrainTamil);
+                                terrainType.onInsert(contentValues);
+
+                            }
+                        }*/
+                        // }
+
+                        JSONObject json9Object = parentObject.getJSONObject("Json9");
+                        boolean statusMsg9 = json9Object.getBoolean("status");
+                        String messageStus9 = json9Object.getString("message");
+                        if (statusMsg9) {
+                            JSONArray result1Array = json9Object.getJSONArray("result");
+                            Log.d("result1Array  9", "" + result1Array);
+                          /*  if (result1Array.length() == contactUs.getCount()) {
+
+                            } else {*/
+                            contactUs.delete();
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String District = jsonObject.getString("District").trim();
+                                String Address = jsonObject.getString("Address").trim();
+                                String PhoneNo = jsonObject.getString("PhoneNo").trim();
+                                String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
+                                String AddressTamil = jsonObject.getString("AddressTamil").trim();
+                                String Last_Update = jsonObject.getString("LastUpdate");
+                                String directions = jsonObject.getString("Direction").trim();
+                                String Email = jsonObject.getString("Email").toString().trim();
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("districtName", District);
+                                contentValues.put("address", Address);
+                                contentValues.put("lastUpdate", Last_Update);
+                                contentValues.put("addressTamil", AddressTamil);
+                                contentValues.put("districtNameTamil", DistrictTamil);
+                                contentValues.put("phoneNo", PhoneNo);
+                                contentValues.put("direction", "" + directions);
+                                contentValues.put("Email", Email);
+                                contactUs.onInsert(contentValues);
+                            }
+                        }
+                        // }
+
+                        JSONObject json10Object = parentObject.getJSONObject("Json10");
+                        boolean statusMsg10 = json10Object.getBoolean("status");
+                        String messageStus10 = json10Object.getString("message");
+                        if (statusMsg10) {
+                            JSONArray result1Array = json10Object.getJSONArray("result");
+                            Log.d("result1Array  10", "" + result1Array);
+                           /* if (result1Array.length() == glossaryTable.getCount()) {
+                                result = "success";
+                            } else {*/
+                            glossaryTable.delete();
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                String Word = jsonObject.getString("Word").trim();
+                                String WordTamil = jsonObject.getString("WordTamil").trim();
+                                String Meaning = jsonObject.getString("Meaning").trim();
+                                String MeaningamTil = jsonObject.getString("MeaningTamil").trim();
+                                String Last_Update = jsonObject.getString("LastUpdate");
+                                Log.d("Word", "" + Word);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("word", Word);
+                                contentValues.put("wordTamil", WordTamil);
+                                contentValues.put("meaning", Meaning);
+                                contentValues.put("meaningTamil", MeaningamTil);
+                                contentValues.put("lastUpdate", Last_Update);
+                                glossaryTable.onInsert(contentValues);
+                            }
+                            //result = "success";
+                        }
+
+                        JSONObject json11Object = parentObject.getJSONObject("Json11");
+                        boolean statusMsg11 = json11Object.getBoolean("status");
+                        String messageStus11 = json11Object.getString("message");
+                        if (statusMsg11) {
+                            JSONArray result1Array = json11Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                Log.d("jsonObject", "" + jsonObject);
+
+                                sch1 = jsonObject.getString("Scheme1");
+                                String sch1Tamil = jsonObject.getString("Scheme1_Tamil");
+                                String sch2 = jsonObject.getString("Scheme2");
+                                String sch2Tamil = jsonObject.getString("Scheme2_Tamil");
+                                String sch3 = jsonObject.getString("Scheme3");
+                                String sch3Tamil = jsonObject.getString("Scheme3_Tamil");
+                                String sch4 = jsonObject.getString("Scheme4");
+                                String sch4Tamil = jsonObject.getString("Scheme4_Tamil");
+
+                                //Log.d("32rr5445", " " + sch1 + "  " + sch1Tamil + " " + sch2 + "  " + sch2Tamil + " " + sch3 + "  " + sch3Tamil + " " + sch4 + "  " + sch4Tamil);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("NoOfScheme", "Scheme " + (i + 1));
+                                contentValues.put("NoOfSchemeTamil", "திட்டங்கள் " + (i + 1));
+                                contentValues.put("sch1", "" + sch1);
+                                contentValues.put("sch1Tamil", sch1Tamil);
+                                contentValues.put("sch2", "" + sch2);
+                                contentValues.put("sch2Tamil", "" + sch2Tamil);
+                                contentValues.put("sch3", "" + jsonObject.getString("Scheme3"));
+                                contentValues.put("sch3Tamil", "" + jsonObject.getString("Scheme3_Tamil"));
+                                contentValues.put("sch4", "" + jsonObject.getString("Scheme4"));
+                                contentValues.put("sch4Tamil", "" + jsonObject.getString("Scheme4_Tamil"));
+
+                                //   Log.d("sdsldksldk", "" + jsonObject.getString("SchemeTitle") + " ksdlskldTamil " + jsonObject.getString("SchemeTitleTamil"));
+
+                                contentValues.put("SchemeTitle", "" + jsonObject.getString("SchemeTitle"));
+                                contentValues.put("SchemeTitleTamil", "" + jsonObject.getString("SchemeTitleTamil"));
+
+                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
+                                schecmesDb.onInsert(contentValues);
+
+                            }
+                        }
+
+                        JSONObject json12Object = parentObject.getJSONObject("Json12");
+                        Log.d("json12Object", "" + json12Object);
+                        boolean statusMsg12 = json12Object.getBoolean("status");
+                        String messageStus12 = json12Object.getString("message");
+                        if (statusMsg12) {
+                            JSONArray result1Array = json12Object.getJSONArray("result");
+                            Log.d("result1ArrayallSoilType", "" + result1Array);
+
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("soilTypeAll", "" + jsonObject.getString("Soil").trim());
+                                contentValues.put("soilTypeAllTamil", "" + jsonObject.getString("SoilTamil").trim());
+                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
+                                allSoilType.onInsert(contentValues);
+                            }
+                        }
+
+                        JSONObject json13Object = parentObject.getJSONObject("Json13");
+                        boolean statusMsg13 = json13Object.getBoolean("status");
+                        String messageStus13 = json13Object.getString("message");
+                        if (statusMsg13) {
+                            JSONArray result1Array = json13Object.getJSONArray("result");
+
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                Log.d("result1ArrayallallTerrainType", "" + jsonObject);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("terrainTypeAll", "" + jsonObject.getString("Terrain").trim());
+                                contentValues.put("terrainTypeAllTamil", "" + jsonObject.getString("TerrainTamil").trim());
+                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
+                                allTerrainType.onInsert(contentValues);
+                            }
+                        }
+
+                        JSONObject json14Object = parentObject.getJSONObject("Json14");
+                        boolean statusMsg14 = json14Object.getBoolean("status");
+                        String messageStus14 = json14Object.getString("message");
+                        if (statusMsg14) {
+                            JSONArray result1Array = json14Object.getJSONArray("result");
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                JSONObject jsonObject = result1Array.getJSONObject(i);
+                                Log.d("result1ArrayallallRainFall", "" + jsonObject);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("rainFallAll", "" + jsonObject.getString("Rainfall").trim());
+                                contentValues.put("rainFallAllTamil", "" + jsonObject.getString("RainfallTamil").trim());
+                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
+                                allRainFall.onInsert(contentValues);
+                            }
+                        }
+
+                        JSONObject json15Object = parentObject.getJSONObject("Json15");
+                        boolean statusMsg15 = json15Object.getBoolean("status");
+                        String messageStus15 = json15Object.getString("message");
+                        if (statusMsg15) {
+                            JSONArray result1Array = json15Object.getJSONArray("result");
+                      /*  if (result1Array.length() == treeTypeNameList.getCout()) {
+                        } else {*/
+                            Log.d("result1Arraytresss15", +treeList.getCount() + "  " + result1Array);
+                          /*  if (result1Array.length() >= 10) {
+                                insertJson15(result1Array, 1);
+                            } else {*/
+                            insertJson15(result1Array, 0);
+                            //}
+                        }
+
+                        JSONObject json16Object = parentObject.getJSONObject("Json16");
+                        boolean statusMsg16 = json16Object.getBoolean("status");
+                        String messageStus16 = json16Object.getString("message");
+                        if (statusMsg16) {
+                            JSONArray result1Array = json16Object.getJSONArray("result");
+                      /*  if (result1Array.length() == treeTypeNameList.getCout()) {
+                        } else {*/
+                            Log.d("result1Arraytresss16", +treeList.getCount() + "  " + result1Array);
+                          /*  if (result1Array.length() >= 10) {
+                                onInsertJson16(result1Array, 1);
+                            } else {*/
+                            onInsertJson16(result1Array, 0);
+                            //}
+                        }
+
+
+                        JSONObject json1Object = parentObject.getJSONObject("Json1");
+                        boolean status = json1Object.getBoolean("status");
+                        String message = json1Object.getString("message");
+                        if (status) {
+                            JSONArray result1Array = json1Object.getJSONArray("result");
+                            Log.d("result1Array 1", +treeList.getCount() + " " + result1Array.length());
+                       /* if (result1Array.length() == treeList.getCount()) {
+
+                        } else {*/
+                            treeList.delete();
+                            for (int i = 0; i < result1Array.length(); i++) {
+                                if (Config.checkInternetConenction(getActivity())) {
+
+                                    JSONObject jsonObject = result1Array.getJSONObject(i);
+                                    String TreeName = jsonObject.getString("TreeName").trim();
+                                    String TreeType = jsonObject.getString("TreeType").trim();
+                                    String Scientific_Name = jsonObject.getString("ScientificName").trim();
+                                    String District = jsonObject.getString("District").trim();
+                                    String common_key = jsonObject.getString("common_key");
+
+
+                                    String Image = jsonObject.getString("thumbnail");
+                                    //String Image = jsonObject.getString("Images");
+
+                                    String Last_Update = jsonObject.getString("LastUpdate");
+                                    //Log.d("Last_U2342334ast_Update", "" + Last_Update);
+                                    String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
+                                    String TreeNameTamil = jsonObject.getString("TreeNameTamil").trim();
+                                    String TreeTypeTamil = jsonObject.getString("TreeTypeTamil").trim();
+                                    String Scientific_Tamil = jsonObject.getString("ScientificTamil").trim();
+                                    String extension = null;
+                                    String storagePath = null;
+                                    ContentValues contentValues = new ContentValues();
+                                    //byte[] imgByte = new byte[0];
+                                    Log.d("ImageFromSplash", "" + Image + "  " + TreeName);
+                                    if (TreeName.equals("null") || TreeName.isEmpty()) {
+                                    } else {
+                                        try {
+                                            if (Image.equals("null") || Image.isEmpty()) {
+                                                contentValues.put("storagePath", "" + storagePath);
+                                                contentValues.put("treeType", TreeType);
+                                                contentValues.put("districtName", "" + District);
+                                                contentValues.put("treeNameTamil", Scientific_Name);
+                                                contentValues.put("treeNameEng", TreeName);
+                                                contentValues.put("lastUpdate", Last_Update);
+                                                contentValues.put("Scientific_Tamil", Scientific_Tamil);
+                                                contentValues.put("treeTypeTamil", TreeTypeTamil);
+                                                contentValues.put("treeNameEngTamil", TreeNameTamil);
+                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
+                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
+                                                contentValues.put("common_key", "" + common_key);
+                                                Log.d("deded else", i + " exist " + common_key);
+                                                treeList.onInsertTreeType(contentValues);
+
+                                            } else {
+                                                extension = Image.substring(Image.lastIndexOf("."));
+                                                //Log.d("extension", "" + extension);
+                                                //  if (extension.toLowerCase().equals(".jpg".toLowerCase()) || extension.toLowerCase().equals(".png".toLowerCase())) {
+                                                File file = new File(sdCardLocation + "/" + Image);
+                                                if (file.exists()) {
+                                                    Log.d("deded", i + " exist");
+                                                    storagePath = sdCardLocation + "/" + Image;
+                                                    File file1 = new File(storagePath);
+                                                    int internalFileLength = (int) file1.length();
+                                                    if (internalFileLength == 0) {
+                                                        String ImageDpwnLoad = fileLocationOnServer + Image;
+                                                        Log.d("ImageImage Zeros", " " + ImageDpwnLoad);
+                                                        storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
+                                                    }
+
+                                                } else {
+                                                    Log.d("deded", i + " Not exist");
+                                                    //String ImageSpilt = Image.replaceAll(" ", "%20");
+                                                    String ImageDpwnLoad = fileLocationOnServer + Image;
+                                                    Log.d("ImageImage TreeType", " " + ImageDpwnLoad);
+                                                    storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
+                                                }
+
+                                                Log.d("storagePath OCmmon", "" + storagePath + common_key);
+                                                contentValues.put("storagePath", "" + storagePath);
+                                                contentValues.put("treeType", TreeType);
+                                                contentValues.put("districtName", "" + District);
+                                                contentValues.put("treeNameTamil", Scientific_Name);
+                                                contentValues.put("treeNameEng", TreeName);
+                                                contentValues.put("lastUpdate", Last_Update);
+                                                contentValues.put("Scientific_Tamil", Scientific_Tamil);
+                                                contentValues.put("treeTypeTamil", TreeTypeTamil);
+                                                contentValues.put("treeNameEngTamil", TreeNameTamil);
+                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
+                                                contentValues.put("common_key", "" + common_key);
+                                                treeList.onInsertTreeType(contentValues);
+
+                                            }
+
+                                        } catch (Exception ex) {
+                                            Log.d("whtaComes", "Here");
+                                            ex.printStackTrace();
+                                            //return "return";
+                                        }
+                                        //   }
+                                    }
+                                } else {
+                                    Log.d("comnnnnn", "json1");
+                                }
+                            }
+                        }
+
                         JSONObject json6Object = parentObject.getJSONObject("Json6");
                         boolean statusMsg6 = json6Object.getBoolean("status");
                         String messageStus6 = json6Object.getString("message");
@@ -1354,15 +1632,6 @@ public class SplashScreen extends Fragment {
                                         contentValues.put("TreeTypeTamil", TreeTypeTamil);
                                         contentValues.put("ScientificTamil", ScientificTamil);
                                         contentValues.put("Propagation_Tamil", "" + Propagation_Tamil);
-/*v"artificial_regeneration": "",
-                "": "",
-                "": "",
-                "": "",
-                "": "",
-                "": "",
-                "": "",
-                "": "",*/
-
                                         contentValues.put("artificial_regeneration", artificial_regeneration);
                                         contentValues.put("artificial_regeneration_tamil", artificial_regeneration_tamil);
                                         contentValues.put("seed_collection", seed_collection);
@@ -1441,249 +1710,7 @@ public class SplashScreen extends Fragment {
                                 //  return "return";
                             }
                         }
-/*
-                        JSONObject json7Object = parentObject.getJSONObject("Json7");
-                        boolean statusMsg7 = json7Object.getBoolean("status");
-                        String messageStus7 = json7Object.getString("message");
-                        if (statusMsg7) {
-                            JSONArray result1Array = json7Object.getJSONArray("result");
-                            Log.d("result1Array  7", "" + result1Array);
-                           *//* if (result1Array.length() == rainfallType.getCount()) {
 
-                            } else {*//*
-                            rainfallType.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                String District = jsonObject.getString("District").trim();
-                                String Rainfall = jsonObject.getString("Rainfall").trim();
-                                String Last_Update = jsonObject.getString("LastUpdate").trim();
-                                String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
-                                String RainfallTamil = jsonObject.getString("RainfallTamil").trim();
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("districtName", District);
-                                contentValues.put("Rainfall", Rainfall);
-                                contentValues.put("lastUpdate", Last_Update);
-                                contentValues.put("districtNameTamil", DistrictTamil);
-                                contentValues.put("RainfallTamil", RainfallTamil);
-                                rainfallType.onInsert(contentValues);
-                            }
-                        }*/
-                        // }
-
-                        /*JSONObject json8Object = parentObject.getJSONObject("Json8");
-                        boolean statusMsg8 = json8Object.getBoolean("status");
-                        String messageStus8 = json8Object.getString("message");
-                        if (statusMsg8) {
-
-                            JSONArray result1Array = json8Object.getJSONArray("result");
-                            Log.d("result1Array  8", "" + result1Array);
-                        *//*    if (result1Array.length() == terrainType.getCount()) {
-
-                            } else {*//*
-                            terrainType.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                String District = jsonObject.getString("District").trim();
-                                String Terrain = jsonObject.getString("Terrain").trim();
-                                String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
-                                String TerrainTamil = jsonObject.getString("TerrainTamil").trim();
-                                String Last_Update = jsonObject.getString("LastUpdate");
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("districtName", District);
-                                contentValues.put("Terrain", Terrain);
-                                contentValues.put("lastUpdate", Last_Update);
-
-                                contentValues.put("districtNameTamil", DistrictTamil);
-                                contentValues.put("TerrainTamil", TerrainTamil);
-                                terrainType.onInsert(contentValues);
-
-                            }
-                        }*/
-                        // }
-
-                        JSONObject json9Object = parentObject.getJSONObject("Json9");
-                        boolean statusMsg9 = json9Object.getBoolean("status");
-                        String messageStus9 = json9Object.getString("message");
-                        if (statusMsg9) {
-                            JSONArray result1Array = json9Object.getJSONArray("result");
-                            Log.d("result1Array  9", "" + result1Array);
-                          /*  if (result1Array.length() == contactUs.getCount()) {
-
-                            } else {*/
-                            contactUs.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                String District = jsonObject.getString("District").trim();
-                                String Address = jsonObject.getString("Address").trim();
-                                String PhoneNo = jsonObject.getString("PhoneNo").trim();
-                                String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
-                                String AddressTamil = jsonObject.getString("AddressTamil").trim();
-                                String Last_Update = jsonObject.getString("LastUpdate");
-                                String directions = jsonObject.getString("Direction").trim();
-                                String Email = jsonObject.getString("Email").toString().trim();
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("districtName", District);
-                                contentValues.put("address", Address);
-                                contentValues.put("lastUpdate", Last_Update);
-                                contentValues.put("addressTamil", AddressTamil);
-                                contentValues.put("districtNameTamil", DistrictTamil);
-                                contentValues.put("phoneNo", PhoneNo);
-                                contentValues.put("direction", "" + directions);
-                                contentValues.put("Email", Email);
-                                contactUs.onInsert(contentValues);
-                            }
-                        }
-                        // }
-
-                        JSONObject json10Object = parentObject.getJSONObject("Json10");
-                        boolean statusMsg10 = json10Object.getBoolean("status");
-                        String messageStus10 = json10Object.getString("message");
-                        if (statusMsg10) {
-                            JSONArray result1Array = json10Object.getJSONArray("result");
-                            Log.d("result1Array  10", "" + result1Array);
-                           /* if (result1Array.length() == glossaryTable.getCount()) {
-                                result = "success";
-                            } else {*/
-                            glossaryTable.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                String Word = jsonObject.getString("Word").trim();
-                                String WordTamil = jsonObject.getString("WordTamil").trim();
-                                String Meaning = jsonObject.getString("Meaning").trim();
-                                String MeaningamTil = jsonObject.getString("MeaningTamil").trim();
-                                String Last_Update = jsonObject.getString("LastUpdate");
-                                Log.d("Word", "" + Word);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("word", Word);
-                                contentValues.put("wordTamil", WordTamil);
-                                contentValues.put("meaning", Meaning);
-                                contentValues.put("meaningTamil", MeaningamTil);
-                                contentValues.put("lastUpdate", Last_Update);
-                                glossaryTable.onInsert(contentValues);
-                            }
-                            //result = "success";
-                        }
-
-                        JSONObject json11Object = parentObject.getJSONObject("Json11");
-                        boolean statusMsg11 = json11Object.getBoolean("status");
-                        String messageStus11 = json11Object.getString("message");
-                        if (statusMsg11) {
-                            JSONArray result1Array = json11Object.getJSONArray("result");
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                Log.d("jsonObject", "" + jsonObject);
-
-                                sch1 = jsonObject.getString("Scheme1");
-                                String sch1Tamil = jsonObject.getString("Scheme1_Tamil");
-                                String sch2 = jsonObject.getString("Scheme2");
-                                String sch2Tamil = jsonObject.getString("Scheme2_Tamil");
-                                String sch3 = jsonObject.getString("Scheme3");
-                                String sch3Tamil = jsonObject.getString("Scheme3_Tamil");
-                                String sch4 = jsonObject.getString("Scheme4");
-                                String sch4Tamil = jsonObject.getString("Scheme4_Tamil");
-
-                                //Log.d("32rr5445", " " + sch1 + "  " + sch1Tamil + " " + sch2 + "  " + sch2Tamil + " " + sch3 + "  " + sch3Tamil + " " + sch4 + "  " + sch4Tamil);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("NoOfScheme", "Scheme " + (i + 1));
-                                contentValues.put("NoOfSchemeTamil", "திட்டங்கள் " + (i + 1));
-                                contentValues.put("sch1", "" + sch1);
-                                contentValues.put("sch1Tamil", sch1Tamil);
-                                contentValues.put("sch2", "" + sch2);
-                                contentValues.put("sch2Tamil", "" + sch2Tamil);
-                                contentValues.put("sch3", "" + jsonObject.getString("Scheme3"));
-                                contentValues.put("sch3Tamil", "" + jsonObject.getString("Scheme3_Tamil"));
-                                contentValues.put("sch4", "" + jsonObject.getString("Scheme4"));
-                                contentValues.put("sch4Tamil", "" + jsonObject.getString("Scheme4_Tamil"));
-
-                                Log.d("sdsldksldk", "" + jsonObject.getString("SchemeTitle") + " ksdlskldTamil " + jsonObject.getString("SchemeTitleTamil"));
-
-                                contentValues.put("SchemeTitle", "" + jsonObject.getString("SchemeTitle"));
-                                contentValues.put("SchemeTitleTamil", "" + jsonObject.getString("SchemeTitleTamil"));
-
-                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
-                                schecmesDb.onInsert(contentValues);
-
-                            }
-                        }
-                        JSONObject json12Object = parentObject.getJSONObject("Json12");
-                        Log.d("json12Object", "" + json12Object);
-                        boolean statusMsg12 = json12Object.getBoolean("status");
-                        String messageStus12 = json12Object.getString("message");
-                        if (statusMsg12) {
-                            JSONArray result1Array = json12Object.getJSONArray("result");
-                            Log.d("result1ArrayallSoilType", "" + result1Array);
-
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("soilTypeAll", "" + jsonObject.getString("Soil").trim());
-                                contentValues.put("soilTypeAllTamil", "" + jsonObject.getString("SoilTamil").trim());
-                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
-                                allSoilType.onInsert(contentValues);
-                            }
-                        }
-
-                        JSONObject json13Object = parentObject.getJSONObject("Json13");
-                        boolean statusMsg13 = json13Object.getBoolean("status");
-                        String messageStus13 = json13Object.getString("message");
-                        if (statusMsg13) {
-                            JSONArray result1Array = json13Object.getJSONArray("result");
-
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                Log.d("result1ArrayallallTerrainType", "" + jsonObject);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("terrainTypeAll", "" + jsonObject.getString("Terrain").trim());
-                                contentValues.put("terrainTypeAllTamil", "" + jsonObject.getString("TerrainTamil").trim());
-                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
-                                allTerrainType.onInsert(contentValues);
-                            }
-                        }
-                        JSONObject json14Object = parentObject.getJSONObject("Json14");
-                        boolean statusMsg14 = json14Object.getBoolean("status");
-                        String messageStus14 = json14Object.getString("message");
-                        if (statusMsg14) {
-                            JSONArray result1Array = json14Object.getJSONArray("result");
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                JSONObject jsonObject = result1Array.getJSONObject(i);
-                                Log.d("result1ArrayallallRainFall", "" + jsonObject);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("rainFallAll", "" + jsonObject.getString("Rainfall").trim());
-                                contentValues.put("rainFallAllTamil", "" + jsonObject.getString("RainfallTamil").trim());
-                                contentValues.put("LastUpdate", "" + jsonObject.getString("LastUpdate"));
-                                allRainFall.onInsert(contentValues);
-                            }
-                        }
-
-                        JSONObject json15Object = parentObject.getJSONObject("Json15");
-                        boolean statusMsg15 = json15Object.getBoolean("status");
-                        String messageStus15 = json15Object.getString("message");
-                        if (statusMsg15) {
-                            JSONArray result1Array = json15Object.getJSONArray("result");
-                      /*  if (result1Array.length() == treeTypeNameList.getCout()) {
-                        } else {*/
-                            Log.d("result1Arraytresss15", +treeList.getCount() + "  " + result1Array);
-                          /*  if (result1Array.length() >= 10) {
-                                insertJson15(result1Array, 1);
-                            } else {*/
-                            insertJson15(result1Array, 0);
-                            //}
-                        }
-
-                        JSONObject json16Object = parentObject.getJSONObject("Json16");
-                        boolean statusMsg16 = json16Object.getBoolean("status");
-                        String messageStus16 = json16Object.getString("message");
-                        if (statusMsg16) {
-                            JSONArray result1Array = json16Object.getJSONArray("result");
-                      /*  if (result1Array.length() == treeTypeNameList.getCout()) {
-                        } else {*/
-                            Log.d("result1Arraytresss16", +treeList.getCount() + "  " + result1Array);
-                          /*  if (result1Array.length() >= 10) {
-                                onInsertJson16(result1Array, 1);
-                            } else {*/
-                            onInsertJson16(result1Array, 0);
-                            //}
-                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         return "server";
@@ -1753,7 +1780,7 @@ public class SplashScreen extends Fragment {
         if (0 == point) {
             length = result1Array.length();
         } else if (1 == point) {
-            length = 10;
+            length = 5;
         }
         Log.d("result1Arraytresss151515", "" + point);
         for (int i = 0; i < length; i++) {
@@ -1828,7 +1855,7 @@ public class SplashScreen extends Fragment {
             length = result1Array.length();
         } else if (1 == point) {
             Log.d("json16values", " 0 0 " + point);
-            length = 10;
+            length = 5;
         }
 
         for (int i = 0; i < length; i++) {

@@ -53,7 +53,7 @@ public class VerifyDetails extends SQLiteOpenHelper {
         try {
             sqLiteDatabase = this.getWritableDatabase();
             sqLiteDatabase.insert("VerifyDetails", null, contentValues);
-            Log.d("contentValuesVerifyed", "" + contentValues);
+            //Log.d("contentValuesVerifyed", "" + contentValues);
         } catch (OutOfMemoryError e) {
             e.printStackTrace();
         }
@@ -149,7 +149,7 @@ public class VerifyDetails extends SQLiteOpenHelper {
         } else {
             cursor = sqLiteDatabase.rawQuery("select * from VerifyDetails where common_key='" + common_key + "'", null);
         }
-        Log.d("comcommon_keymon_key", "super  " + cursor.getCount());
+       // Log.d("comcommon_keymon_key", "super  " + cursor.getCount());
         if (cursor.moveToFirst()) {
             do {
                 if (language.equals("1")) {

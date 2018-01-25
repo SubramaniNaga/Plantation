@@ -116,8 +116,8 @@ public class Adapter_Selected_tree_Type extends BaseAdapter {
 
         String mImg = mListItemValies.get(position).get("storagePath");
         if (mImg != null) {
-            Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.logo_3).into(holder.imageView);
-            Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.logo_3).into(holder.mPart2Img);
+            Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.no_thumbnail).into(holder.imageView);
+            Picasso.with(mContext).load((Uri.fromFile(new File(mImg)))).error(R.drawable.no_thumbnail).into(holder.mPart2Img);
         }
 
         if (getItemViewType(position) == 0) {

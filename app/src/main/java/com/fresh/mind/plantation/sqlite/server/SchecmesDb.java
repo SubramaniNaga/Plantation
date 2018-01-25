@@ -109,7 +109,7 @@ public class SchecmesDb extends SQLiteOpenHelper {
                     childSchems.add(cursor.getString(cursor.getColumnIndex("sch3Tamil")));
                     childSchems.add(cursor.getString(cursor.getColumnIndex("sch4Tamil")));
                     //NoOfScheme
-                    Log.d("childSchems", "lis  " + childSchems.size());
+                    //Log.d("childSchems", "lis  " + childSchems.size());
                     expandableListDetail.put(cursor.getString(cursor.getColumnIndex("NoOfSchemeTamil")), childSchems);
 
                 } else {
@@ -120,8 +120,8 @@ public class SchecmesDb extends SQLiteOpenHelper {
                     childSchems.add(cursor.getString(cursor.getColumnIndex("sch3")));
                     childSchems.add(cursor.getString(cursor.getColumnIndex("sch4")));
                     //NoOfScheme
-                    Log.d("childSchems", "english  " + childSchems.size() + "  \n " + childSchems);
-
+                    //   Log.d("childSchems", "english  " + childSchems.size() + "  \n " + childSchems);
+                    Log.d("sdskldskd", "" + cursor.getString(cursor.getColumnIndex("NoOfScheme")) + "   " + childSchems);
                     expandableListDetail.put(cursor.getString(cursor.getColumnIndex("NoOfScheme")), childSchems);
 
                 }
