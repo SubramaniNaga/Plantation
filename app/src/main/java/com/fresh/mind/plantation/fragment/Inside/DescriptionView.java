@@ -122,7 +122,7 @@ public class DescriptionView extends Fragment {
     }
 
     private void checkCondition(ArrayList<HashMap<String, String>> description, ArrayList<HashMap<String, String>> glossaryDetails) {
-        Log.d("descriptionLegnthj", "" + description.size() + " \n " + description + " \n " + glossaryDetails.size() + "  " + glossaryDetails.toString());
+        Log.d("descriptionLegnthj", "" + description.size() + glossaryDetails.size() + " \n " + description + " \n " + glossaryDetails.size() + "  " + glossaryDetails.toString());
 
         if (description.size() >= 1) {
             tvNodata.setVisibility(View.GONE);
@@ -408,7 +408,7 @@ public class DescriptionView extends Fragment {
             }
         } else {
             tvNodata.setVisibility(View.VISIBLE);
-            tvNodata.setText("");
+            tvNodata.setText("" + getActivity().getString(R.string.no_data_found));
             svAll.setVisibility(View.GONE);
         }
     }

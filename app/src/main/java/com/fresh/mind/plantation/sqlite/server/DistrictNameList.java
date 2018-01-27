@@ -31,7 +31,7 @@ public class DistrictNameList extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String tableName = "create table DistrictListName(Id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,districtNameTamil text,common_key text,treetypes text,treetypesTamil text)";
+        String tableName = "create table DistrictListName(Id INTEGER PRIMARY KEY AUTOINCREMENT,districtName text,lastUpdate text,districtNameTamil text,common_key text,treetypes text,treetypesTamil text,storagePath text)";
         db.execSQL(tableName);
     }
 
@@ -80,14 +80,19 @@ public class DistrictNameList extends SQLiteOpenHelper {
                 HashMap<String, String> status = new HashMap<>();
                 if (languages.equals("2")) {
                     String name = cursor.getString(cursor.getColumnIndex("districtName"));
+                    String storagePath = cursor.getString(cursor.getColumnIndex("storagePath"));
                     if (name != null) {
                         status.put("District", name);
+                        status.put("storagePath", storagePath);
                     }
                 } else {
+                    String storagePath = cursor.getString(cursor.getColumnIndex("storagePath"));
                     String name = cursor.getString(cursor.getColumnIndex("districtNameTamil"));
                     //Log.d("name", "" + name);
                     if (name != null) {
                         status.put("District", name);
+                        status.put("storagePath", storagePath);
+
                     }
                 }
                 mDistrinListName.add(status);

@@ -33,8 +33,10 @@ public class Config {
     public static String sdCardLocationIntercrops = "sdcard/Treepedia/Intercrops";
     public static String sdCardLocation = "sdcard/Treepedia/TreeImages";
     public static String sdCardLocationTreeImages = "sdcard/Treepedia/TreeImages";
+    public static String sdCardLocationDistricts = "sdcard/Treepedia/Districts/" ;
 
     public static String fileLocationOnServer = "http://plantation.roughnote.in/admin2017/images/";
+    public static String fileLocationOnDitricts = "http://plantation.roughnote.in/images/district/";
     public static String sdCardLocationVideo = "sdcard/Treepedia/Videos/";
 
     public static int SPLASH_LANGUAGE = -1;

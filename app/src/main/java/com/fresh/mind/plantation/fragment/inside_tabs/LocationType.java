@@ -1,5 +1,6 @@
 package com.fresh.mind.plantation.fragment.inside_tabs;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.fresh.mind.plantation.Constant.Config;
+import com.fresh.mind.plantation.Constant.ImageUtils;
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
@@ -24,6 +26,8 @@ import com.fresh.mind.plantation.sqlite.server.DistrictNameList;
 import com.fresh.mind.plantation.sqlite.sorting.SortOrder;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,11 +55,7 @@ public class LocationType extends Fragment {
             R.drawable.d_theni, R.drawable.d_thiruvallur, R.drawable.d_thiruvannamalai, R.drawable.d_thiruvarur, R.drawable.d_thoothukudi, R.drawable.d_tiruchirapalli, R.drawable.d_tirunelvelli,
             R.drawable.d_tiruppur, R.drawable.d_vellore, R.drawable.d_vilupuram, R.drawable.d_virudhunagar};
 
-    /*  [{District=Ariyalur}, {District=Chennai}, {District=Coimbatore}, {District=Cudalore}, {District=Dharmapuri}, {District=Dindigul}, {District=Erode}, {District=Kanchipuram},
-      {District=Kanyakumari}, {District=Karur}, {District=Krishnagiri}, {District=Madurai}, {District=Nagapattinam}, {District=Namakkal}, {District=Nilgiris}, {District=Perambalur},
-      {District=Pudukottai}, {District=Ramanathapuram}, {District=Salem}, {District=Sivagangai}, {District=Thanjavur}, {District=Theni}, {District=Thiruvallur}, {District=Thiruvannamalai},
-      {District=Thiruvarur}, {District=Thoothukudi}, {District=Tiruchirapalli}, {District=Tirunelveli}, {District=Tiruppur}, {District=Tirupur-test}, {District=Vellore}, {District=Vilupuram}, {District=Virudhunagar}]
-  */
+
     private int[] mDistrictImagesTamil = {R.drawable.d_ariyalur, R.drawable.d_erode, R.drawable.d_cuddalore, R.drawable.d_kanyakumari, R.drawable.d_karur, R.drawable.d_kanchipuram, R.drawable.d_krishnagiri,
             R.drawable.d_coimbatore, R.drawable.d_sivagangai, R.drawable.d_chennai, R.drawable.d_salem, R.drawable.d_thanjavur, R.drawable.d_dharmapuri, R.drawable.d_dindigul,
             R.drawable.d_tiruchirapalli, R.drawable.d_tirunelvelli, R.drawable.d_tiruppur, R.drawable.d_thiruvannamalai, R.drawable.d_thiruvallur, R.drawable.d_thiruvarur, R.drawable.d_thoothukudi,
@@ -111,34 +111,17 @@ public class LocationType extends Fragment {
                     return s1.get("District").compareTo(s2.get("District"));
                 }
             });
-            /*if (bySortType != null) {
-                if (bySortType.equals("Z-A")) {
-                    Collections.sort(mLocation, new Comparator<HashMap<String, String>>() {
-                        @Override
-                        public int compare(HashMap<String, String> s1, HashMap<String, String> s2) {
-                            return s2.get("District").compareTo(s1.get("District"));
-                        }
-                    });
-                } else {
-                    Collections.sort(mLocation, new Comparator<HashMap<String, String>>() {
-                        @Override
-                        public int compare(HashMap<String, String> s1, HashMap<String, String> s2) {
-                            return s1.get("District").compareTo(s2.get("District"));
-                        }
-                    });
-                }
-            }*/
+
 
             mNodata.setVisibility(View.GONE);
 
             //locationListView.setAdapter(new Adapter_Location(getActivity(), mLocation));
             rvDistrictName.setVisibility(View.VISIBLE);
-            Log.d("sdlksldskdl", "" + mDistrictImagesTamil.length + "  Name " + mLocation.size() + mLocation + "\n  dsds " + mDistrictImages.length);
+            // Log.d("sdlksldskdl", "" + mDistrictImagesTamil.length + "  Name " + mLocation.size() + mLocation + "\n  dsds " + mDistrictImages.length);
             if (languages.equals("1")) {
-                rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation, mDistrictImagesTamil));
+                rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation/*, mDistrictImagesTamil*/));
             } else {
-
-                rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation, mDistrictImages));
+                rvDistrictName.setAdapter(new AdapterDistrictName(getActivity(), mLocation/*, mDistrictImages*/));
             }
         } else {
             mNodata.setVisibility(View.VISIBLE);
@@ -170,12 +153,12 @@ public class LocationType extends Fragment {
     class AdapterDistrictName extends RecyclerView.Adapter<SolventViewHolders> {
         private final FragmentActivity mContext;
         private final ArrayList<HashMap<String, String>> listViewValues;
-        private final int[] mDistrictImages;
+        // private final int[] mDistrictImages;
 
-        public AdapterDistrictName(FragmentActivity activity, ArrayList<HashMap<String, String>> mLocation, int[] mDistrictImages) {
+        public AdapterDistrictName(FragmentActivity activity, ArrayList<HashMap<String, String>> mLocation/*, int[] mDistrictImages*/) {
             this.mContext = activity;
             this.listViewValues = mLocation;
-            this.mDistrictImages = mDistrictImages;
+            //this.mDistrictImages = mDistrictImages;
         }
 
         @Override
@@ -204,10 +187,16 @@ public class LocationType extends Fragment {
             }
 
             holder.mSPinnerText.setText("" + listViewValues.get(position).get("District"));
-            //holder.imTreeImage.setImageResource(R.drawable.logo_3);
 
-            Picasso.with(mContext).load(mDistrictImages[position]).into(holder.imTreeImage);
-                        /*Glide.with(mContext).load((""+mDistrictImages[position])).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.imTreeImage) {
+            String storagePath = listViewValues.get(position).get("storagePath");
+            Log.d("sdlskdlsk", "" + storagePath);
+            //ImageUtils.setImage(holder.imTreeImage, storagePath, mContext);
+            if (storagePath != null) {
+                Picasso.with(mContext).load((Uri.fromFile(new File(storagePath)))).into(holder.imTreeImage);
+            } else {
+                holder.imTreeImage.setImageResource(R.drawable.no_thumbnail);
+            }
+            /*Glide.with(mContext).load((""+mDistrictImages[position])).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.imTreeImage) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =

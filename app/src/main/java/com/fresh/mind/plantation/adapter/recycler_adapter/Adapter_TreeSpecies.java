@@ -15,6 +15,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.fresh.mind.plantation.Constant.ImageUtils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
 import com.fresh.mind.plantation.holder.KittenClickListener;
@@ -60,7 +61,7 @@ public class Adapter_TreeSpecies extends RecyclerView.Adapter<ViewHolder> implem
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final int viewType = getItemViewType(position);
 
-       // Log.d("viewType", "" + viewType);
+        // Log.d("viewType", "" + viewType);
         holder.cardView1.setVisibility(View.VISIBLE);
         holder.cardView2.setVisibility(View.GONE);
         /*if (viewType == 0) {
@@ -74,6 +75,7 @@ public class Adapter_TreeSpecies extends RecyclerView.Adapter<ViewHolder> implem
         holder.mSubName.setText("" + mListItemValiesFilter.get(position).get("subTreeName"));
         try {
             byte[] photo = mimagesFilter.get(position).get("treeIcon");
+            Log.d("photoasd", "" + photo);
            /* if (imgpath != null) {
                 int img = Integer.parseInt(imgpath);
                 holder.imageView.setImageResource(img);
@@ -85,6 +87,8 @@ public class Adapter_TreeSpecies extends RecyclerView.Adapter<ViewHolder> implem
             Bitmap theImage = BitmapFactory.decodeStream(imageStream);
             holder.imageView.setImageBitmap(theImage);
             holder.mPart2Img.setImageBitmap(theImage);
+
+            //ImageUtils.setImage(holder.imageView, imag, activity1);
 
         } catch (Exception ex) {
             ex.printStackTrace();

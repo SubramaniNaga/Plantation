@@ -1,8 +1,6 @@
 package com.fresh.mind.plantation.service;
 
-import android.app.Dialog;
 import android.app.IntentService;
-import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -13,15 +11,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;;
+import android.widget.Toast;
+
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.Constant.JSONParser;
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
-
 import com.fresh.mind.plantation.api.RetrofitCall;
 import com.fresh.mind.plantation.api.RetrofitService;
 import com.fresh.mind.plantation.fragment.menu_page.Tutorials;
@@ -39,31 +35,19 @@ import com.fresh.mind.plantation.sqlite.server.TreeList;
 import com.fresh.mind.plantation.sqlite.server.TreeTypeNameList;
 import com.fresh.mind.plantation.sqlite.server.VerifyDetails;
 
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -71,13 +55,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.process;
 import static com.fresh.mind.plantation.Constant.Config.LOAD_MORE;
 import static com.fresh.mind.plantation.Constant.Config.fileLocationOnServer;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocation;
@@ -86,10 +68,8 @@ import static com.fresh.mind.plantation.Constant.Config.sdCardLocationModel;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeImages;
 import static com.fresh.mind.plantation.Constant.Config.url;
 import static com.fresh.mind.plantation.Constant.Utils.showNotification;
-import static com.fresh.mind.plantation.R.id.mRefresh;
-import static com.fresh.mind.plantation.R.id.name;
-import static com.fresh.mind.plantation.activity.SplashActivity.mEnglish;
-import static com.fresh.mind.plantation.activity.SplashActivity.mTamil;
+
+;
 
 
 /**
@@ -796,30 +776,32 @@ public class ImagesDownloadService extends IntentService {
             super.onPostExecute(s);
             Log.d("ldkjsksld", "" + s);
             Log.d("statusDownloadService", " " + statusDownload + "  " + idDownload);
-            if (s.equals("success")) {
-                Log.d("sljdsdlk", "UpdateDb");
-                if (idDownload == null) {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("status", "1");
-                    statusForDownload.onInsert(contentValues);
+            if (s != null) {
+                if (s.equals("success")) {
+                    Log.d("sljdsdlk", "UpdateDb");
+                    if (idDownload == null) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("status", "1");
+                        statusForDownload.onInsert(contentValues);
+                    } else {
+                        int status = Integer.parseInt(statusDownload) + 1;
+                        statusForDownload.onUpdate(idDownload, status);
+                    }
+                } else if (s.equals("false")) {
+                    statusForDownload.onUpdate(idDownload, -1);
                 } else {
-                    int status = Integer.parseInt(statusDownload) + 1;
+                    int status = Integer.parseInt(statusDownload);
                     statusForDownload.onUpdate(idDownload, status);
                 }
-            } else if (s.equals("false")) {
-                statusForDownload.onUpdate(idDownload, -1);
-            } else {
-                int status = Integer.parseInt(statusDownload);
-                statusForDownload.onUpdate(idDownload, status);
-            }
 
-            HashMap<String, String> stringHashMap = statusForDownload.getStatus();
-            statusDownload = stringHashMap.get("status");
-            idDownload = stringHashMap.get("id");
-            Log.d("soadjslkdjs", "" + idDownload + "  " + statusDownload);
-            if (statusDownload.equals("-1")) {
-            } else {
-                runBackground();
+                HashMap<String, String> stringHashMap = statusForDownload.getStatus();
+                statusDownload = stringHashMap.get("status");
+                idDownload = stringHashMap.get("id");
+                Log.d("soadjslkdjs", "" + idDownload + "  " + statusDownload);
+                if (statusDownload.equals("-1")) {
+                } else {
+                    runBackground();
+                }
             }
         }
     }
@@ -875,116 +857,116 @@ public class ImagesDownloadService extends IntentService {
                 } catch (OutOfMemoryError outOfMemoryError) {
                     outOfMemoryError.printStackTrace();
                 }
+                   try {
                 result = sb.toString();*/
-                result = JSONParser.getJsonResponse(url, nameValuePairs);
+                try {
+                    result = JSONParser.getJsonResponse(url, nameValuePairs);
 
-                Log.d("resultJson1", "" + result);
-                if (result == null || result.isEmpty() || result.contains("SHTML Wrapper - 500 Server Error")) {
-                    LOAD_MORE = false;
-                    return "server";
-                } else {
-                    JSONObject parentObject = null;
-                    try {
-
-                        LOAD_MORE = true;
+                    Log.d("resultJson1", "" + result);
+                    if (result == null || result.isEmpty() || result.contains("SHTML Wrapper - 500 Server Error")) {
+                        LOAD_MORE = false;
+                        return "server";
+                    } else {
+                        JSONObject parentObject = null;
                         try {
+
+                            LOAD_MORE = true;
+
                             parentObject = new JSONObject(result);
-                        } catch (OutOfMemoryError e) {
-                            e.printStackTrace();
-                        }
-                        JSONObject json1Object = parentObject.getJSONObject("Json1");
-                        boolean status = json1Object.getBoolean("status");
-                        String message = json1Object.getString("message");
-                        if (status) {
-                            JSONArray result1Array = json1Object.getJSONArray("result");
-                            Log.d("result1ArrayService 1", +treeList.getCount() + " " + result1Array.length());
+
+                            JSONObject json1Object = parentObject.getJSONObject("Json1");
+                            boolean status = json1Object.getBoolean("status");
+                            String message = json1Object.getString("message");
+                            if (status) {
+                                JSONArray result1Array = json1Object.getJSONArray("result");
+                                Log.d("result1ArrayService 1", +treeList.getCount() + " " + result1Array.length());
                             /*if (result1Array.length() == treeList.getCount()) {
                                 Log.d("sampleee  111", " Same");
                             } else {*/
-                            Log.d("sampleeeService1111", "Not Same");
-                            //treeList.delete();
-                            for (int i = 0; i < result1Array.length(); i++) {
-                                if (checkInternetConenction(getApplicationContext())) {
-                                    // Log.d("sadsadddsadsdsad Forasyn", "true  " + checkInternetConenction(getApplicationContext()));
-                                    JSONObject jsonObject = result1Array.getJSONObject(i);
-                                    String TreeName = jsonObject.getString("TreeName").trim();
-                                    String TreeType = jsonObject.getString("TreeType").trim();
-                                    String Scientific_Name = jsonObject.getString("ScientificName").trim();
-                                    String District = jsonObject.getString("District").trim();
-                                    String common_key = jsonObject.getString("common_key");
+                                Log.d("sampleeeService1111", "Not Same");
+                                //treeList.delete();
+                                for (int i = 0; i < result1Array.length(); i++) {
+                                    if (checkInternetConenction(getApplicationContext())) {
+                                        // Log.d("sadsadddsadsdsad Forasyn", "true  " + checkInternetConenction(getApplicationContext()));
+                                        JSONObject jsonObject = result1Array.getJSONObject(i);
+                                        String TreeName = jsonObject.getString("TreeName").trim();
+                                        String TreeType = jsonObject.getString("TreeType").trim();
+                                        String Scientific_Name = jsonObject.getString("ScientificName").trim();
+                                        String District = jsonObject.getString("District").trim();
+                                        String common_key = jsonObject.getString("common_key");
 
-                                    String Image = jsonObject.getString("thumbnail");
-                                    //String Image = jsonObject.getString("Images");
+                                        String Image = jsonObject.getString("thumbnail");
+                                        //String Image = jsonObject.getString("Images");
 
-                                    String Last_Update = jsonObject.getString("LastUpdate");
-                                    //   Log.d("Last_U2342334ast_Update From Async", "" + Last_Update);
-                                    String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
-                                    String TreeNameTamil = jsonObject.getString("TreeNameTamil").trim();
-                                    String TreeTypeTamil = jsonObject.getString("TreeTypeTamil").trim();
-                                    String Scientific_Tamil = jsonObject.getString("ScientificTamil").trim();
+                                        String Last_Update = jsonObject.getString("LastUpdate");
+                                        //   Log.d("Last_U2342334ast_Update From Async", "" + Last_Update);
+                                        String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
+                                        String TreeNameTamil = jsonObject.getString("TreeNameTamil").trim();
+                                        String TreeTypeTamil = jsonObject.getString("TreeTypeTamil").trim();
+                                        String Scientific_Tamil = jsonObject.getString("ScientificTamil").trim();
 
-                                    String extension = null;
-                                    String storagePath = null;
-                                    ContentValues contentValues = new ContentValues();
-                                    //byte[] imgByte = new byte[0];
-                                    Log.d("ImageFromServieImagesService", i + "  " + Image + " " + TreeName);
-                                    if (TreeName.equals("null") || TreeName.isEmpty()) {
-                                    } else {
-                                        try {
-                                            if (Image.equals("null") || Image.isEmpty()) {
-                                                //contentValues.put("storagePath", "" + storagePath);
-                                                contentValues.put("treeType", TreeType);
-                                                contentValues.put("districtName", "" + District);
-                                                contentValues.put("treeNameTamil", Scientific_Name);
-                                                contentValues.put("treeNameEng", TreeName);
-                                                contentValues.put("lastUpdate", Last_Update);
-                                                contentValues.put("Scientific_Tamil", Scientific_Tamil);
-                                                contentValues.put("treeTypeTamil", TreeTypeTamil);
-                                                contentValues.put("treeNameEngTamil", TreeNameTamil);
-                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
-                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
-                                                contentValues.put("common_key", "" + common_key);
-                                                treeList.onInsertTreeType(contentValues);
+                                        String extension = null;
+                                        String storagePath = null;
+                                        ContentValues contentValues = new ContentValues();
+                                        //byte[] imgByte = new byte[0];
+                                        Log.d("ImageFromServieImagesService", i + "  " + Image + " " + TreeName);
+                                        if (TreeName.equals("null") || TreeName.isEmpty()) {
+                                        } else {
+                                            try {
+                                                if (Image.equals("null") || Image.isEmpty()) {
+                                                    //contentValues.put("storagePath", "" + storagePath);
+                                                    contentValues.put("treeType", TreeType);
+                                                    contentValues.put("districtName", "" + District);
+                                                    contentValues.put("treeNameTamil", Scientific_Name);
+                                                    contentValues.put("treeNameEng", TreeName);
+                                                    contentValues.put("lastUpdate", Last_Update);
+                                                    contentValues.put("Scientific_Tamil", Scientific_Tamil);
+                                                    contentValues.put("treeTypeTamil", TreeTypeTamil);
+                                                    contentValues.put("treeNameEngTamil", TreeNameTamil);
+                                                    contentValues.put("districtNameTamil", "" + DistrictTamil);
+                                                    contentValues.put("districtNameTamil", "" + DistrictTamil);
+                                                    contentValues.put("common_key", "" + common_key);
+                                                    treeList.onInsertTreeType(contentValues);
                                                  /*   Intent broadcastIntent = new Intent();
                                                     broadcastIntent.setAction("refresh");
                                                     //Log.d("mListHash", "" + treeList.getTreTypeeNames(AppData.checkLanguage(getApplicationContext())));
                                                     broadcastIntent.putExtra("Data", treeList.getTreTypeeNames(AppData.checkLanguage(getApplicationContext())));
                                                     sendBroadcast(broadcastIntent);*/
-                                            } else {
-                                                extension = Image.substring(Image.lastIndexOf("."));
-                                                //Log.d("extension", "" + extension);
-                                                //  if (extension.toLowerCase().equals(".jpg".toLowerCase()) || extension.toLowerCase().equals(".png".toLowerCase())) {
-                                                File file = new File(sdCardLocation + "/" + Image);
-                                                if (file.exists()) {
-                                                    Log.d("dededFewService", i + " exist");
-                                                    storagePath = sdCardLocation + "/" + Image;
-                                                    File file1 = new File(storagePath);
-                                                    int internalFileLength = (int) file1.length();
-                                                    if (internalFileLength == 0) {
+                                                } else {
+                                                    extension = Image.substring(Image.lastIndexOf("."));
+                                                    //Log.d("extension", "" + extension);
+                                                    //  if (extension.toLowerCase().equals(".jpg".toLowerCase()) || extension.toLowerCase().equals(".png".toLowerCase())) {
+                                                    File file = new File(sdCardLocation + "/" + Image);
+                                                    if (file.exists()) {
+                                                        Log.d("dededFewService", i + " exist");
+                                                        storagePath = sdCardLocation + "/" + Image;
+                                                        File file1 = new File(storagePath);
+                                                        int internalFileLength = (int) file1.length();
+                                                        if (internalFileLength == 0) {
+                                                            String ImageDpwnLoad = fileLocationOnServer + Image;
+                                                            Log.d("ImageImage Zeros", TreeName + " " + ImageDpwnLoad);
+                                                            storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
+                                                        }
+                                                    } else {
+                                                        Log.d("dededFewService", i + " Not exist");
+                                                        //String ImageSpilt = Image.replaceAll(" ", "%20");
                                                         String ImageDpwnLoad = fileLocationOnServer + Image;
-                                                        Log.d("ImageImage Zeros", TreeName + " " + ImageDpwnLoad);
+                                                        Log.d("ImageImageServiceTreeType", " " + ImageDpwnLoad);
                                                         storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
                                                     }
-                                                } else {
-                                                    Log.d("dededFewService", i + " Not exist");
-                                                    //String ImageSpilt = Image.replaceAll(" ", "%20");
-                                                    String ImageDpwnLoad = fileLocationOnServer + Image;
-                                                    Log.d("ImageImageServiceTreeType", " " + ImageDpwnLoad);
-                                                    storagePath = downloadFile(ImageDpwnLoad, sdCardLocation);
-                                                }
-                                                Log.d("storagePathService", TreeName + " " + storagePath);
-                                                contentValues.put("storagePath", "" + storagePath);
-                                                contentValues.put("treeType", TreeType);
-                                                contentValues.put("districtName", "" + District);
-                                                contentValues.put("treeNameTamil", Scientific_Name);
-                                                contentValues.put("treeNameEng", TreeName);
-                                                contentValues.put("lastUpdate", Last_Update);
-                                                contentValues.put("Scientific_Tamil", Scientific_Tamil);
-                                                contentValues.put("treeTypeTamil", TreeTypeTamil);
-                                                contentValues.put("treeNameEngTamil", TreeNameTamil);
-                                                contentValues.put("districtNameTamil", "" + DistrictTamil);
-                                                contentValues.put("common_key", "" + common_key);
-                                                treeList.onInsertTreeType(contentValues);
+                                                    Log.d("storagePathService", TreeName + " " + storagePath);
+                                                    contentValues.put("storagePath", "" + storagePath);
+                                                    contentValues.put("treeType", TreeType);
+                                                    contentValues.put("districtName", "" + District);
+                                                    contentValues.put("treeNameTamil", Scientific_Name);
+                                                    contentValues.put("treeNameEng", TreeName);
+                                                    contentValues.put("lastUpdate", Last_Update);
+                                                    contentValues.put("Scientific_Tamil", Scientific_Tamil);
+                                                    contentValues.put("treeTypeTamil", TreeTypeTamil);
+                                                    contentValues.put("treeNameEngTamil", TreeNameTamil);
+                                                    contentValues.put("districtNameTamil", "" + DistrictTamil);
+                                                    contentValues.put("common_key", "" + common_key);
+                                                    treeList.onInsertTreeType(contentValues);
 
 /*
                                                     Intent broadcastIntent = new Intent();
@@ -992,27 +974,33 @@ public class ImagesDownloadService extends IntentService {
                                                     //   Log.d("mListHash", "" + treeList.getTreTypeeNames(AppData.checkLanguage(getApplicationContext())));
                                                     broadcastIntent.putExtra("Data", treeList.getTreTypeeNames(AppData.checkLanguage(getApplicationContext())));
                                                     sendBroadcast(broadcastIntent);*/
+                                                }
+                                                //  }
+
+                                            } catch (Exception ex) {
+                                                Log.d("whtaComes", "Here");
+                                                ex.printStackTrace();
+                                                return "return";
                                             }
-                                            //  }
-
-                                        } catch (Exception ex) {
-                                            Log.d("whtaComes", "Here");
-                                            ex.printStackTrace();
-                                            return "return";
                                         }
+
+                                    } else {
+                                        Log.d("sadsadddsadsdsadService", "false " + checkInternetConenction(getApplicationContext()));
                                     }
-
-                                } else {
-                                    Log.d("sadsadddsadsdsadService", "false " + checkInternetConenction(getApplicationContext()));
                                 }
+                                //}
                             }
-                            //}
-                        }
 
-                    } catch (JSONException | RuntimeException e) {
-                        e.printStackTrace();
-                        return "parsing";
+                        } catch (JSONException | RuntimeException e) {
+                            e.printStackTrace();
+                            return "parsing";
+                        }
                     }
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                    Asyn asyn = new Asyn();
+                    asyn.execute();
+
                 }
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
@@ -1033,22 +1021,24 @@ public class ImagesDownloadService extends IntentService {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("sampledds", "" + s);
-            if (s.equals("success")) {
-                Config.LOAD_MORE = false;
-                showNotification(getString(R.string.bgm_success), getString(R.string.bgm_success), getApplicationContext());
-            } else if (s.equals("server")) {
-                showNotification(getString(R.string.bgm_failed), getString(R.string.server_500), getApplicationContext());
+            if (s != null) {
+                if (s.equals("success")) {
+                    Config.LOAD_MORE = false;
+                    showNotification(getString(R.string.bgm_success), getString(R.string.bgm_success), getApplicationContext());
+                } else if (s.equals("server")) {
+                    showNotification(getString(R.string.bgm_failed), getString(R.string.server_500), getApplicationContext());
                /* if (treeList.getCount() >= 1 && verifyDetails.getCount() >= 1) {
 
                 } else {
 
                 }*/
-            } else if (s.equals("parsing")) {
-                showNotification(getString(R.string.bgm_failed), getString(R.string.download_error), getApplicationContext());
-            } else if (s.equals("hostname")) {
-                showNotification(getString(R.string.bgm_failed), getString(R.string.server_not_found), getApplicationContext());
-            } else if (s.equals("return")) {
-                //  showNotification(getString(R.string.bgm_failed), getString(R.string.server_not_found), getApplicationContext());
+                } else if (s.equals("parsing")) {
+                    showNotification(getString(R.string.bgm_failed), getString(R.string.download_error), getApplicationContext());
+                } else if (s.equals("hostname")) {
+                    showNotification(getString(R.string.bgm_failed), getString(R.string.server_not_found), getApplicationContext());
+                } else if (s.equals("return")) {
+                    //  showNotification(getString(R.string.bgm_failed), getString(R.string.server_not_found), getApplicationContext());
+                }
             }
         }
     }

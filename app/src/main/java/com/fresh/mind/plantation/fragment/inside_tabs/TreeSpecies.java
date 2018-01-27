@@ -217,24 +217,18 @@ public class TreeSpecies extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
-        // Log.d("dsjfhl", "" + location.getLatitude() + "  " + location.getLongitude());
-        if (Config.celsiu == -1) {
-            //Log.d("StopLocation", "Running");
-            lat = location.getLatitude();
-            lng = location.getLongitude();
-            String address = getAddress(TreeSpecies.this, location.getLatitude(), location.getLongitude());
-            Log.d("addre123324ss ", "" + address);
-            if (address != null) {
-                setAddress(address);
+        if (Config.checkInternetConenction(getActivity())) {
+            if (Config.celsiu == -1) {
+                lat = location.getLatitude();
+                lng = location.getLongitude();
+                String address = getAddress(TreeSpecies.this, location.getLatitude(), location.getLongitude());
+                if (address != null) {
+                    setAddress(address);
+                }
             } else {
-                //  Log.d("addre123324ss ", "" + address);
+                lm.removeUpdates(this);
+
             }
-        } else {
-            //Log.d("StopLocation", "Stop");
-
-            lm.removeUpdates(this);
-
         }
     }
 
@@ -259,7 +253,7 @@ public class TreeSpecies extends Fragment implements LocationListener {
         super.onResume();
         //if (Config.checkInternetConenction(getActivity())) {
         Log.d("Receiversss", "onResume");
-        //  getActivity().registerReceiver(mReceiver, intentFilter);
+
 
         if (Config.celsiu == 0) {
             lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -274,20 +268,20 @@ public class TreeSpecies extends Fragment implements LocationListener {
             } catch (Exception ex) {
             }
             if (!gps_enabled && !network_enabled) {
-                Log.d("sadd", "eeeeee");
+
                 // notify user
 
             } else {
                 lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 Criteria criteria = new Criteria();
                 String provider = lm.getBestProvider(criteria, true);
-                Log.d("provider", "" + provider);
+
                 if (provider != null) {
-                    Log.d("provideproviderr", "" + provider);
+
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                         location = lm.getLastKnownLocation(provider);
                     if (location != null) {
-                        Log.d("asdsadsadsa", "Locations");
+
                         onLocationChanged(location);
                     }
 
@@ -356,7 +350,7 @@ public class TreeSpecies extends Fragment implements LocationListener {
             e.printStackTrace();
         }
         // read the response
-        Log.d("asdsad", "" + response);
+        //   Log.d("asdsad", "" + response);
         return response;
 
     }

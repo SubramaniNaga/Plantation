@@ -3,6 +3,7 @@ package com.fresh.mind.plantation.fragment.ModelInter_tabs;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -18,13 +19,17 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.fresh.mind.plantation.Constant.AppData;
+import com.fresh.mind.plantation.Constant.ImageUtils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.adapter.base_adapter.SchemeExpandableListAdapter;
 import com.fresh.mind.plantation.customized.CustomTextView;
+import com.fresh.mind.plantation.fragment.menu_page.AgroForestry;
 import com.fresh.mind.plantation.sqlite.Intercrops;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 import com.fresh.mind.plantation.sqlite.server.SchecmesDb;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,8 +72,7 @@ public class Intercropstab extends Fragment {
 
         final List<String> expandableListTitle = new ArrayList<>(mIntercropsinfos.keySet());
 
-        Log.d("mIntercropsinfos", "" + mIntercropsinfos);
-        Log.d("Modelsssinter", "" + mIntercropsinfos.size() + "   " + expandableListTitle.size());
+
 
 
        /* if (mIntercropsinfos.size() >= 1) {
@@ -123,7 +127,7 @@ public class Intercropstab extends Fragment {
 
         ArrayList<HashMap<String, String>> IntercropsDescription = Intercropsinfo.getIntercropDescription(languages);
         // checkConditionIntercrop(IntercropsDescription);*/
-        Log.d("IntercropsDescription", "" + IntercropsDescription.size());
+
         if (IntercropsDescription.size() >= 1) {
             InterCroplistadapter adapter2 = new InterCroplistadapter(getActivity(), IntercropsDescription);
             intercroplist.setAdapter(adapter2);
@@ -137,7 +141,7 @@ public class Intercropstab extends Fragment {
     }
 
     private void checkConditionIntercrop(ArrayList<HashMap<String, String>> InterDescription) {
-        Log.d("descriptionLegnthj", "" + InterDescription.size());
+
         String language = AppData.checkLanguage(getActivity());
 
         if (language.equals("1")) {
@@ -152,21 +156,20 @@ public class Intercropstab extends Fragment {
                 modelnfodb.put("images", imge);
                 //  mIntercropsinfoslist.add(modelnfodb);
 
-                Log.d("modeldataintercrop", "" + mIntercropsinfoslist.size());
+
             }
         } else {
             for (int i = 0; i < InterDescription.size(); i++) {
                 String sch12 = InterDescription.get(i).get("Description");
-                Log.d("Descriptionssss", "" + sch12);
+
                 String imge2 = InterDescription.get(i).get("storagePath");
-                Log.d("Imgaepathhh", "" + imge2);
 
                 HashMap<String, String> modelnfodb = new HashMap<String, String>();
                 modelnfodb.put("des", sch12);
                 modelnfodb.put("images", imge2);
                 // mIntercropsinfoslist.add(modelnfodb);
 
-                Log.d("modeldata", "" + mIntercropsinfoslist.size());
+
             }
         }
     }
@@ -195,8 +198,24 @@ public class Intercropstab extends Fragment {
             try {
                 holder.agrodes.setText(intercrop1.get(position).get("des"));
                 String imag = intercrop1.get(position).get("images");
-                Bitmap bmb = BitmapFactory.decodeFile(imag);
-                holder.agroimages.setImageBitmap(bmb);
+                // Bitmap bmb = BitmapFactory.decodeFile(imag);
+                //holder.agroimages.setImageBitmap(bmb);
+
+
+                if (imag != null) {
+                    try {
+
+                        ImageUtils.setImage(holder.agroimages, imag, activity1);
+
+
+                    } catch (OutOfMemoryError outOfMemoryError) {
+                        outOfMemoryError.printStackTrace();
+                        activity1.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new AgroForestry()).commit();
+                    }
+                } else {
+                    holder.agroimages.setImageResource(R.drawable.no_thumbnail);
+                    //  holder.agroimages2.setImageResource(R.drawable.no_thumbnail);
+                }
                 holder.mLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -211,7 +230,7 @@ public class Intercropstab extends Fragment {
                 });
 
             } catch (OutOfMemoryError outOfMemoryError) {
-
+                Log.d("sdlskldsk", "" + outOfMemoryError.getMessage());
             }
         }
 

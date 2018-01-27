@@ -437,7 +437,7 @@ public class DescriptionImages extends IntentService {
         FileOutputStream fileOutput = null;
         try {
             if (ImagesDownloadService.checkInternetConenction(getApplicationContext())) {
-                Log.d("nameforDownlading_Purpose", "" + fileName + " " + filesPath + "  " + sdCardPath);
+                //Log.d("nameforDownlading_Purpose", "" + fileName + " " + filesPath + "  " + sdCardPath);
                 URL url = new URL(filesPath);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");

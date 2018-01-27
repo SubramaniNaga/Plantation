@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.fresh.mind.plantation.Constant.AppData;
+import com.fresh.mind.plantation.Constant.ImageUtils;
 import com.fresh.mind.plantation.Constant.Utils;
 import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.customized.CustomTextView;
@@ -148,10 +149,9 @@ public class Models extends Fragment {
             //Log.d("imag", "" + imag);
             if (imag != null) {
                 try {
-                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).error(R.drawable.no_thumbnail).into(holder.agroimages);
-                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).error(R.drawable.no_thumbnail).into(holder.agroimages2);
-                    /*Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).placeholder(R.drawable.logo_3).error(R.drawable.logo_3).into(holder.agroimages);
-                    Picasso.with(activity1).load((Uri.fromFile(new File(imag)))).placeholder(R.drawable.logo_3).error(R.drawable.logo_3).into(holder.agroimages2);*/
+
+                    ImageUtils.setImage(holder.agroimages, imag, activity1);
+                    ImageUtils.setImage(holder.agroimages2, imag, activity1);
                 } catch (OutOfMemoryError outOfMemoryError) {
                     outOfMemoryError.printStackTrace();
                     activity1.getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new AgroForestry()).commit();

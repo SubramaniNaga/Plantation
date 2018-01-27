@@ -159,7 +159,7 @@ public class Others extends Fragment implements LocationListener {
             e.printStackTrace();
         }
         // read the response
-        Log.d("asdsad", "" + response);
+        //Log.d("asdsad", "" + response);
         return response;
 
     }

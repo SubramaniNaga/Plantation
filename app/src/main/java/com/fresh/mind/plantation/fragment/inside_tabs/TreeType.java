@@ -43,6 +43,7 @@ import com.fresh.mind.plantation.R;
 import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.customized.CustomTextView;
 import com.fresh.mind.plantation.fragment.Inside.SelectedTreeType;
+import com.fresh.mind.plantation.receiver.NetworkChechReceiver;
 import com.fresh.mind.plantation.service.GPSTracker;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
 import com.fresh.mind.plantation.sqlite.sorting.SortOrder;
@@ -176,23 +177,25 @@ public class TreeType extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        if (Config.checkInternetConenction(getActivity())) {
+            //  Log.d("dsjfhl", "" + location.getLatitude() + "  " + location.getLongitude());
+            if (Config.celsiu == -1) {
+                //Log.d("StopLocation", "Running");
+                lat = location.getLatitude();
+                lng = location.getLongitude();
+                String address = getAddress(location.getLatitude(), location.getLongitude());
+                // Log.d("addre123324ss ", "" + address);
+                if (address != null) {
 
-        //  Log.d("dsjfhl", "" + location.getLatitude() + "  " + location.getLongitude());
-        if (Config.celsiu == -1) {
-            //Log.d("StopLocation", "Running");
-            lat = location.getLatitude();
-            lng = location.getLongitude();
-            String address = getAddress(location.getLatitude(), location.getLongitude());
-            // Log.d("addre123324ss ", "" + address);
-            if (address != null) {
-                setAddress(address);
+                    setAddress(address);
+                } else {
+                    //  Log.d("addre123324ss ", "" + address);
+                }
             } else {
-                //  Log.d("addre123324ss ", "" + address);
-            }
-        } else {
-            // Log.d("StopLocation", "Stop" + lm);
-            lm.removeUpdates(this);
+                // Log.d("StopLocation", "Stop" + lm);
+                lm.removeUpdates(this);
 
+            }
         }
     }
 
@@ -321,13 +324,13 @@ public class TreeType extends Fragment implements LocationListener {
                 lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 Criteria criteria = new Criteria();
                 String provider = lm.getBestProvider(criteria, true);
-                Log.d("provider", "" + provider);
+                //  Log.d("provider", "" + provider);
                 if (provider != null) {
-                    Log.d("provideproviderr", "" + provider);
+                    // Log.d("provideproviderr", "" + provider);
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                         location = lm.getLastKnownLocation(provider);
                     if (location != null) {
-                        Log.d("asdsadsadsa", "Locations");
+                        //Log.d("asdsadsadsa", "Locations");
                         onLocationChanged(location);
                     }
                     GPSTracker gpsTracker = new GPSTracker(getActivity());

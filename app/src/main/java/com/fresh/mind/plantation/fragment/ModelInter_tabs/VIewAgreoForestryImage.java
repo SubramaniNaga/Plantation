@@ -34,6 +34,7 @@ public class VIewAgreoForestryImage extends Fragment {
     private Intercrops intercropsinfo;
     private CustomTextView mNodata;
     private Modelinfo modelinfo;
+    private String cals, des;
 
     @Nullable
     @Override
@@ -46,8 +47,11 @@ public class VIewAgreoForestryImage extends Fragment {
         } else {
             Utils.setLocalLanguage("en", getActivity());
         }
+        Bundle bundle = getArguments();
+        cals = bundle.getString("class");
+        des = bundle.getString("des");
 
-        ((MainActivity) getActivity()).viewTreeDetails("View Details", "View Details");
+        ((MainActivity) getActivity()).viewTreeDetails("" + des, "View Details");
         return inflater.inflate(R.layout.plant_view_images, null);
     }
 
@@ -56,23 +60,20 @@ public class VIewAgreoForestryImage extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewPager = (ViewPager) view.findViewById(R.id.pager);
-
         mNodata = (CustomTextView) view.findViewById(R.id.mNodata);
         viewPager = (ViewPager) view.findViewById(R.id.pager);
         MainActivity.menuItem.setVisible(false);
         MainActivity.menuItem1.setVisible(false);
         intercropsinfo = new Intercrops(getActivity());
         modelinfo = new Modelinfo(getActivity());
-        Bundle bundle = getArguments();
-        String cals = bundle.getString("class");
-        String des = bundle.getString("des");
+
         ArrayList<HashMap<String, String>> mImagePath;
         if ("inter".equals(cals)) {
             mImagePath = intercropsinfo.getImges(des, languages);
         } else {
             mImagePath = modelinfo.getImges(des, languages);
         }
-        Log.d("mImagePath", "" + mImagePath.size());
+        //Log.d("mImagePath", "" + mImagePath.size());
         if (mImagePath.size() >= 1) {
             FullScreenImageAdapter fullScreenImageAdapter = new FullScreenImageAdapter(getActivity(), mImagePath);
             viewPager.setAdapter(fullScreenImageAdapter);

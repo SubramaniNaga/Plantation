@@ -296,25 +296,17 @@ public class HomeTabView extends Fragment implements LocationListener, GoogleApi
     @Override
     public void onLocationChanged(Location location) {
 
-        Log.d("dsjfhl", "" + location.getLatitude() + "  " + location.getLongitude());
-        //if (Config.celsiu == -1) {
-        Log.d("StopLocation", "Running");
-        lat = location.getLatitude();
-        lng = location.getLongitude();
-        String address = getAddress(HomeTabView.this, location.getLatitude(), location.getLongitude());
-        Log.d("addre123324ss ", "" + address);
-        if (address != null) {
-            setAddress(address);
+        Log.d("StopLocation", "" + location.getLatitude() + "  " + location.getLongitude());
+        if (Config.checkInternetConenction(getActivity())) {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+            String address = getAddress(HomeTabView.this, location.getLatitude(), location.getLongitude());
             Log.d("addre123324ss ", "" + address);
-        } else {
-            Log.d("addre123324ss ", "nO ADDDRESS" + address);
+            if (address != null) {
+                setAddress(address);
+            }
         }
-        /*} else {
-            Log.d("StopLocation", "Stop");
 
-            lm.removeUpdates((android.location.LocationListener) this);
-            lm = null;
-        }*/
     }
 
 

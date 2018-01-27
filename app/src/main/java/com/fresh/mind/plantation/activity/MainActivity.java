@@ -19,7 +19,6 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -55,15 +54,11 @@ import com.fresh.mind.plantation.fragment.Inside.Directions;
 import com.fresh.mind.plantation.fragment.Inside.LocationSelected;
 import com.fresh.mind.plantation.fragment.Inside.SearchedByTree;
 import com.fresh.mind.plantation.fragment.Inside.SelectedTreeType;
-
-import com.fresh.mind.plantation.fragment.ModelInter_tabs.VIewAgreoForestryImage;
 import com.fresh.mind.plantation.fragment.menu_page.AgroForestry;
 import com.fresh.mind.plantation.fragment.menu_page.AppDetails;
-import com.fresh.mind.plantation.fragment.menu_page.Calculation;
 import com.fresh.mind.plantation.fragment.menu_page.FeedBack;
 import com.fresh.mind.plantation.fragment.menu_page.Glossary;
 import com.fresh.mind.plantation.fragment.menu_page.Help;
-import com.fresh.mind.plantation.fragment.menu_page.Others;
 import com.fresh.mind.plantation.fragment.menu_page.PlantationCalculation;
 import com.fresh.mind.plantation.fragment.menu_page.Schemes;
 import com.fresh.mind.plantation.fragment.menu_page.SettingUpdate;
@@ -76,7 +71,6 @@ import com.fresh.mind.plantation.sqlite.sorting.SortOrder;
 import com.fresh.mind.plantation.sqlite.sorting.SortOrderAZ;
 import com.fresh.mind.plantation.sqlite.sorting.SortOrderSelection;
 import com.fresh.mind.plantation.tab_pager.HomeTabView;
-
 
 import io.fabric.sdk.android.Fabric;
 

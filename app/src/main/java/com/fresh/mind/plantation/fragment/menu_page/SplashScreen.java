@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -37,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
 import com.fresh.mind.plantation.Constant.Config;
 import com.fresh.mind.plantation.Constant.JSONParser;
 import com.fresh.mind.plantation.Constant.Utils;
@@ -46,18 +44,14 @@ import com.fresh.mind.plantation.activity.MainActivity;
 import com.fresh.mind.plantation.api.RetrofitCall;
 import com.fresh.mind.plantation.api.RetrofitService;
 import com.fresh.mind.plantation.customized.CustomTextView;
-
-
 import com.fresh.mind.plantation.customized.RippleView;
 import com.fresh.mind.plantation.model.PrimaryModel;
 import com.fresh.mind.plantation.model.json1.TreeSpecielModel;
 import com.fresh.mind.plantation.service.ImagesDownloadService;
 import com.fresh.mind.plantation.service.UpdateData;
 import com.fresh.mind.plantation.service.VideoDownloadService;
-
 import com.fresh.mind.plantation.sqlite.Intercrops;
 import com.fresh.mind.plantation.sqlite.LanguageChange;
-
 import com.fresh.mind.plantation.sqlite.StatusForDownload;
 import com.fresh.mind.plantation.sqlite.server.AllRainFall;
 import com.fresh.mind.plantation.sqlite.server.AllSoilType;
@@ -70,29 +64,20 @@ import com.fresh.mind.plantation.sqlite.server.ImageDb;
 import com.fresh.mind.plantation.sqlite.server.Modelinfo;
 import com.fresh.mind.plantation.sqlite.server.SchecmesDb;
 import com.fresh.mind.plantation.sqlite.server.SoilType;
-
 import com.fresh.mind.plantation.sqlite.server.TreeList;
 import com.fresh.mind.plantation.sqlite.server.TreeTypeNameList;
 import com.fresh.mind.plantation.sqlite.server.VerifyDetails;
 import com.fresh.mind.plantation.tab_pager.HomeTabView;
-import com.squareup.picasso.Picasso;
 
 import net.frakbot.jumpingbeans.JumpingBeans;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -100,7 +85,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -114,17 +98,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.thumbnail;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static com.fresh.mind.plantation.Constant.Config.SPLASH_LANGUAGE;
+import static com.fresh.mind.plantation.Constant.Config.fileLocationOnDitricts;
 import static com.fresh.mind.plantation.Constant.Config.fileLocationOnServer;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocation;
+import static com.fresh.mind.plantation.Constant.Config.sdCardLocationDistricts;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationIntercrops;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationModel;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeImages;
 import static com.fresh.mind.plantation.Constant.Config.sdCardLocationTreeType;
 import static com.fresh.mind.plantation.Constant.Config.url;
-import static java.lang.Boolean.getBoolean;
 
 /**
  * Created by AND I5 on 30-01-2017.
@@ -254,7 +238,7 @@ public class SplashScreen extends Fragment {
         mRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRefresh.setVisibility(View.GONE);
+                mRefresh.setVisibility(View.INVISIBLE);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new SplashScreen()).commit();
             }
         });
@@ -350,6 +334,8 @@ public class SplashScreen extends Fragment {
                             dialogAnimation.startAnimation(slide_up);
                             finalDialog.dismiss();
                             if (verifyDetails.getCount() >= 1) {
+                                getActivity().startService(new Intent(getActivity(), ImagesDownloadService.class));
+                                mRefresh.setVisibility(View.GONE);
                                 mTamil.setVisibility(View.VISIBLE);
                                 mEnglish.setVisibility(View.VISIBLE);
                                 // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
@@ -385,9 +371,10 @@ public class SplashScreen extends Fragment {
                     Log.d("dsdsad", "" + treeList.getCount() + "  " + verifyDetails.getCount());
                     if (treeList.getCount() >= 1 && verifyDetails.getCount() >= 1) {
                         Log.d("Processs", "Whatss");
-                        getActivity().startService(new Intent(getActivity(), VideoDownloadService.class));
                         getActivity().startService(new Intent(getActivity(), ImagesDownloadService.class));
+                        getActivity().startService(new Intent(getActivity(), VideoDownloadService.class));
                         // getActivity().startService(new Intent(getActivity(), DescriptionImages.class));
+                        mRefresh.setVisibility(View.GONE);
                         mTamil.setVisibility(View.VISIBLE);
                         mEnglish.setVisibility(View.VISIBLE);
                         //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_body, new HomeTabView()).commit();
@@ -395,8 +382,8 @@ public class SplashScreen extends Fragment {
                         getActivity().startService(new Intent(getActivity(), VideoDownloadService.class));
                         mTamil.setVisibility(View.GONE);
                         mEnglish.setVisibility(View.GONE);
+                        mRefresh.setVisibility(View.INVISIBLE);
                         Log.d("Processs", "Comonn");
-
                         dialog = new Dialog(getActivity());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.dialog_progress);
@@ -441,7 +428,7 @@ public class SplashScreen extends Fragment {
                 if (primaryModel != null && primaryModel.status) {
                     Log.d("responsemodel", "111" + primaryModel.json1TreePecieas.treeSpecielModels.size());
                     Toast.makeText(getActivity(), "" + primaryModel.json1TreePecieas.treeSpecielModels.size(), Toast.LENGTH_LONG).show();
-                    mRefresh.setVisibility(View.GONE);
+
 
                     if (primaryModel.json1TreePecieas.treeSpecielModels.size() > 10) {
                         onInsertWithConditions(primaryModel.json1TreePecieas.treeSpecielModels, 10);
@@ -450,7 +437,7 @@ public class SplashScreen extends Fragment {
                     }
                     mTamil.setVisibility(View.VISIBLE);
                     mEnglish.setVisibility(View.VISIBLE);
-
+                    mRefresh.setVisibility(View.GONE);
                 } else {
                     Log.d("responsemodel", "000 ");
                     Toast.makeText(getActivity(), getResources().getString(R.string.server_500), Toast.LENGTH_LONG).show();
@@ -585,7 +572,7 @@ public class SplashScreen extends Fragment {
                         if (loaderTask == null) {
                             mEnglish.setVisibility(View.GONE);
                             mTamil.setVisibility(View.GONE);
-                            mRefresh.setVisibility(View.GONE);
+                            mRefresh.setVisibility(View.INVISIBLE);
                             loading();
                             //  changeTextStatus(Config.checkInternetConenction(getActivity()));
 
@@ -622,7 +609,7 @@ public class SplashScreen extends Fragment {
                     if (loaderTask == null) {
                         mEnglish.setVisibility(View.GONE);
                         mTamil.setVisibility(View.GONE);
-                        mRefresh.setVisibility(View.GONE);
+                        mRefresh.setVisibility(View.INVISIBLE);
                         loading();
                         //changeTextStatus(Config.checkInternetConenction(getActivity()));
                     } else {
@@ -842,18 +829,7 @@ public class SplashScreen extends Fragment {
 
             Log.d("nameValuePairs", "" + nameValuePairs);
             try {
-               /* httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpClient.execute(httpPost);
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
-                    //if (isCancelled()) break;
-                }
-                result = sb.toString();*/
+
 
                 result = JSONParser.getJsonResponse(url, nameValuePairs);
                 //"http://plantation.kambaaincorporation.in/webservices/testapi.php
@@ -976,7 +952,7 @@ public class SplashScreen extends Fragment {
                         String messageStus3 = json3Object.getString("message");
                         if (statusMsg3) {
                             JSONArray result1Array = json3Object.getJSONArray("result");
-                            Log.d("result1Array  3", "" + result1Array);
+                            Log.d("result1Array3", "" + result1Array);
                          /*   if (result1Array.length() == districtNameList.getCount()) {
                             } else {*/
                             districtNameList.delete();
@@ -984,16 +960,24 @@ public class SplashScreen extends Fragment {
                                 JSONObject jsonObject = result1Array.getJSONObject(i);
                                 String District = jsonObject.getString("District").trim();
                                 String Last_Update = jsonObject.getString("LastUpdate").trim();
+                                String districtImage = jsonObject.getString("DistrictImage").trim();
                                 String DistrictTamil = jsonObject.getString("DistrictTamil").trim();
                                 String treetypes = jsonObject.get("treetypes").toString().toLowerCase();
                                 String treetypesTamil = jsonObject.getString("treetypesTamil").toLowerCase();
                                 Log.d("DistrictTamiljson", "" + DistrictTamil + "  " + District);
+                                if (districtImage != null) {
+                                    Log.d("serverPath", "" + fileLocationOnDitricts + districtImage);
+                                    districtImage = downloadFile(fileLocationOnDitricts + districtImage, sdCardLocationDistricts);
+                                }
+                                Log.d("sldksldsk", "" + districtImage);
+
                                 ContentValues contentValues = new ContentValues();
                                 contentValues.put("districtName", District);
                                 contentValues.put("lastUpdate", Last_Update);
                                 contentValues.put("districtNameTamil", DistrictTamil);
                                 contentValues.put("treetypes", treetypes);
                                 contentValues.put("treetypesTamil", treetypesTamil);
+                                contentValues.put("storagePath", districtImage);
 
                                 districtNameList.onCreate(contentValues);
                             }
@@ -1754,6 +1738,7 @@ public class SplashScreen extends Fragment {
                         }
                         mTamil.setVisibility(View.VISIBLE);
                         mEnglish.setVisibility(View.VISIBLE);
+                        mRefresh.setVisibility(View.GONE);
                     } else if (s.contains("server")) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.server_500), Toast.LENGTH_LONG).show();
                         mRefresh.setVisibility(View.VISIBLE);
